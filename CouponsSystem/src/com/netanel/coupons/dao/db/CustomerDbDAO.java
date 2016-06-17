@@ -9,11 +9,16 @@ import com.netanel.coupons.jbeans.Customer;
 public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
-	public void createCustomer(Customer customer) {
+	public long createCustomer(Customer customer) {
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
+	@Override
+	public void removeCustomer(long id) {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public void removeCustomer(Customer customer) {
 		// TODO Auto-generated method stub
@@ -49,5 +54,7 @@ public class CustomerDbDAO implements CustomerDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
 
 }

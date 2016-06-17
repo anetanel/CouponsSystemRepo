@@ -1,5 +1,8 @@
 package com.netanel.coupons.app;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -13,6 +16,7 @@ import com.netanel.coupons.jbeans.CouponType;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
+				
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company");
 		DB.connectDB().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
 		
@@ -58,10 +62,8 @@ public class Test {
 
 		
 		
-		System.out.println(db1.login("CompA", "1234"));
-		System.out.println(db1.login("CompA", "1234"));
-		
-		
+		System.out.println(db1.login("CompA", "1234"));		
 		
 	}
+
 }

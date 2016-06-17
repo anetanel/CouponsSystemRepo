@@ -6,10 +6,11 @@ import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
 public interface CustomerDAO {
-	public void createCustomer(Customer customer);
+	public long createCustomer(Customer customer);
 	
 	public void removeCustomer(Customer customer);
-	
+	public void removeCustomer(long id);
+		
 	public void updateCustomer(Customer customer);
 	
 	public Customer getCustomer(long id);

@@ -7,7 +7,6 @@ public class Coupon {
 	//
 	// Attributes
 	//
-	private static long idCount = 1;
 	private long id;
 	private String title;
 	private Date startDate;
@@ -21,6 +20,7 @@ public class Coupon {
 	//
 	// Constructor
 	//
+	public Coupon() {}
 	
 	public Coupon(String title, Date startDate, Date endDate, int amount, CouponType type, String message,
 			double price, String image) {
@@ -32,6 +32,12 @@ public class Coupon {
 		this.message = message;
 		this.price = price;
 		this.image = image;
+	}
+	
+	public Coupon(long id, String title, Date startDate, Date endDate, int amount, CouponType type, String message,
+			double price, String image) {
+		this(title, startDate, endDate, amount, type, message, price, image);
+		this.id = id;
 	}
 
 	//
@@ -72,10 +78,6 @@ public class Coupon {
 	public String getImage() {
 		return image;
 	}
-
-//	public void setId(long id) {
-//		this.id = id;
-//	}
 
 	public void setTitle(String title) {
 		this.title = title;

@@ -17,18 +17,11 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public long createCompany(Company company) {
-//		try {
-//			company.setId();
-//		} catch (IdAlreadySetException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
+
 		long id=-1;
 		try (Connection con = DB.connectDB()){
-			//String sqlCmdStr = "INSERT INTO Company VALUES(?,?,?,?)";
 			String sqlCmdStr = "INSERT INTO Company (COMP_NAME, PASSWORD, EMAIL) VALUES(?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-//			stat.setLong(1, company.getId());
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());

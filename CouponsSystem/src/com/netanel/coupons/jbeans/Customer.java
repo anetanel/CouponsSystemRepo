@@ -6,8 +6,7 @@ public class Customer {
 	//
 	// Attributes
 	//
-	private static long idCount = 1;
-	private long id=-1;
+	private long id;
 	private String custName;
 	private String password;
 	private HashSet<Coupon> coupons;
@@ -20,6 +19,11 @@ public class Customer {
 	public Customer(String custName, String password) {
 		this.custName = custName;
 		this.password = password;
+	}
+	
+	public Customer(long id, String custName, String password) {
+		this(custName, password);
+		this.id = id;
 	}
 	
 	//
@@ -41,9 +45,6 @@ public class Customer {
 		return coupons;
 	}
 
-//	public void setId(long id) {
-//		this.id = id;
-//	}
 
 	public void setCustName(String custName) {
 		this.custName = custName;

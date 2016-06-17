@@ -3,75 +3,109 @@ package com.netanel.coupons.crypt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.bind.DatatypeConverter;
 
-public class PasswordHash {
+/**
+ * This class provides static functions that handles password encryption.
+ * <p>
+ * For better security, a password is never stored as plain text.
+ * Rather, first the text is converted to an array of bytes. Than, a "salt" is added to the array.
+ * The "salt" is a 32 bit SecureRandom array.
+ * The combined password and salt is hashed using a one-way hashing algorithm (such as SHA-256) and converted to hexadecimal String.
+ * The combined hash, along with the salt is needed to verify a password
+ * @author Netanel Attali
+ * @see <a href="https://crackstation.net/hashing-security.html"> Salted Password Hashing - Doing it Right </a>
+ */
+final public class PasswordHash {
+
+	/**
+	 * Hashes a password and returns a map containing the salted hash and the "salt" used.
+	 * @param password	- A char array 
+	 * @return	A map <String, String> with keys "salt" and "hash", and values of the salt and password hash in hex. 		
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static Map<String, String> hashPassword(char[] password) throws NoSuchAlgorithmException {
+		byte[] salt = generateSalt();
+		return hashPassword(password, salt);
+	}
 	
-	public static String[] hashPassword(char[] password, byte[] salt) throws NoSuchAlgorithmException {
+	/**
+	 * Checks if the given password matches the hash and salt.
+	 * The original password should be kept in the database along with its salt.
+	 * @param saltHexStr - The salt as a hex String 
+	 * @param hashHexStr - The password hash as a hex String
+	 * @param password - A char array
+	 * @return {@code true} if the given password matched the hash and salt, {@code false} otherwise
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static boolean passwordMatches(String saltHexStr, String hashHexStr, char[] password)
+			throws NoSuchAlgorithmException {
+		byte[] salt = hexStringToByteArray(saltHexStr);
+		
+		return hashHexStr.equals(hashPassword(password, salt).get("hash"));
+	}
+	
+	
+	/**
+	 * Checks if the given password matches the hash and salt.
+	 * The original password should be kept in the database along with its salt.
+	 * @param saltAndHash - A map <String, String> with keys "salt" and "hash", and values of the salt and password hash in hex. 
+	 * @param password - A char array
+	 * @return {@code true} if the given password matched the hash and salt, {@code false} otherwise
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static boolean passwordMatches(Map<String, String> saltAndHash, char[] password)
+			throws NoSuchAlgorithmException {
+		
+		return passwordMatches(saltAndHash.get("salt"), saltAndHash.get("hash"), password);
+	}
+	
+	// Hashes a password with a given salt, and returns a map containing the salted hash and the salt used.
+	private static Map<String, String> hashPassword(char[] password, byte[] salt) throws NoSuchAlgorithmException {		
+		// Convert password to byte array
 		byte[] passByte = charToBytesASCII(password);
 		byte[] combine = new byte[salt.length + passByte.length];
 		// combine salt and password
 		System.arraycopy(salt, 0, combine, 0, salt.length);
 		System.arraycopy(passByte, 0, combine, salt.length, passByte.length);
 
+		// Hash the salted password 
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		md.update(combine);
-		String[] saltAndHash = { byteArrayToHexString(salt), byteArrayToHexString(md.digest()) };
+
+		Map<String, String> saltAndHash = new HashMap<>();
+		saltAndHash.put("salt", byteArrayToHexString(salt));
+		saltAndHash.put("hash", byteArrayToHexString(md.digest()));
+
 		return saltAndHash;
 	}
-	
-	public static String[] hashPassword(char[] password) throws NoSuchAlgorithmException {
-		byte[] salt = getSalt();
-		return hashPassword(password, salt);
-	}
-	
-	private static byte[] getSalt() {
+
+	// Generated a secure random 32-bit byte array ("salt").
+	private static byte[] generateSalt() {
 		SecureRandom sr = new SecureRandom();
 		byte[] salt = new byte[32];
 		sr.nextBytes(salt);
 		return salt;
 	}
 
-	public static byte[] stringToBytesASCII(String str) {
-		byte[] b = new byte[str.length()];
-		for (int i = 0; i < b.length; i++) {
-			b[i] = (byte) str.charAt(i);
-		}
-		return b;
-	}
-
-	public static byte[] charToBytesASCII(char[] str) {
+	// Converts char array to byte array
+	private static byte[] charToBytesASCII(char[] str) {
 		byte[] b = new byte[str.length];
 		for (int i = 0; i < b.length; i++) {
 			b[i] = (byte) str[i];
 		}
 		return b;
 	}
-	
-	public static char[] BytesToCharASCII(byte[] b) {
-		char[] str = new char[b.length];
-		for (int i = 0; i < str.length; i++) {
-			str[i] = (char) b[i];
-		}
-		return str;
+
+	// Returns a hex string representation of a byte array.
+	private static String byteArrayToHexString(byte[] byteArr) {
+		return DatatypeConverter.printHexBinary(byteArr);
 	}
-	
-	public  static String byteArrayToHexString(byte[] byteArr) {
-		StringBuffer hexString = new StringBuffer();
-		for (int i = 0; i < byteArr.length; i++) {
-			String hex = Integer.toHexString(0xff & byteArr[i]);
-			if (hex.length() == 1)
-				hexString.append('0');
-			hexString.append(hex);
-		}
-		return hexString.toString();
-	}
-	public static byte[] hexStringToByteArray(String s) {
-	    int len = s.length();
-	    byte[] data = new byte[len / 2];
-	    for (int i = 0; i < len; i += 2) {
-	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-	                             + Character.digit(s.charAt(i+1), 16));
-	    }
-	    return data;
+
+	// Returns a byte array from a hex string created by byteArrayToHexString.
+	private static byte[] hexStringToByteArray(String s) {
+		return DatatypeConverter.parseHexBinary(s);
 	}
 }

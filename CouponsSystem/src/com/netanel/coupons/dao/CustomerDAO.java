@@ -10,6 +10,7 @@ public interface CustomerDAO {
 	
 	public void removeCustomer(Customer customer);
 	public void removeCustomer(long id);
+	public void removeCustomer(String custName);
 		
 	public void updateCustomer(Customer customer);
 	
@@ -19,5 +20,5 @@ public interface CustomerDAO {
 	
 	public Set<Coupon> getCoupons();
 	
-	public boolean login(String custName, String password);
+	public boolean login(String custName, char[] password);
 }

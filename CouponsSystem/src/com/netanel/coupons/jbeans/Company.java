@@ -1,8 +1,8 @@
 package com.netanel.coupons.jbeans;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
-
-import com.netanel.coupons.exceptions.IdAlreadySetException;
+import com.netanel.coupons.crypt.Password;
 
 public class Company {
 	//
@@ -10,7 +10,9 @@ public class Company {
 	//
 	private long id;
 	private String compName;
-	private String password;
+//	private char[] password;
+//	private String salt;
+	private Password password;
 	private String email;
 	private HashSet<Coupon> coupons;
 	
@@ -20,13 +22,13 @@ public class Company {
 	//
 	public Company() { }
 	
-	public Company(String compName, String password, String email) {
+	public Company(String compName, Password password, String email) {
 		this.compName = compName;
 		this.password = password;
 		this.email = email;
 	}
 	
-	public Company(long id, String compName, String password, String email) {
+	public Company(long id, String compName, Password password, String email) {
 		this(compName, password, email);
 		this.id = id;
 	}
@@ -42,10 +44,11 @@ public class Company {
 		return compName;
 	}
 
-	public String getPassword() {
+	public Password getPassword() {
 		return password;
 	}
 	
+
 	public String getEmail() {
 		return email;
 	}
@@ -60,9 +63,10 @@ public class Company {
 		this.compName = compName;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(char[] password) throws NoSuchAlgorithmException {
+		this.password.setNewPassword(password);
 	}
+	
 	
 	public void setEmail(String email) {
 		this.email = email;
@@ -72,10 +76,10 @@ public class Company {
 	public void setCoupons(HashSet<Coupon> coupons) {
 		this.coupons = coupons;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Company [id=" + id + ", compName=" + compName + ", Password=" + password + ", email=" + email
+		return "Company [id=" + id + ", compName=" + compName + ", password=" + password + ", email=" + email
 				+ ", coupons=" + coupons + "]";
 	}
 
@@ -136,6 +140,12 @@ public class Company {
 		}
 		return true;
 	}
+
+
+
+
+	
+
 	
 	
 }

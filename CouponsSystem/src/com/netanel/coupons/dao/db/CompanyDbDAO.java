@@ -1,15 +1,18 @@
 package com.netanel.coupons.dao.db;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.netanel.coupons.crypt.Password;
+import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CompanyDAO;
-import com.netanel.coupons.exceptions.IdAlreadySetException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 
@@ -17,14 +20,15 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public long createCompany(Company company) {
-
 		long id=-1;
 		try (Connection con = DB.connectDB()){
-			String sqlCmdStr = "INSERT INTO Company (COMP_NAME, PASSWORD, EMAIL) VALUES(?,?,?)";
+			Map<String,String> hashAndSalt = company.getPassword().getHashAndSalt();
+			String sqlCmdStr = "INSERT INTO Company (COMP_NAME, PASSWORD, EMAIL, SALT) VALUES(?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, company.getCompName());
-			stat.setString(2, company.getPassword());
+			stat.setString(2, hashAndSalt.get("hash"));
 			stat.setString(3, company.getEmail());
+			stat.setString(4, hashAndSalt.get("salt"));
 			stat.executeUpdate();
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
@@ -37,6 +41,11 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 
 	@Override
+	public void removeCompany(Company company) {
+		removeCompany(company.getCompName());
+	}
+	
+	@Override
 	public void removeCompany(long id) {
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "DELETE FROM Company WHERE ID=?";
@@ -48,7 +57,6 @@ public class CompanyDbDAO implements CompanyDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 	
 	@Override
@@ -62,24 +70,18 @@ public class CompanyDbDAO implements CompanyDAO {
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 
-	@Override
-	public void removeCompany(Company company) {
-		removeCompany(company.getCompName());
-	}
 	
 	@Override
 	public void updateCompany(Company company) {
 		try (Connection con = DB.connectDB()){
-			String sqlCmdStr = "UPDATE Company SET COMP_NAME=?, PASSWORD=?, EMAIL=? WHERE ID=?";
+			String sqlCmdStr = "UPDATE Company SET COMP_NAME=?, EMAIL=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, company.getCompName());
-			stat.setString(2, company.getPassword());
-			stat.setString(3, company.getEmail());
-			stat.setLong(4, company.getId());
+			stat.setString(2, company.getEmail());
+			stat.setLong(3, company.getId());
 			stat.executeUpdate();
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -91,7 +93,8 @@ public class CompanyDbDAO implements CompanyDAO {
 	@Override
 	public Company getCompany(long id) {
 		Company company = null;
-		String compName, password, email;
+		String compName, email;
+		Password password;
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT * FROM Company WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -99,10 +102,11 @@ public class CompanyDbDAO implements CompanyDAO {
 			ResultSet rs = stat.executeQuery();
 			rs.next();
 			compName = rs.getString("COMP_NAME");
-			password = rs.getString("PASSWORD");
+			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
 			email = rs.getString("EMAIL");
 			
 			company = new Company(id, compName, password, email);
+			//company.setSalt(salt);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,20 +138,25 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 
 	@Override
-	public boolean login(String compName, String password) {
-		boolean rowFound = false;
+	public boolean login(String compName, char[] password) {
+		boolean passwordMatch = false;
+		String saltHexStr, hashHexStr;
 		try (Connection con = DB.connectDB()){
-			String sqlCmdStr = "SELECT * FROM Company WHERE COMP_NAME=? AND PASSWORD=?";
+			String sqlCmdStr = "SELECT PASSWORD, SALT FROM Company WHERE COMP_NAME=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, compName);
-			stat.setString(2, password);
 			ResultSet rs = stat.executeQuery();
-			rowFound = rs.next();			
-		} catch (ClassNotFoundException | SQLException e) {
+			rs.next();
+			hashHexStr = rs.getString("PASSWORD");
+			saltHexStr = rs.getString("SALT");
+			
+			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
+						
+		} catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return rowFound;
+		return passwordMatch;
 	}
 
 }

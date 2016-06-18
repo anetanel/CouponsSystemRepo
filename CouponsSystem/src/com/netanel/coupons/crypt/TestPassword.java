@@ -1,6 +1,7 @@
 package com.netanel.coupons.crypt;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Map;
 
 public class TestPassword {
@@ -17,6 +18,5 @@ public class TestPassword {
 		char[] password2 = "mypassword".toCharArray();
 //		System.out.println(PasswordHash.passwordMatches(hashMap.get("salt"), hashMap.get("hash"), password2));
 		System.out.println(PasswordHash.passwordMatches(hashMap, password2));
-			
 	}
 }

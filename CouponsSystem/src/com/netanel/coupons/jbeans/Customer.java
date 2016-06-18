@@ -1,5 +1,6 @@
 package com.netanel.coupons.jbeans;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Customer {
@@ -8,24 +9,25 @@ public class Customer {
 	//
 	private long id;
 	private String custName;
-	private String password;
+	private char[]  password;
+	private String salt;
 	private HashSet<Coupon> coupons;
 	
 	//
-	// Constructor
+	// Constructors
 	//
 	public Customer() {	}
 	
-	public Customer(String custName, String password) {
+	public Customer(String custName, char[] password) {
 		this.custName = custName;
 		this.password = password;
 	}
 	
-	public Customer(long id, String custName, String password) {
+	public Customer(long id, String custName, char[] password) {
 		this(custName, password);
 		this.id = id;
 	}
-	
+
 	//
 	// Functions
 	//
@@ -37,21 +39,32 @@ public class Customer {
 		return custName;
 	}
 
-	public String getPassword() {
+	public char[] getPassword() {
 		return password;
+	}
+
+	public String getSalt() {
+		return salt;
 	}
 
 	public HashSet<Coupon> getCoupons() {
 		return coupons;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public void setCustName(String custName) {
 		this.custName = custName;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(char[] password) {
 		this.password = password;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public void setCoupons(HashSet<Coupon> coupons) {
@@ -60,8 +73,8 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", custName=" + custName + ", password=" + password + ", coupons=" + coupons
-				+ "]";
+		return "Customer [id=" + id + ", custName=" + custName + ", password=" + Arrays.toString(password) + ", salt="
+				+ salt + ", coupons=" + coupons + "]";
 	}
 
 	@Override
@@ -71,7 +84,8 @@ public class Customer {
 		result = prime * result + ((coupons == null) ? 0 : coupons.hashCode());
 		result = prime * result + ((custName == null) ? 0 : custName.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + Arrays.hashCode(password);
+		result = prime * result + ((salt == null) ? 0 : salt.hashCode());
 		return result;
 	}
 
@@ -104,15 +118,16 @@ public class Customer {
 		if (id != other.id) {
 			return false;
 		}
-		if (password == null) {
-			if (other.password != null) {
+		if (!Arrays.equals(password, other.password)) {
+			return false;
+		}
+		if (salt == null) {
+			if (other.salt != null) {
 				return false;
 			}
-		} else if (!password.equals(other.password)) {
+		} else if (!salt.equals(other.salt)) {
 			return false;
 		}
 		return true;
-	}
-	
-	
+	}	
 }

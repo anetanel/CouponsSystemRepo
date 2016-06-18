@@ -19,6 +19,6 @@ public interface CompanyDAO {
 	
 	public Set<Coupon> getCoupons();
 	
-	public boolean login(String compName, String password);
+	public boolean login(String compName, char[] password);
 	
 }

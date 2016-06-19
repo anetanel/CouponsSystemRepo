@@ -94,7 +94,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	public Company getCompany(long id) {
 		Company company = null;
 		String compName, email;
-		Password password;
+		Password password = null;
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT * FROM Company WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);

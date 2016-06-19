@@ -10,8 +10,6 @@ public class Company {
 	//
 	private long id;
 	private String compName;
-//	private char[] password;
-//	private String salt;
 	private Password password;
 	private String email;
 	private HashSet<Coupon> coupons;

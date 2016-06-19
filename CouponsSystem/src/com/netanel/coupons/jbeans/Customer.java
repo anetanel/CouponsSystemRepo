@@ -1,7 +1,10 @@
 package com.netanel.coupons.jbeans;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
+
+import com.netanel.coupons.crypt.Password;
 
 public class Customer {
 	//
@@ -9,8 +12,7 @@ public class Customer {
 	//
 	private long id;
 	private String custName;
-	private char[]  password;
-	private String salt;
+	private Password password;
 	private HashSet<Coupon> coupons;
 	
 	//
@@ -18,12 +20,12 @@ public class Customer {
 	//
 	public Customer() {	}
 	
-	public Customer(String custName, char[] password) {
+	public Customer(String custName, Password password) {
 		this.custName = custName;
 		this.password = password;
 	}
 	
-	public Customer(long id, String custName, char[] password) {
+	public Customer(long id, String custName, Password password) {
 		this(custName, password);
 		this.id = id;
 	}
@@ -39,42 +41,33 @@ public class Customer {
 		return custName;
 	}
 
-	public char[] getPassword() {
+	public Password getPassword() {
 		return password;
 	}
 
-	public String getSalt() {
-		return salt;
-	}
 
 	public HashSet<Coupon> getCoupons() {
 		return coupons;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
+	
 	public void setCustName(String custName) {
 		this.custName = custName;
 	}
 
-	public void setPassword(char[] password) {
-		this.password = password;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
 
 	public void setCoupons(HashSet<Coupon> coupons) {
 		this.coupons = coupons;
 	}
 
+	public void setPassword(char[] password) throws NoSuchAlgorithmException {
+		this.password.setNewPassword(password);
+	}
+
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", custName=" + custName + ", password=" + Arrays.toString(password) + ", salt="
-				+ salt + ", coupons=" + coupons + "]";
+		return "Customer [id=" + id + ", custName=" + custName + ", password=" + password + ", coupons=" + coupons
+				+ "]";
 	}
 
 	@Override
@@ -84,50 +77,38 @@ public class Customer {
 		result = prime * result + ((coupons == null) ? 0 : coupons.hashCode());
 		result = prime * result + ((custName == null) ? 0 : custName.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + Arrays.hashCode(password);
-		result = prime * result + ((salt == null) ? 0 : salt.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Customer other = (Customer) obj;
 		if (coupons == null) {
-			if (other.coupons != null) {
+			if (other.coupons != null)
 				return false;
-			}
-		} else if (!coupons.equals(other.coupons)) {
+		} else if (!coupons.equals(other.coupons))
 			return false;
-		}
 		if (custName == null) {
-			if (other.custName != null) {
+			if (other.custName != null)
 				return false;
-			}
-		} else if (!custName.equals(other.custName)) {
+		} else if (!custName.equals(other.custName))
 			return false;
-		}
-		if (id != other.id) {
+		if (id != other.id)
 			return false;
-		}
-		if (!Arrays.equals(password, other.password)) {
-			return false;
-		}
-		if (salt == null) {
-			if (other.salt != null) {
+		if (password == null) {
+			if (other.password != null)
 				return false;
-			}
-		} else if (!salt.equals(other.salt)) {
+		} else if (!password.equals(other.password))
 			return false;
-		}
 		return true;
-	}	
+	}
+
+	
 }

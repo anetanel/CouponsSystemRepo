@@ -31,15 +31,16 @@ public class Test {
 		Password p4 = new Password("1234".toCharArray());
 		Password p5 = new Password("1234".toCharArray());
 		Password p6 = new Password("1234".toCharArray());
+		Password p7 = new Password("1234".toCharArray());
 		
 		Company a = new Company("CompA", p1, "compa@compa.com");
 		Company b = new Company("CompB", p2, "compb@compb.com");
 		Company c = new Company("CompC", p3, "compc@compc.com");
 		Company d = new Company("CompD", p4, "compd@compd.com");
 		
-		Customer cust1 = new Customer("moshe", "12345".toCharArray());
-		Customer cust2 = new Customer("david", "12345".toCharArray());
-		Customer cust3 = new Customer("sarah", "12345".toCharArray());
+		Customer cust1 = new Customer("moshe", p5);
+		Customer cust2 = new Customer("david", p6);
+		Customer cust3 = new Customer("sarah", p7);
 		
 //		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 //		Coupon c1 = new Coupon("Coupon1",new Date(),sdf.parse("29.7.2018"), 10, CouponType.CARS, "Car Coupon", 19.90, "files/cars.jpg");
@@ -82,6 +83,7 @@ public class Test {
 		//ResultSet rs = DB.connectDB().createStatement().executeQuery("SELECT * FROM Company WHERE COMP_NAME='CompA' AND PASSWORD='12345'");
 				
 		System.out.println("Login: " + compDB.login("CompA", "1234".toCharArray()));
+		System.out.println("Login: " + custDB.login("moshe", "12344".toCharArray()));
 		
 		System.out.println(p1);
 

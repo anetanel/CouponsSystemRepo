@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.jbeans.Company;
@@ -22,7 +23,7 @@ public class CustomerDbDAO implements CustomerDAO {
 	public long createCustomer(Customer customer) {
 		long id=-1;
 		try (Connection con = DB.connectDB()){
-			Map<String,String> hashAndSalt = PasswordHash.hashPassword(customer.getPassword());
+			Map<String,String> hashAndSalt = customer.getPassword().getHashAndSalt();
 			String sqlCmdStr = "INSERT INTO Customer (CUST_NAME, PASSWORD, SALT) VALUES(?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, customer.getCustName());
@@ -32,7 +33,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
 			id = rs.getLong(1);
-		} catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -90,7 +91,8 @@ public class CustomerDbDAO implements CustomerDAO {
 	@Override
 	public Customer getCustomer(long id) {
 		Customer customer = null;
-		String custName, password, salt;
+		String custName;
+		Password password = null;
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT * FROM Customer WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -98,11 +100,8 @@ public class CustomerDbDAO implements CustomerDAO {
 			ResultSet rs = stat.executeQuery();
 			rs.next();
 			custName = rs.getString("CUST_NAME");
-			password = rs.getString("PASSWORD");
-			salt = rs.getString("SALT");
-			
-			customer = new Customer(id, custName, password.toCharArray());
-			customer.setSalt(salt);
+			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
+			customer = new Customer(id, custName, password);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

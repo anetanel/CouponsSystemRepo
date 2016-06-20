@@ -1,6 +1,5 @@
 package com.netanel.coupons.jbeans;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import com.netanel.coupons.crypt.Password;
 
@@ -61,7 +60,7 @@ public class Company {
 		this.compName = compName;
 	}
 
-	public void setPassword(char[] password) throws NoSuchAlgorithmException {
+	public void setPassword(char[] password) {
 		this.password.setNewPassword(password);
 	}
 	

@@ -1,6 +1,5 @@
 package com.netanel.coupons.crypt;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ public class Password {
 	//
 	// Constructors
 	//
-	public Password(char[] password) throws NoSuchAlgorithmException {
+	public Password(char[] password) {
 		setNewPassword(password);
 	}
 	
@@ -29,7 +28,7 @@ public class Password {
 		return hashAndSalt;
 	}
 	
-	public void setNewPassword(char[] password) throws NoSuchAlgorithmException {
+	public void setNewPassword(char[] password) {
 		hashAndSalt = PasswordHash.hashPassword(password);
 	}
 

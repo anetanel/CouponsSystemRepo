@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao.db;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +12,6 @@ import java.util.Set;
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CustomerDAO;
-import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
@@ -147,7 +145,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 						
-		} catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

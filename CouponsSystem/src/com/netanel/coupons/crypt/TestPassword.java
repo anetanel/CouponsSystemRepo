@@ -1,11 +1,9 @@
 package com.netanel.coupons.crypt;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Map;
 
 public class TestPassword {
-	public static void main(String[] args) throws NoSuchAlgorithmException {
+	public static void main(String[] args)  {
 		char[] password = "mypassword".toCharArray();
 		Map<String, String> hashMap = PasswordHash.hashPassword(password);
 		

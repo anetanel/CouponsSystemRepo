@@ -24,9 +24,8 @@ final public class PasswordHash {
 	 * Hashes a password and returns a map containing the salted hash and the "salt" used.
 	 * @param password	- A char array 
 	 * @return	A map <String, String> with keys "salt" and "hash", and values of the salt and password hash in hex. 		
-	 * @throws NoSuchAlgorithmException
 	 */
-	public static Map<String, String> hashPassword(char[] password) throws NoSuchAlgorithmException {
+	public static Map<String, String> hashPassword(char[] password) {
 		byte[] salt = generateSalt();
 		return hashPassword(password, salt);
 	}
@@ -38,10 +37,8 @@ final public class PasswordHash {
 	 * @param hashHexStr - The password hash as a hex String
 	 * @param password - A char array
 	 * @return {@code true} if the given password matched the hash and salt, {@code false} otherwise
-	 * @throws NoSuchAlgorithmException
 	 */
-	public static boolean passwordMatches(String saltHexStr, String hashHexStr, char[] password)
-			throws NoSuchAlgorithmException {
+	public static boolean passwordMatches(String saltHexStr, String hashHexStr, char[] password) {
 		byte[] salt = hexStringToByteArray(saltHexStr);
 		
 		return hashHexStr.equals(hashPassword(password, salt).get("hash"));
@@ -54,16 +51,14 @@ final public class PasswordHash {
 	 * @param saltAndHash - A map <String, String> with keys "salt" and "hash", and values of the salt and password hash in hex. 
 	 * @param password - A char array
 	 * @return {@code true} if the given password matched the hash and salt, {@code false} otherwise
-	 * @throws NoSuchAlgorithmException
 	 */
-	public static boolean passwordMatches(Map<String, String> saltAndHash, char[] password)
-			throws NoSuchAlgorithmException {
+	public static boolean passwordMatches(Map<String, String> saltAndHash, char[] password) {
 		
 		return passwordMatches(saltAndHash.get("salt"), saltAndHash.get("hash"), password);
 	}
 	
 	// Hashes a password with a given salt, and returns a map containing the salted hash and the salt used.
-	private static Map<String, String> hashPassword(char[] password, byte[] salt) throws NoSuchAlgorithmException {		
+	private static Map<String, String> hashPassword(char[] password, byte[] salt) {		
 		// Convert password to byte array
 		byte[] passByte = charToBytesASCII(password);
 		byte[] combine = new byte[salt.length + passByte.length];
@@ -72,12 +67,19 @@ final public class PasswordHash {
 		System.arraycopy(passByte, 0, combine, salt.length, passByte.length);
 
 		// Hash the salted password 
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
-		md.update(combine);
-
-		Map<String, String> saltAndHash = new HashMap<>();
-		saltAndHash.put("salt", byteArrayToHexString(salt));
-		saltAndHash.put("hash", byteArrayToHexString(md.digest()));
+		MessageDigest md;
+		Map<String, String> saltAndHash = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+			md.update(combine);
+			saltAndHash = new HashMap<>();
+			saltAndHash.put("salt", byteArrayToHexString(salt));
+			saltAndHash.put("hash", byteArrayToHexString(md.digest()));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		return saltAndHash;
 	}

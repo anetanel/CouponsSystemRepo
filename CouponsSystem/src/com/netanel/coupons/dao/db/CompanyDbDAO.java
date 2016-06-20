@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao.db;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -152,7 +151,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 						
-		} catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

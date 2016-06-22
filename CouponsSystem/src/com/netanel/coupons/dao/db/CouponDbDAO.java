@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,8 +25,10 @@ public class CouponDbDAO implements CouponDAO {
 								+ " TYPE, MESSAGE, PRICE, IMAGE) VALUES(?,?,?,?,?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, coupon.getTitle());
-			stat.setDate(2, coupon.getStartDate());
-			stat.setDate(3, coupon.getEndDate());
+			//stat.setDate(2, coupon.getStartDate());
+			//stat.setDate(3, coupon.getEndDate());
+			stat.setTimestamp(2, Timestamp.valueOf(coupon.getStartDate().toString()));
+			stat.setTimestamp(3, Timestamp.valueOf(coupon.getEndDate().toString()));
 			stat.setInt(4, coupon.getAmount());
 			stat.setString(5, coupon.getType().toString());
 			stat.setString(6, coupon.getMessage());
@@ -69,8 +73,10 @@ public class CouponDbDAO implements CouponDAO {
 								+ " TYPE=?, MESSAGE=?, PRICE=?, IMAGE=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, coupon.getTitle());
-			stat.setDate(2, coupon.getStartDate());
-			stat.setDate(3, coupon.getEndDate());
+			//stat.setDate(2, coupon.getStartDate());
+			//stat.setDate(3, coupon.getEndDate());
+			stat.setTimestamp(2, Timestamp.valueOf(coupon.getStartDate().toString()));
+			stat.setTimestamp(3, Timestamp.valueOf(coupon.getEndDate().toString()));
 			stat.setInt(4, coupon.getAmount());
 			stat.setString(5, coupon.getType().toString());
 			stat.setString(6, coupon.getMessage());

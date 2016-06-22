@@ -9,7 +9,7 @@ public interface CouponDAO {
 	
 	public void removeCoupon(Coupon coupon);
 	public void removeCoupon(long id);
-	public void removeCoupon(String couponName);
+	//public void removeCoupon(String couponName);
 	
 	public void updateCoupon(Coupon coupon);
 	

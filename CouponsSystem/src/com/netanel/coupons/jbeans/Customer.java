@@ -8,7 +8,7 @@ public class Customer {
 	//
 	// Attributes
 	//
-	private long id;
+	private long id = -1;
 	private String custName;
 	private Password password;
 	private HashSet<Coupon> coupons;
@@ -48,6 +48,13 @@ public class Customer {
 		return coupons;
 	}
 
+	public void setId(long id) {
+		if (this.id == -1) { 
+			this.id = id;
+		} else {
+			throw new IllegalArgumentException("ID already set" + this.id);
+		}
+	}
 	
 	public void setCustName(String custName) {
 		this.custName = custName;

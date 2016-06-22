@@ -32,6 +32,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
 			id = rs.getLong(1);
+			company.setId(id);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,8 +119,8 @@ public class CompanyDbDAO implements CompanyDAO {
 		Set<Company> companies = new HashSet<>(); 
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT ID FROM Company";
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery(sqlCmdStr);
+			Statement stat = con.createStatement();
+			ResultSet rs = stat.executeQuery(sqlCmdStr);
 			while (rs.next()) {
 				companies.add(getCompany(rs.getLong(1)));
 			}

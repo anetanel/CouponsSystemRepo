@@ -3,10 +3,10 @@ package com.netanel.coupons.app;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.dao.db.CompanyDbDAO;
@@ -42,10 +42,12 @@ public class Test {
 		Customer cust2 = new Customer("david", p6);
 		Customer cust3 = new Customer("sarah", p7);
 		
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 //		Coupon c1 = new Coupon("Coupon1",new Date(),sdf.parse("29.7.2018"), 10, CouponType.CARS, "Car Coupon", 19.90, "files/cars.jpg");
 //		Coupon c2 = new Coupon("Coupon2",new Date(),sdf.parse("15.05.2017"), 10, CouponType.ELECTRONICS, "Electronics Coupon", 89.90, "files/electronics.jpg");
 //		Coupon c3 = new Coupon("Coupon3",new Date(),sdf.parse("32.7.2018"), 10, CouponType.FOOD, "Food Coupon", 12.90, "files/food.jpg");
+		Date startDate = new Date(0);
+		//Coupon c4 = new Coupon("test", startDate, endDate, 10, CouponType.CARS, "my message", 19.90, "files/images/car.jpg");
 		
 //		System.out.println(a);
 //		System.out.println(b);

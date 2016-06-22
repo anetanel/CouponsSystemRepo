@@ -7,7 +7,7 @@ public class Company {
 	//
 	// Attributes
 	//
-	private long id;
+	private long id = -1;
 	private String compName;
 	private Password password;
 	private String email;
@@ -55,6 +55,13 @@ public class Company {
 		return coupons;
 	}
 
+	public void setId(long id) {
+		if (this.id == -1) { 
+			this.id = id;
+		} else {
+			throw new IllegalArgumentException("ID already set" + this.id);
+		}
+	}
 	
 	public void setCompName(String compName) {
 		this.compName = compName;

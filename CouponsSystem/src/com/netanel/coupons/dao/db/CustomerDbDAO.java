@@ -31,6 +31,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
 			id = rs.getLong(1);
+			customer.setId(id);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,8 +113,8 @@ public class CustomerDbDAO implements CustomerDAO {
 		Set<Customer> customers = new HashSet<>(); 
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT ID FROM Customer";
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery(sqlCmdStr);
+			Statement stat = con.createStatement();
+			ResultSet rs = stat.executeQuery(sqlCmdStr);
 			while (rs.next()) {
 				customers.add(getCustomer(rs.getLong(1)));
 			}

@@ -7,7 +7,7 @@ public class Coupon {
 	//
 	// Attributes
 	//
-	private long id;
+	private long id = -1;
 	private String title;
 	private Date startDate;
 	private Date endDate;
@@ -79,6 +79,14 @@ public class Coupon {
 		return image;
 	}
 
+	public void setId(long id) {
+		if (this.id == -1) { 
+			this.id = id;
+		} else {
+			throw new IllegalArgumentException("ID already set" + this.id);
+		}
+	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}

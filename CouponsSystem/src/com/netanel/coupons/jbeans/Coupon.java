@@ -1,6 +1,5 @@
 package com.netanel.coupons.jbeans;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class Coupon {
@@ -84,7 +83,7 @@ public class Coupon {
 		if (this.id == -1) { 
 			this.id = id;
 		} else {
-			throw new IllegalArgumentException("ID already set" + this.id);
+			throw new IllegalArgumentException("ID already set: " + this.id);
 		}
 	}
 	

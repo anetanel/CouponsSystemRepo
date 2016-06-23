@@ -32,7 +32,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
 			id = rs.getLong(1);
-			company.setId(id);
+			company.setId(id);			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,6 +157,15 @@ public class CompanyDbDAO implements CompanyDAO {
 			e.printStackTrace();
 		}
 		return passwordMatch;
+	}
+	
+	public void addCoupon(Company company, Coupon coupon) {
+		try {
+			DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

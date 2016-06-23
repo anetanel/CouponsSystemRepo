@@ -1,6 +1,7 @@
 package com.netanel.coupons.jbeans;
 
-import java.util.HashSet;
+import java.util.Set;
+
 import com.netanel.coupons.crypt.Password;
 
 public class Company {
@@ -11,7 +12,7 @@ public class Company {
 	private String compName;
 	private Password password;
 	private String email;
-	private HashSet<Coupon> coupons;
+	private Set<Coupon> coupons;
 	
 	
 	//
@@ -19,14 +20,15 @@ public class Company {
 	//
 	public Company() { }
 	
-	public Company(String compName, Password password, String email) {
+	public Company(String compName, Password password, String email, Set<Coupon> coupons) {
 		this.compName = compName;
 		this.password = password;
 		this.email = email;
+		this.coupons = coupons;
 	}
 	
-	public Company(long id, String compName, Password password, String email) {
-		this(compName, password, email);
+	public Company(long id, String compName, Password password, String email, Set<Coupon> coupons) {
+		this(compName, password, email, coupons);
 		this.id = id;
 	}
 
@@ -51,7 +53,7 @@ public class Company {
 	}
 
 
-	public HashSet<Coupon> getCoupons() {
+	public Set<Coupon> getCoupons() {
 		return coupons;
 	}
 
@@ -77,7 +79,7 @@ public class Company {
 	}
 
 
-	public void setCoupons(HashSet<Coupon> coupons) {
+	public void setCoupons(Set<Coupon> coupons) {
 		this.coupons = coupons;
 	}
 

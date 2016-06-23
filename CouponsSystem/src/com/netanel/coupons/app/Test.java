@@ -25,6 +25,8 @@ public class Test {
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company");
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Customer");
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Coupon");
+		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company_Coupon");
+		DB.connectDB().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
 		DB.connectDB().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
 		
 		//Create passwords
@@ -36,10 +38,10 @@ public class Test {
 		Password p6 = new Password("1234".toCharArray());
 		Password p7 = new Password("1234".toCharArray());
 		
-		Company a = new Company("CompA", p1, "compa@compa.com");
-		Company b = new Company("CompB", p2, "compb@compb.com");
-		Company c = new Company("CompC", p3, "compc@compc.com");
-		Company d = new Company("CompD", p4, "compd@compd.com");
+//		Company a = new Company("CompA", p1, "compa@compa.com");
+//		Company b = new Company("CompB", p2, "compb@compb.com");
+//		Company c = new Company("CompC", p3, "compc@compc.com");
+//		Company d = new Company("CompD", p4, "compd@compd.com");
 		
 		Customer cust1 = new Customer("moshe", p5);
 		Customer cust2 = new Customer("david", p6);
@@ -65,17 +67,17 @@ public class Test {
 		custDB.removeCustomer("david");
 		
 		CompanyDbDAO compDB = new CompanyDbDAO();
-		compDB.createCompany(a);
-		compDB.createCompany(b);
-		compDB.createCompany(c);
-		
-		compDB.removeCompany(b);
-		
-		c.setCompName("New CompC");
-		c.setPassword("abc".toCharArray());
-		compDB.updateCompany(c);
-		
-		compDB.createCompany(d);
+//		compDB.createCompany(a);
+//		compDB.createCompany(b);
+//		compDB.createCompany(c);
+//		
+//		compDB.removeCompany(b);
+//		
+//		c.setCompName("New CompC");
+//		c.setPassword("abc".toCharArray());
+//		compDB.updateCompany(c);
+//		
+//		compDB.createCompany(d);
 		
 		System.out.println(compDB.getAllCompanies());
 //		Statement stat = DB.connectDB().createStatement();
@@ -86,7 +88,7 @@ public class Test {
 //		System.out.println("generatedkeyId: " + stat.getGeneratedKeys());
 		//ResultSet rs = DB.connectDB().createStatement().executeQuery("SELECT * FROM Company WHERE COMP_NAME='CompA' AND PASSWORD='12345'");
 				
-		System.out.println("Login: " + compDB.login("CompA", "1234".toCharArray()));
+		//System.out.println("Login: " + compDB.login("CompA", "1234".toCharArray()));
 		System.out.println("Login: " + custDB.login("moshe", "12344".toCharArray()));
 		
 		System.out.println(p1);
@@ -102,8 +104,9 @@ public class Test {
 		System.out.println(myCoupon);
 		myCoupon.setAmount(80);
 		couponDB.updateCoupon(myCoupon);
-		couponDB.createCoupon(c1);
+		//couponDB.createCoupon(c1);
 		
+		//DB.updateJoin("Customer_Coupon", 1, 2);
 		
 	}
 

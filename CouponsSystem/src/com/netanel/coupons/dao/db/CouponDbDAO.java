@@ -23,8 +23,8 @@ public class CouponDbDAO implements CouponDAO {
 								+ " TYPE, MESSAGE, PRICE, IMAGE) VALUES(?,?,?,?,?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, coupon.getTitle());
-			stat.setDate(2, coupon.getStartDate());
-			stat.setDate(3, coupon.getEndDate());
+			stat.setDate(2, Date.valueOf(coupon.getStartDate()));
+			stat.setDate(3, Date.valueOf(coupon.getEndDate()));
 			stat.setInt(4, coupon.getAmount());
 			stat.setString(5, coupon.getType().toString());
 			stat.setString(6, coupon.getMessage());
@@ -69,8 +69,8 @@ public class CouponDbDAO implements CouponDAO {
 								+ " TYPE=?, MESSAGE=?, PRICE=?, IMAGE=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, coupon.getTitle());
-			stat.setDate(2, coupon.getStartDate());
-			stat.setDate(3, coupon.getEndDate());
+			stat.setDate(2, Date.valueOf(coupon.getStartDate()));
+			stat.setDate(3, Date.valueOf(coupon.getEndDate()));
 			stat.setInt(4, coupon.getAmount());
 			stat.setString(5, coupon.getType().toString());
 			stat.setString(6, coupon.getMessage());
@@ -109,7 +109,8 @@ public class CouponDbDAO implements CouponDAO {
 			price = rs.getDouble("PRICE");
 			image = rs.getString("IMAGE");
 			
-			coupon = new Coupon(id, title, startDate, endDate, amount, type, message, price, image);
+			coupon = new Coupon(id, title, startDate.toLocalDate(),
+					endDate.toLocalDate(), amount, type, message, price, image);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

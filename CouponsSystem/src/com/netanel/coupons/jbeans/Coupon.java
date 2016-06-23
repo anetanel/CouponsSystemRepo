@@ -1,6 +1,6 @@
 package com.netanel.coupons.jbeans;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Coupon {
 
@@ -9,8 +9,8 @@ public class Coupon {
 	//
 	private long id = -1;
 	private String title;
-	private Date startDate;
-	private Date endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private int amount;
 	private CouponType type;
 	private String message;
@@ -22,7 +22,7 @@ public class Coupon {
 	//
 	public Coupon() {}
 	
-	public Coupon(String title, Date startDate, Date endDate, int amount, CouponType type, String message,
+	public Coupon(String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
 			double price, String image) {
 		this.title = title;
 		this.startDate = startDate;
@@ -34,7 +34,7 @@ public class Coupon {
 		this.image = image;
 	}
 	
-	public Coupon(long id, String title, Date startDate, Date endDate, int amount, CouponType type, String message,
+	public Coupon(long id, String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
 			double price, String image) {
 		this(title, startDate, endDate, amount, type, message, price, image);
 		this.id = id;
@@ -51,11 +51,11 @@ public class Coupon {
 		return title;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
@@ -83,7 +83,7 @@ public class Coupon {
 		if (this.id == -1) { 
 			this.id = id;
 		} else {
-			throw new IllegalArgumentException("ID already set" + this.id);
+			throw new IllegalArgumentException("ID already set: " + this.id);
 		}
 	}
 	
@@ -91,11 +91,11 @@ public class Coupon {
 		this.title = title;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -121,9 +121,10 @@ public class Coupon {
 
 	@Override
 	public String toString() {
-		return "Coupon [id=" + id + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", amount=" + amount + ", type=" + type + ", message=" + message + ", price=" + price + ", image="
-				+ image + "]";
+		return "Coupon [id=" + id + ", title=" + title + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", amount=" + amount
+				+ ", type=" + type + ", message=" + message + ", price="
+				+ price + ", image=" + image + "]";
 	}
 
 	@Override
@@ -138,7 +139,8 @@ public class Coupon {
 		long temp;
 		temp = Double.doubleToLongBits(price);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -146,65 +148,50 @@ public class Coupon {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Coupon other = (Coupon) obj;
-		if (amount != other.amount) {
+		if (amount != other.amount)
 			return false;
-		}
 		if (endDate == null) {
-			if (other.endDate != null) {
+			if (other.endDate != null)
 				return false;
-			}
-		} else if (!endDate.equals(other.endDate)) {
+		} else if (!endDate.equals(other.endDate))
 			return false;
-		}
-		if (id != other.id) {
+		if (id != other.id)
 			return false;
-		}
 		if (image == null) {
-			if (other.image != null) {
+			if (other.image != null)
 				return false;
-			}
-		} else if (!image.equals(other.image)) {
+		} else if (!image.equals(other.image))
 			return false;
-		}
 		if (message == null) {
-			if (other.message != null) {
+			if (other.message != null)
 				return false;
-			}
-		} else if (!message.equals(other.message)) {
+		} else if (!message.equals(other.message))
 			return false;
-		}
-		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price)) {
+		if (Double.doubleToLongBits(price) != Double
+				.doubleToLongBits(other.price))
 			return false;
-		}
 		if (startDate == null) {
-			if (other.startDate != null) {
+			if (other.startDate != null)
 				return false;
-			}
-		} else if (!startDate.equals(other.startDate)) {
+		} else if (!startDate.equals(other.startDate))
 			return false;
-		}
 		if (title == null) {
-			if (other.title != null) {
+			if (other.title != null)
 				return false;
-			}
-		} else if (!title.equals(other.title)) {
+		} else if (!title.equals(other.title))
 			return false;
-		}
-		if (type != other.type) {
+		if (type != other.type)
 			return false;
-		}
 		return true;
 	}
 	
-	
 }
+
+	

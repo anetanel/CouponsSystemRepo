@@ -23,4 +23,6 @@ public class DB {
 		stat.setLong(2, id2);
 		stat.executeUpdate();
 	}
+	
+	
 }

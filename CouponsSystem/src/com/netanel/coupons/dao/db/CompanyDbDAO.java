@@ -32,7 +32,10 @@ public class CompanyDbDAO implements CompanyDAO {
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
 			id = rs.getLong(1);
-			company.setId(id);			
+			company.setId(id);		
+			for (Coupon coupon : company.getCoupons()) {
+				addCoupon(company, coupon);
+			}
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,11 +49,11 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 	
 	@Override
-	public void removeCompany(long id) {
+	public void removeCompany(long compId) {
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "DELETE FROM Company WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id);
+			stat.setLong(1, compId);
 			stat.executeUpdate();
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -91,22 +94,23 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 
 	@Override
-	public Company getCompany(long id) {
+	public Company getCompany(long compId) {
 		Company company = null;
 		String compName, email;
 		Password password = null;
+		Set<Coupon> coupons = null;
+		
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT * FROM Company WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id);
+			stat.setLong(1, compId);
 			ResultSet rs = stat.executeQuery();
 			rs.next();
 			compName = rs.getString("COMP_NAME");
 			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
 			email = rs.getString("EMAIL");
-			
-			company = new Company(id, compName, password, email);
-			//company.setSalt(salt);
+			coupons = getCoupons(compId);
+			company = new Company(compId, compName, password, email, coupons);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,9 +136,23 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 
 	@Override
-	public Set<Coupon> getCoupons() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Coupon> getCoupons(long compId) {
+		Set<Coupon> coupons = new HashSet<>();
+		CouponDbDAO couponDB = new CouponDbDAO();
+		
+		try (Connection con = DB.connectDB()){
+			String sqlCmdStr = "SELECT COUPON_ID FROM Company_Coupon WHERE COMP_ID=?";
+			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
+			stat.setLong(1, compId);
+			ResultSet rs = stat.executeQuery();
+			while (rs.next()) {
+				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
+			}	
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return coupons;
 	}
 
 	@Override
@@ -159,6 +177,7 @@ public class CompanyDbDAO implements CompanyDAO {
 		return passwordMatch;
 	}
 	
+	@Override
 	public void addCoupon(Company company, Coupon coupon) {
 		try {
 			DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
@@ -167,5 +186,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 }

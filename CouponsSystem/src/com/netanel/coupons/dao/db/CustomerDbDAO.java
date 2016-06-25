@@ -32,6 +32,9 @@ public class CustomerDbDAO implements CustomerDAO {
 			rs.next();
 			id = rs.getLong(1);
 			customer.setId(id);
+			for (Coupon coupon : customer.getCoupons()) {
+				addCoupon(customer, coupon);
+			}
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,6 +95,8 @@ public class CustomerDbDAO implements CustomerDAO {
 		Customer customer = null;
 		String custName;
 		Password password = null;
+		Set<Coupon> coupons = null;
+
 		try (Connection con = DB.connectDB()){
 			String sqlCmdStr = "SELECT * FROM Customer WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -100,7 +105,8 @@ public class CustomerDbDAO implements CustomerDAO {
 			rs.next();
 			custName = rs.getString("CUST_NAME");
 			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
-			customer = new Customer(id, custName, password);
+			coupons = getCoupons(id);
+			customer = new Customer(id, custName, password, coupons);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,9 +132,23 @@ public class CustomerDbDAO implements CustomerDAO {
 	}
 
 	@Override
-	public Set<Coupon> getCoupons() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Coupon> getCoupons(long custId) {
+		Set<Coupon> coupons = new HashSet<>();
+		CouponDbDAO couponDB = new CouponDbDAO();
+		
+		try (Connection con = DB.connectDB()){
+			String sqlCmdStr = "SELECT COUPON_ID FROM Customer_Coupon WHERE CUST_ID=?";
+			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
+			stat.setLong(1, custId);
+			ResultSet rs = stat.executeQuery();
+			while (rs.next()) {
+				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
+			}	
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return coupons;
 	}
 
 	@Override
@@ -151,6 +171,16 @@ public class CustomerDbDAO implements CustomerDAO {
 			e.printStackTrace();
 		}
 		return passwordMatch;
+	}
+
+	@Override
+	public void addCoupon(Customer customer, Coupon coupon) {
+		try {
+			DB.updateJoin("Customer_Coupon", customer.getId(), coupon.getId());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 }

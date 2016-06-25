@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao.db;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +36,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			for (Coupon coupon : customer.getCoupons()) {
 				addCoupon(customer, coupon);
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -55,7 +56,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.setLong(1, id);
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -69,7 +70,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.setString(1, custName);
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -84,7 +85,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.setLong(2, customer.getId());
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -107,7 +108,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
 			coupons = getCoupons(id);
 			customer = new Customer(id, custName, password, coupons);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -124,7 +125,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			while (rs.next()) {
 				customers.add(getCustomer(rs.getLong(1)));
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -144,7 +145,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			while (rs.next()) {
 				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
 			}	
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -166,7 +167,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 						
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -177,7 +178,7 @@ public class CustomerDbDAO implements CustomerDAO {
 	public void addCoupon(Customer customer, Coupon coupon) {
 		try {
 			DB.updateJoin("Customer_Coupon", customer.getId(), coupon.getId());
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		

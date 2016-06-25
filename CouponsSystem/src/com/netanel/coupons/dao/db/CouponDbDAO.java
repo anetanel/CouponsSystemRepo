@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao.db;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -35,7 +36,7 @@ public class CouponDbDAO implements CouponDAO {
 			rs.next();
 			id = rs.getLong(1);
 			coupon.setId(id);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -55,7 +56,7 @@ public class CouponDbDAO implements CouponDAO {
 			stat.setLong(1, id);
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -79,7 +80,7 @@ public class CouponDbDAO implements CouponDAO {
 			stat.setLong(9, coupon.getId());
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -111,7 +112,7 @@ public class CouponDbDAO implements CouponDAO {
 			
 			coupon = new Coupon(id, title, startDate.toLocalDate(),
 					endDate.toLocalDate(), amount, type, message, price, image);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -128,7 +129,7 @@ public class CouponDbDAO implements CouponDAO {
 			while (rs.next()) {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -146,7 +147,7 @@ public class CouponDbDAO implements CouponDAO {
 			while (rs.next()) {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

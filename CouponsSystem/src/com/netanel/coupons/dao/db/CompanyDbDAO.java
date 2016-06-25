@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao.db;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +37,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			for (Coupon coupon : company.getCoupons()) {
 				addCoupon(company, coupon);
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -56,7 +57,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setLong(1, compId);
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -70,7 +71,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setString(1, compName);
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -87,7 +88,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setLong(3, company.getId());
 			stat.executeUpdate();
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -111,7 +112,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			email = rs.getString("EMAIL");
 			coupons = getCoupons(compId);
 			company = new Company(compId, compName, password, email, coupons);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -128,7 +129,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			while (rs.next()) {
 				companies.add(getCompany(rs.getLong(1)));
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -148,7 +149,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			while (rs.next()) {
 				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
 			}	
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -170,7 +171,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 						
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -181,7 +182,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	public void addCoupon(Company company, Coupon coupon) {
 		try {
 			DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | PropertyVetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

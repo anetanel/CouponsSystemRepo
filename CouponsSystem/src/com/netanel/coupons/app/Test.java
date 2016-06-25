@@ -22,6 +22,8 @@ import com.netanel.coupons.jbeans.Customer;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
+		System.setProperty("com.mchange.v2.log.MLog", "fallback");
+		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		// Initialize DB		
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company");
 		DB.connectDB().createStatement().executeUpdate("DELETE FROM Customer");

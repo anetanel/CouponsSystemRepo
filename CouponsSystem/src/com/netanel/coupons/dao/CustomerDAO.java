@@ -22,5 +22,5 @@ public interface CustomerDAO {
 	
 	public boolean login(String custName, char[] password);
 	
-	public void addCoupon(Customer customer, Coupon coupon);
+	public void buyCoupon(Customer customer, Coupon coupon);
 }

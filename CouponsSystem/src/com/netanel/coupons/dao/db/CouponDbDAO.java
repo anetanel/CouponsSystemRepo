@@ -19,7 +19,7 @@ public class CouponDbDAO implements CouponDAO {
 	@Override
 	public long createCoupon(Coupon coupon) {
 		long id=-1;
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "INSERT INTO Coupon (TITLE, START_DATE, END_DATE, AMOUNT,"
 								+ " TYPE, MESSAGE, PRICE, IMAGE) VALUES(?,?,?,?,?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -36,7 +36,7 @@ public class CouponDbDAO implements CouponDAO {
 			rs.next();
 			id = rs.getLong(1);
 			coupon.setId(id);
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -50,13 +50,13 @@ public class CouponDbDAO implements CouponDAO {
 
 	@Override
 	public void removeCoupon(long id) {
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, id);
 			stat.executeUpdate();
 			
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -65,7 +65,7 @@ public class CouponDbDAO implements CouponDAO {
 
 	@Override
 	public void updateCoupon(Coupon coupon) {
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "UPDATE Coupon SET TITLE=?, START_DATE=?, END_DATE=?, AMOUNT=?,"
 								+ " TYPE=?, MESSAGE=?, PRICE=?, IMAGE=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -80,7 +80,7 @@ public class CouponDbDAO implements CouponDAO {
 			stat.setLong(9, coupon.getId());
 			stat.executeUpdate();
 			
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -95,7 +95,7 @@ public class CouponDbDAO implements CouponDAO {
 		CouponType type;
 		double price;
 		
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT * FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, id);
@@ -112,7 +112,7 @@ public class CouponDbDAO implements CouponDAO {
 			
 			coupon = new Coupon(id, title, startDate.toLocalDate(),
 					endDate.toLocalDate(), amount, type, message, price, image);
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -122,14 +122,14 @@ public class CouponDbDAO implements CouponDAO {
 	@Override
 	public Set<Coupon> getAllCoupons() {
 		Set<Coupon> coupons = new HashSet<>(); 
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT ID FROM Coupon";
 			Statement stat = con.createStatement();
 			ResultSet rs = stat.executeQuery(sqlCmdStr);
 			while (rs.next()) {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -139,7 +139,7 @@ public class CouponDbDAO implements CouponDAO {
 	@Override
 	public Set<Coupon> getCouponByType(CouponType couponType) {
 		Set<Coupon> coupons = new HashSet<>();
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT ID FROM Coupon WHERE TYPE=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
 			stat.setString(1, couponType.toString());
@@ -147,7 +147,7 @@ public class CouponDbDAO implements CouponDAO {
 			while (rs.next()) {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

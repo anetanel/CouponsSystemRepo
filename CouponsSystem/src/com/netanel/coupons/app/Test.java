@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -15,31 +16,38 @@ import com.netanel.coupons.dao.db.CompanyDbDAO;
 import com.netanel.coupons.dao.db.CouponDbDAO;
 import com.netanel.coupons.dao.db.CustomerDbDAO;
 import com.netanel.coupons.dao.db.DB;
+import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 import com.netanel.coupons.jbeans.Customer;
 
 public class Test {
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args)  {
 		System.setProperty("com.mchange.v2.log.MLog", "fallback");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		// Initialize DB		
-		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company");
-		DB.connectDB().createStatement().executeUpdate("DELETE FROM Customer");
-		DB.connectDB().createStatement().executeUpdate("DELETE FROM Coupon");
-		DB.connectDB().createStatement().executeUpdate("DELETE FROM Company_Coupon");
-		DB.connectDB().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
-		DB.connectDB().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
+		try {
+			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company");
+			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer");
+			DB.getConnection().createStatement().executeUpdate("DELETE FROM Coupon");
+			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company_Coupon");
+			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
+			DB.getConnection().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		//Create passwords
 		Password p1 = new Password("1234".toCharArray());
 		Password p2 = new Password("1234".toCharArray());
-//		Password p3 = new Password("1234".toCharArray());
-//		Password p4 = new Password("1234".toCharArray());
-//		Password p5 = new Password("1234".toCharArray());
-//		Password p6 = new Password("1234".toCharArray());
-//		Password p7 = new Password("1234".toCharArray());
+		Password p3 = new Password("1234".toCharArray());
+		Password p4 = new Password("1234".toCharArray());
+		Password p5 = new Password("1234".toCharArray());
+		Password p6 = new Password("1234".toCharArray());
+		Password p7 = new Password("1234".toCharArray());
 
 		// Create coupons
 		Coupon c1 = new Coupon("Coupon1",LocalDate.now(),LocalDate.of(2018, 7, 29), 10, CouponType.CARS, "Car Coupon", 19.90, "files/cars.jpg");
@@ -61,37 +69,42 @@ public class Test {
 		couponDB.createCoupon(c3);
 		couponDB.createCoupon(c4);
 		
+		// Create Companies
 		Company a = new Company("CompA", p1, "compa@compa.com", coupons);
 		Company b = new Company("CompB", p2, "compb@compb.com", coupons2);
-//		Company c = new Company("CompC", p3, "compc@compc.com");
+		Company c = new Company("CompC", p3, "compc@compc.com", new HashSet<Coupon>());
 //		Company d = new Company("CompD", p4, "compd@compd.com");
-//		
-//		Customer cust1 = new Customer("moshe", p5);
-//		Customer cust2 = new Customer("david", p6);
-//		Customer cust3 = new Customer("sarah", p7);
-//		
-//		
 
-//		
-////		System.out.println(a);
-////		System.out.println(b);
-////		System.out.println(c);
-////		System.out.println(c1);
-////		System.out.println(c2);
-////		System.out.println(c3);
-//		CustomerDbDAO custDB = new CustomerDbDAO();
-//		custDB.createCustomer(cust1);
-//		custDB.createCustomer(cust2);
-//		custDB.createCustomer(cust3);
-//		
-//		custDB.removeCustomer("david");
-//		
 		CompanyDbDAO compDB = new CompanyDbDAO();
-		compDB.createCompany(a);
-		compDB.createCompany(b);
-////		compDB.createCompany(c);
+		try {
+			compDB.createCompany(a);
+		//	compDB.createCompany(a);
+			compDB.createCompany(b);
+			compDB.createCompany(c);
+			compDB.removeCompany(b);
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		// Create Customers
+		Customer cust1 = new Customer("moshe", p5, new HashSet<Coupon>());
+		Customer cust2 = new Customer("david", p6, new HashSet<Coupon>());
+		Customer cust3 = new Customer("sarah", p7, new HashSet<Coupon>());
+		
+		CustomerDbDAO custDB = new CustomerDbDAO();
+		custDB.createCustomer(cust1);
+		custDB.createCustomer(cust2);
+		custDB.createCustomer(cust3);
+		
+		custDB.removeCustomer("david");
+		
+
+		
 ////		
-////		compDB.removeCompany(b);
+////		
 ////		
 ////		c.setCompName("New CompC");
 ////		c.setPassword("abc".toCharArray());
@@ -124,7 +137,12 @@ public class Test {
 //		
 //		//DB.updateJoin("Customer_Coupon", 1, 2);
 		Company test = new Company();
-		test = compDB.getCompany(2);
+		try {
+			test = compDB.getCompany(2);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(test);
 		
 		

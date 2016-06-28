@@ -21,7 +21,7 @@ public class CustomerDbDAO implements CustomerDAO {
 	@Override
 	public long createCustomer(Customer customer) {
 		long id=-1;
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			Map<String,String> hashAndSalt = customer.getPassword().getHashAndSalt();
 			String sqlCmdStr = "INSERT INTO Customer (CUST_NAME, PASSWORD, SALT) VALUES(?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -34,9 +34,9 @@ public class CustomerDbDAO implements CustomerDAO {
 			id = rs.getLong(1);
 			customer.setId(id);
 			for (Coupon coupon : customer.getCoupons()) {
-				addCoupon(customer, coupon);
+				buyCoupon(customer, coupon);
 			}
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -50,13 +50,13 @@ public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
 	public void removeCustomer(long id) {
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Customer WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, id);
 			stat.executeUpdate();
 			
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -64,13 +64,13 @@ public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
 	public void removeCustomer(String custName) {
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Customer WHERE CUST_NAME=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, custName);
 			stat.executeUpdate();
 			
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -78,14 +78,14 @@ public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
 	public void updateCustomer(Customer customer) {
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "UPDATE Company SET CUST_NAME=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, customer.getCustName());
 			stat.setLong(2, customer.getId());
 			stat.executeUpdate();
 			
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public class CustomerDbDAO implements CustomerDAO {
 		Password password = null;
 		Set<Coupon> coupons = null;
 
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT * FROM Customer WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, id);
@@ -108,7 +108,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
 			coupons = getCoupons(id);
 			customer = new Customer(id, custName, password, coupons);
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -118,14 +118,14 @@ public class CustomerDbDAO implements CustomerDAO {
 	@Override
 	public Set<Customer> getAllCustomers() {
 		Set<Customer> customers = new HashSet<>(); 
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT ID FROM Customer";
 			Statement stat = con.createStatement();
 			ResultSet rs = stat.executeQuery(sqlCmdStr);
 			while (rs.next()) {
 				customers.add(getCustomer(rs.getLong(1)));
 			}
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -137,7 +137,7 @@ public class CustomerDbDAO implements CustomerDAO {
 		Set<Coupon> coupons = new HashSet<>();
 		CouponDbDAO couponDB = new CouponDbDAO();
 		
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT COUPON_ID FROM Customer_Coupon WHERE CUST_ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, custId);
@@ -145,7 +145,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			while (rs.next()) {
 				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
 			}	
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -156,7 +156,7 @@ public class CustomerDbDAO implements CustomerDAO {
 	public boolean login(String custName, char[] password) {
 		boolean passwordMatch = false;
 		String saltHexStr, hashHexStr;
-		try (Connection con = DB.connectDB()){
+		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT PASSWORD, SALT FROM Customer WHERE CUST_NAME=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, custName);
@@ -167,7 +167,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 						
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -175,13 +175,8 @@ public class CustomerDbDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void addCoupon(Customer customer, Coupon coupon) {
-		try {
-			DB.updateJoin("Customer_Coupon", customer.getId(), coupon.getId());
-		} catch (ClassNotFoundException | SQLException | PropertyVetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+	public void buyCoupon(Customer customer, Coupon coupon) {
+		DB.updateJoin("Customer_Coupon", customer.getId(), coupon.getId());		
 	}
 
 }

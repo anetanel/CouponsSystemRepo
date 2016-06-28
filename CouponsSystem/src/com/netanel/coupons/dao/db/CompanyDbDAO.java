@@ -21,11 +21,11 @@ public class CompanyDbDAO implements CompanyDAO {
 	@Override
 	public long createCompany(Company company) throws DAOException {
 		// Check if ID or COMP_NAME already exist in DB 
-		if (DB.foundInDb("Company", "ID", String.valueOf(company.getId()))) {
-			throw new DAOException("Company ID alreay exist in DB: " + company.getId());
+		if (DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(company.getId()))) {
+			throw new DAOException("Company ID already exist in DB: " + company.getId());
 		}
-		if (DB.foundInDb("Company", "COMP_NAME", String.valueOf(company.getCompName()))) {
-			throw new DAOException("Company Name alreay exist in DB: " + company.getCompName());
+		if (DB.foundInDb(Tables.Company, Columns.COMP_NAME, String.valueOf(company.getCompName()))) {
+			throw new DAOException("Company Name already exist in DB: " + company.getCompName());
 		}
 		
 		// Initialize id to -1
@@ -50,7 +50,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			
 			// TODO: split coupon issuing to separate method?
 			for (Coupon coupon : company.getCoupons()) {
-				issueCoupon(company, coupon);
+				addCoupon(company, coupon);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +67,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	
 	@Override
 	public void removeCompany(long compId) throws DAOException {
-		if (! DB.foundInDb("Company", "ID", String.valueOf(compId))) {
+		if (! DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(compId))) {
 			throw new DAOException("Company ID does not exist in DB: " + compId);
 		}
 		try (Connection con = DB.getConnection()){
@@ -84,7 +84,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	
 	@Override
 	public void removeCompany(String compName) throws DAOException {
-		if (! DB.foundInDb("Company", "ID", compName)) {
+		if (! DB.foundInDb(Tables.Company, Columns.ID, compName)) {
 			throw new DAOException("Company Name does not exist in DB: " + compName);
 		}
 		try (Connection con = DB.getConnection()){
@@ -102,7 +102,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	
 	@Override
 	public void updateCompany(Company company) throws DAOException {
-		if (! DB.foundInDb("Company", "ID", String.valueOf(company.getId()))) {
+		if (! DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(company.getId()))) {
 			throw new DAOException("Company ID does not exist in DB: " + company.getId());
 		}
 		try (Connection con = DB.getConnection()){
@@ -121,7 +121,7 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public Company getCompany(long compId) throws DAOException {
-		if (! DB.foundInDb("Company", "ID", String.valueOf(compId))) {
+		if (! DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(compId))) {
 			throw new DAOException("Company ID does not exist in DB: " + compId);
 		}
 		Company company = null;
@@ -166,7 +166,7 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public Set<Coupon> getCoupons(long compId) throws DAOException {
-		if (! DB.foundInDb("Company", "ID", String.valueOf(compId))) {
+		if (! DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(compId))) {
 			throw new DAOException("Company ID does not exist in DB: " + compId);
 		}
 		
@@ -211,25 +211,33 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 	
 	@Override
-	public void issueCoupon(Company company, Coupon coupon) throws DAOException {
-		boolean companyExist = DB.foundInDb("Company", "ID", String.valueOf(company.getId()));
-		boolean couponExist = DB.foundInDb("Coupon", "ID", String.valueOf(coupon.getId()));
+	public void addCoupon(Company company, Coupon coupon) throws DAOException {
+		//TODO: can be more efficient? maybe one query..
+		boolean companyExist = DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(company.getId()));
+		boolean couponExist = DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()));
+		boolean joinExist = DB.foundInDb(Tables.Company_Coupon,
+										Columns.COMP_ID, Columns.COUPON_ID,
+										String.valueOf(company.getId()), String.valueOf(coupon.getId()));
+		
 		if (! companyExist) {
 			throw new DAOException("Company ID does not exist in DB: " + company.getId());
 		}
 		if (! couponExist) {
 			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
 		}
+		if (joinExist) {
+			throw new DAOException("Coupon ID already exist in join DB: " + coupon.getId());
+		}
 		
-		DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
+		DB.updateJoin(SqlCmd.INSERT, Tables.Company_Coupon, company.getId(), coupon.getId());
 	}
 	
 	@Override
 	public void removeCoupon(long couponId) throws DAOException {
-		if (! DB.foundInDb("Coupon", "ID", String.valueOf(couponId))) {
-			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
-		}
-		DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
+//		if (! DB.foundInDb("Coupon", "ID", String.valueOf(couponId))) {
+//			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
+//		}
+//		DB.updateJoin("Company_Coupon", company.getId(), coupon.getId());
 	}
 
 	@Override

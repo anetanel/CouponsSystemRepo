@@ -78,7 +78,7 @@ public class Test {
 		CompanyDbDAO compDB = new CompanyDbDAO();
 		try {
 			compDB.createCompany(a);
-		//	compDB.createCompany(a);
+			compDB.createCompany(a);
 			compDB.createCompany(b);
 			compDB.createCompany(c);
 			compDB.removeCompany(b);
@@ -139,11 +139,12 @@ public class Test {
 		Company test = new Company();
 		try {
 			test = compDB.getCompany(2);
+			System.out.println(test);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
-		System.out.println(test);
+		
 		
 		
 	}

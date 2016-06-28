@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao.db;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +33,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			id = rs.getLong(1);
 			customer.setId(id);
 			for (Coupon coupon : customer.getCoupons()) {
-				buyCoupon(customer, coupon);
+				addCoupon(customer, coupon);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -175,8 +174,8 @@ public class CustomerDbDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void buyCoupon(Customer customer, Coupon coupon) {
-		DB.updateJoin("Customer_Coupon", customer.getId(), coupon.getId());		
+	public void addCoupon(Customer customer, Coupon coupon) {
+		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, customer.getId(), coupon.getId());		
 	}
 
 }

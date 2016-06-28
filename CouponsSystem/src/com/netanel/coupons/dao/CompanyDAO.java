@@ -22,7 +22,7 @@ public interface CompanyDAO {
 	
 	public boolean login(String compName, char[] password);
 	
-	public void issueCoupon(Company company, Coupon coupon) throws DAOException;
+	public void addCoupon(Company company, Coupon coupon) throws DAOException;
 	public void removeCoupon(Coupon coupon) throws DAOException;
 	public void removeCoupon(long couponId) throws DAOException;
 	

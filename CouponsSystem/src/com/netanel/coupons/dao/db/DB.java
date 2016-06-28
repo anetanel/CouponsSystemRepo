@@ -34,13 +34,29 @@ public class DB {
 		return con;
 	}
 	
-	public static void updateJoin(String joinDb, long id1, long id2) {
-		String sqlCmdStr = "INSERT INTO " + joinDb + " VALUES(?,?)";
+	public static void updateJoin(SqlCmd sqlCmd, Tables joinDb, long companyOrCustomerID, long couponID) {
+		String sqlCmdStr = "";
+		String column1;
+		if (joinDb.equals(Tables.Company_Coupon)) {
+			column1 = "COMP_ID";
+		} else {
+			column1 = "CUST_ID";
+		}
+		switch (sqlCmd) {
+			case INSERT:
+				sqlCmdStr = "INSERT INTO " + joinDb + " VALUES(?,?)";
+				break;
+			case DELETE:
+				sqlCmdStr = "DELETE FROM " + joinDb + "WHERE "+ column1 + "=? AND COUPON_ID=?";
+				break;
+			
+		}
+		
 		PreparedStatement stat;
 		try (Connection con = getConnection()){
 			stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id1);
-			stat.setLong(2, id2);
+			stat.setLong(1, companyOrCustomerID);
+			stat.setLong(2, couponID);
 			stat.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -48,13 +64,14 @@ public class DB {
 		}		
 	}
 	
-	public static boolean foundInDb(String table, String columnName, String queryValue) {
-		String sqlCmdStr = "SELECT * FROM " + table + " WHERE " + columnName + "=?";
+	public static boolean foundInDb(Tables table, Columns columnName1, Columns columnName2, String queryValue1, String queryValue2) {
+		String sqlCmdStr = "SELECT * FROM " + table + " WHERE " + columnName1 + "=? AND " + columnName2 + "=?";
 		PreparedStatement stat;
 		boolean foundBool = false;
 		try (Connection con = getConnection()){
 			stat = con.prepareStatement (sqlCmdStr);
-			stat.setString(1, queryValue);
+			stat.setString(1, queryValue1);
+			stat.setString(2, queryValue2);
 			ResultSet rs = stat.executeQuery();
 			foundBool = rs.next();
 		} catch (SQLException e) {
@@ -65,5 +82,9 @@ public class DB {
 		return foundBool;
 	}
 	
+	public static boolean foundInDb(Tables table, Columns columnName, String queryValue) {
+		// Overloading with the same arguments
+		return foundInDb(table, columnName, columnName, queryValue, queryValue);	
+	}
 	
 }

@@ -5,5 +5,6 @@ public enum Columns {
 	COUPON_ID,
 	COMP_ID,
 	CUST_ID,
-	COMP_NAME
+	COMP_NAME,
+	CUST_NAME
 }

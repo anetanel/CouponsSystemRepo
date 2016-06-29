@@ -2,11 +2,12 @@ package com.netanel.coupons.dao;
 
 import java.util.Set;
 
+import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
 public interface CustomerDAO {
-	long createCustomer(Customer customer);
+	long createCustomer(Customer customer) throws DAOException;
 	
 	void removeCustomer(Customer customer);
 	void removeCustomer(long custId);

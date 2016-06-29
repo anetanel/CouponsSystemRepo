@@ -12,26 +12,37 @@ import java.util.Set;
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CustomerDAO;
+import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
 public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
-	public long createCustomer(Customer customer) {
+	public long createCustomer(Customer customer) throws DAOException {
+		// Check if ID already exist in DB
+		if (DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
+			throw new DAOException("Customer ID already exist in DB: " + customer.getId());
+		}
+		// Initialize id to -1
 		long id=-1;
 		try (Connection con = DB.getConnection()){
+			// Get Password information from the Customer object
 			Map<String,String> hashAndSalt = customer.getPassword().getHashAndSalt();
+			// SQL command:
 			String sqlCmdStr = "INSERT INTO Customer (CUST_NAME, PASSWORD, SALT) VALUES(?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setString(1, customer.getCustName());
 			stat.setString(2, hashAndSalt.get("hash"));
 			stat.setString(3, hashAndSalt.get("salt"));
 			stat.executeUpdate();
+			// Result set retrieves the SQL auto-generated ID
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
+			// Set id from SQL auto-generated ID
 			id = rs.getLong(1);
 			customer.setId(id);
+			// Insert all coupons to the Customer_Coupon join table
 			for (Coupon coupon : customer.getCoupons()) {
 				addCoupon(customer, coupon);
 			}
@@ -43,11 +54,11 @@ public class CustomerDbDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void removeCustomer(long id) {
+	public void removeCustomer(long custId) {
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Customer WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id);
+			stat.setLong(1, custId);
 			stat.executeUpdate();
 			
 		} catch (SQLException e) {

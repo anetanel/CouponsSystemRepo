@@ -39,7 +39,7 @@ public class Test {
 			e.printStackTrace();
 		}
 		
-		
+
 		//Create passwords
 		Password p1 = new Password("1234".toCharArray());
 		Password p2 = new Password("1234".toCharArray());
@@ -99,10 +99,7 @@ public class Test {
 		custDB.createCustomer(cust2);
 		custDB.createCustomer(cust3);
 		
-		custDB.removeCustomer("david");
-		
-
-		
+			
 ////		
 ////		
 ////		

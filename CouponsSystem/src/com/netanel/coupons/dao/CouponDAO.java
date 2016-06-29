@@ -5,18 +5,17 @@ import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 
 public interface CouponDAO {
-	public long createCoupon(Coupon coupon);
+	long createCoupon(Coupon coupon);
 	
-	public void removeCoupon(Coupon coupon);
-	public void removeCoupon(long id);
-	//public void removeCoupon(String couponName);
+	void removeCoupon(Coupon coupon);
+	void removeCoupon(long id);
+
+	void updateCoupon(Coupon coupon);
 	
-	public void updateCoupon(Coupon coupon);
+	Coupon getCoupon(long id);
 	
-	public Coupon getCoupon(long id);
+	Set<Coupon> getAllCoupons();
 	
-	public Set<Coupon> getAllCoupons();
-	
-	public Set<Coupon> getCouponByType(CouponType couponType);
+	Set<Coupon> getCouponByType(CouponType couponType);
 
 }

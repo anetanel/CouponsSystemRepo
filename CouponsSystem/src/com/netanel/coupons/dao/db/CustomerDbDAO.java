@@ -43,11 +43,6 @@ public class CustomerDbDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void removeCustomer(Customer customer) {
-			removeCustomer(customer.getCustName());		
-	}
-
-	@Override
 	public void removeCustomer(long id) {
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Customer WHERE ID=?";
@@ -60,20 +55,13 @@ public class CustomerDbDAO implements CustomerDAO {
 			e.printStackTrace();
 		}		
 	}
-
+	
 	@Override
-	public void removeCustomer(String custName) {
-		try (Connection con = DB.getConnection()){
-			String sqlCmdStr = "DELETE FROM Customer WHERE CUST_NAME=?";
-			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setString(1, custName);
-			stat.executeUpdate();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+	public void removeCustomer(Customer customer) {
+			removeCustomer(customer.getId());		
 	}
+
+
 
 	@Override
 	public void updateCustomer(Customer customer) {

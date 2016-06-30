@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao.db;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,15 +10,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.netanel.coupons.dao.CouponDAO;
+import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 
 public class CouponDbDAO implements CouponDAO {
 
 	@Override
-	public long createCoupon(Coupon coupon) {
+	public long createCoupon(Coupon coupon) throws DAOException {
+		// Check if ID already exist in DB
+		if (DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
+			throw new DAOException("Coupon ID already exist in DB: " + coupon.getId());
+		}
+
+		// Initialize id to -1
 		long id=-1;
 		try (Connection con = DB.getConnection()){
+			// SQL command:
 			String sqlCmdStr = "INSERT INTO Coupon (TITLE, START_DATE, END_DATE, AMOUNT,"
 								+ " TYPE, MESSAGE, PRICE, IMAGE) VALUES(?,?,?,?,?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
@@ -32,8 +39,10 @@ public class CouponDbDAO implements CouponDAO {
 			stat.setDouble(7, coupon.getPrice());
 			stat.setString(8, coupon.getImage());
 			stat.executeUpdate();
+			// Result set retrieves the SQL auto-generated ID
 			ResultSet rs = stat.getGeneratedKeys();
 			rs.next();
+			// Set id from SQL auto-generated ID
 			id = rs.getLong(1);
 			coupon.setId(id);
 		} catch (SQLException e) {
@@ -44,16 +53,16 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public void removeCoupon(Coupon coupon) {
-		removeCoupon(coupon.getId());		
-	}
-
-	@Override
-	public void removeCoupon(long id) {
+	public void removeCoupon(long couponId) throws DAOException {
+		// Check if Coupon ID is in DB
+		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(couponId))) {
+			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
+		}
+		
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "DELETE FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id);
+			stat.setLong(1, couponId);
 			stat.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -61,10 +70,19 @@ public class CouponDbDAO implements CouponDAO {
 			e.printStackTrace();
 		}		
 	}
-
+	
+	@Override
+	public void removeCoupon(Coupon coupon) throws DAOException {
+		removeCoupon(coupon.getId());		
+	}
 
 	@Override
-	public void updateCoupon(Coupon coupon) {
+	public void updateCoupon(Coupon coupon) throws DAOException {
+		// Check if Coupon ID is in DB
+		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
+			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
+		}
+		
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "UPDATE Coupon SET TITLE=?, START_DATE=?, END_DATE=?, AMOUNT=?,"
 								+ " TYPE=?, MESSAGE=?, PRICE=?, IMAGE=? WHERE ID=?";

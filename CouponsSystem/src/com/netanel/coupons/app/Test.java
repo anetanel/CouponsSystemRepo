@@ -23,10 +23,10 @@ import com.netanel.coupons.jbeans.CouponType;
 import com.netanel.coupons.jbeans.Customer;
 
 public class Test {
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 		System.setProperty("com.mchange.v2.log.MLog", "fallback");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
-		// Initialize DB		
+		// Initialize DB
 		try {
 			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company");
 			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer");
@@ -38,9 +38,8 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-		//Create passwords
+		// Create passwords
 		Password p1 = new Password("1234".toCharArray());
 		Password p2 = new Password("1234".toCharArray());
 		Password p3 = new Password("1234".toCharArray());
@@ -50,30 +49,41 @@ public class Test {
 		Password p7 = new Password("1234".toCharArray());
 
 		// Create coupons
-		Coupon c1 = new Coupon("Coupon1",LocalDate.now(),LocalDate.of(2018, 7, 29), 10, CouponType.CARS, "Car Coupon", 19.90, "files/cars.jpg");
-		Coupon c2 = new Coupon("Coupon2",LocalDate.now(),LocalDate.of(2017, 05, 15), 10, CouponType.ELECTRONICS, "Electronics Coupon", 89.90, "files/electronics.jpg");
-		Coupon c3 = new Coupon("Coupon3",LocalDate.now(),LocalDate.of(2018,9 , 30), 10, CouponType.FOOD, "Food Coupon", 12.90, "files/food.jpg");
-		Coupon c4 = new Coupon("test", LocalDate.now(), LocalDate.of(2017, 6, 17), 10, CouponType.CARS, "my message", 19.90, "files/images/car.jpg");
-		
+		Coupon c1 = new Coupon("Coupon1", LocalDate.now(), LocalDate.of(2018, 7, 29), 10, CouponType.CARS, "Car Coupon",
+				19.90, "files/cars.jpg");
+		Coupon c2 = new Coupon("Coupon2", LocalDate.now(), LocalDate.of(2017, 05, 15), 10, CouponType.ELECTRONICS,
+				"Electronics Coupon", 89.90, "files/electronics.jpg");
+		Coupon c3 = new Coupon("Coupon3", LocalDate.now(), LocalDate.of(2018, 9, 30), 10, CouponType.FOOD,
+				"Food Coupon", 12.90, "files/food.jpg");
+		Coupon c4 = new Coupon("test", LocalDate.now(), LocalDate.of(2017, 6, 17), 10, CouponType.CARS, "my message",
+				19.90, "files/images/car.jpg");
+
 		Set<Coupon> coupons = new HashSet<>();
 		coupons.add(c1);
 		coupons.add(c2);
 		coupons.add(c3);
-		
+
 		Set<Coupon> coupons2 = new HashSet<>();
 		coupons2.add(c4);
-		
+
 		CouponDbDAO couponDB = new CouponDbDAO();
-		couponDB.createCoupon(c1);
-		couponDB.createCoupon(c2);
-		couponDB.createCoupon(c3);
-		couponDB.createCoupon(c4);
-		
+
+		try {
+			couponDB.createCoupon(c1);
+			couponDB.createCoupon(c2);
+			couponDB.createCoupon(c3);
+			couponDB.createCoupon(c4);
+
+		} catch (DAOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
 		// Create Companies
 		Company a = new Company("CompA", p1, "compa@compa.com", coupons);
 		Company b = new Company("CompB", p2, "compb@compb.com", coupons2);
 		Company c = new Company("CompC", p3, "compc@compc.com", new HashSet<Coupon>());
-//		Company d = new Company("CompD", p4, "compd@compd.com");
+		// Company d = new Company("CompD", p4, "compd@compd.com");
 
 		CompanyDbDAO compDB = new CompanyDbDAO();
 		try {
@@ -82,63 +92,66 @@ public class Test {
 			compDB.createCompany(b);
 			compDB.createCompany(c);
 			compDB.removeCompany(b);
-			
+
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		// Create Customers
 		Customer cust1 = new Customer("moshe", p5, new HashSet<Coupon>());
 		Customer cust2 = new Customer("david", p6, new HashSet<Coupon>());
 		Customer cust3 = new Customer("sarah", p7, new HashSet<Coupon>());
-		
+
 		CustomerDbDAO custDB = new CustomerDbDAO();
 		try {
 			custDB.createCustomer(cust1);
 			custDB.createCustomer(cust2);
 			custDB.createCustomer(cust3);
-			
+
 		} catch (DAOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	
-			
-////		
-////		
-////		
-////		c.setCompName("New CompC");
-////		c.setPassword("abc".toCharArray());
-////		compDB.updateCompany(c);
-////		
-////		compDB.createCompany(d);
-//		
-//		System.out.println(compDB.getAllCompanies());
-////		Statement stat = DB.connectDB().createStatement();
-////		stat.executeUpdate("INSERT INTO Company (COMP_NAME, PASSWORD, EMAIL) VALUES('blag','b','c')");
-////		ResultSet rs = stat.getGeneratedKeys();
-////		rs.next();
-////		System.out.println(rs.getInt(1));
-////		System.out.println("generatedkeyId: " + stat.getGeneratedKeys());
-//		//ResultSet rs = DB.connectDB().createStatement().executeQuery("SELECT * FROM Company WHERE COMP_NAME='CompA' AND PASSWORD='12345'");
-//				
-//		//System.out.println("Login: " + compDB.login("CompA", "1234".toCharArray()));
-//		System.out.println("Login: " + custDB.login("moshe", "12344".toCharArray()));
-//		
-//		System.out.println(p1);
-//		System.out.println(c1);
-//		
 
-//		
-//		Coupon myCoupon = couponDB.getCoupon(2);
-//		System.out.println(myCoupon);
-//		myCoupon.setAmount(80);
-//		couponDB.updateCoupon(myCoupon);
-//		//couponDB.createCoupon(c1);
-//		
-//		//DB.updateJoin("Customer_Coupon", 1, 2);
+		////
+		////
+		////
+		//// c.setCompName("New CompC");
+		//// c.setPassword("abc".toCharArray());
+		//// compDB.updateCompany(c);
+		////
+		//// compDB.createCompany(d);
+		//
+		// System.out.println(compDB.getAllCompanies());
+		//// Statement stat = DB.connectDB().createStatement();
+		//// stat.executeUpdate("INSERT INTO Company (COMP_NAME, PASSWORD,
+		//// EMAIL) VALUES('blag','b','c')");
+		//// ResultSet rs = stat.getGeneratedKeys();
+		//// rs.next();
+		//// System.out.println(rs.getInt(1));
+		//// System.out.println("generatedkeyId: " + stat.getGeneratedKeys());
+		// //ResultSet rs =
+		//// DB.connectDB().createStatement().executeQuery("SELECT * FROM
+		//// Company WHERE COMP_NAME='CompA' AND PASSWORD='12345'");
+		//
+		// //System.out.println("Login: " + compDB.login("CompA",
+		//// "1234".toCharArray()));
+		// System.out.println("Login: " + custDB.login("moshe",
+		//// "12344".toCharArray()));
+		//
+		// System.out.println(p1);
+		// System.out.println(c1);
+		//
+
+		//
+		// Coupon myCoupon = couponDB.getCoupon(2);
+		// System.out.println(myCoupon);
+		// myCoupon.setAmount(80);
+		// couponDB.updateCoupon(myCoupon);
+		// //couponDB.createCoupon(c1);
+		//
+		// //DB.updateJoin("Customer_Coupon", 1, 2);
 		Company test = new Company();
 		try {
 			test = compDB.getCompany(2);
@@ -147,9 +160,7 @@ public class Test {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
+
 	}
 
 }

@@ -30,7 +30,7 @@ public interface CompanyDAO {
 	void removeCompany(Company company) throws DAOException;
 	
 	/**
-	 * Updates a Company in the underling database (or any other persistence storage), from a given {@code Company} object.
+	 * Updates a Company in the underling database (or any other persistence storage), from a given {@code Company} object. The fields affected are Name, Email, Password and Salt.
 	 * @param company a {@code Company} object.
 	 * @throws DAOException
 	 */
@@ -53,11 +53,11 @@ public interface CompanyDAO {
 	
 	/**
 	 * Returns a {@code Set<Coupon>} of all Coupons of a specific Company, from the underling database (or any other persistence storage).
-	 * @param CompId a {@code long} Company ID.
+	 * @param compId a {@code long} Company ID.
 	 * @return a {@code Set<Coupon>}.
 	 * @throws DAOException
 	 */
-	Set<Coupon> getCoupons(long CompId) throws DAOException;
+	Set<Coupon> getCoupons(long compId) throws DAOException;
 	
 	/**
 	 * Checks if the password and company name given, matches the credentials stored in the underling database (or any other persistence storage).

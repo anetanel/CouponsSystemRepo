@@ -95,10 +95,16 @@ public class Test {
 		Customer cust3 = new Customer("sarah", p7, new HashSet<Coupon>());
 		
 		CustomerDbDAO custDB = new CustomerDbDAO();
-		custDB.createCustomer(cust1);
-		custDB.createCustomer(cust2);
-		custDB.createCustomer(cust3);
-		
+		try {
+			custDB.createCustomer(cust1);
+			custDB.createCustomer(cust2);
+			custDB.createCustomer(cust3);
+			
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
 			
 ////		
 ////		

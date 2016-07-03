@@ -13,7 +13,7 @@ public class CompanyFacade implements CouponClientFacade{
 	}
 
 	@Override
-	public CouponClientFacade login(String name, Password password, ClientType clientType) {
+	public CouponClientFacade login(String name, char[] password, ClientType clientType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

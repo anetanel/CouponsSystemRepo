@@ -3,6 +3,7 @@ package com.netanel.coupons.clients;
 import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
+import com.netanel.coupons.exception.LoginException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 
@@ -13,7 +14,7 @@ public class CustomerFacade implements CouponClientFacade{
 	}
 	
 	@Override
-	public CouponClientFacade login(String name, Password password, ClientType clientType) {
+	public CouponClientFacade login(String name, char[] password, ClientType clientType) throws LoginException {
 		// TODO Auto-generated method stub
 		return null;
 	}

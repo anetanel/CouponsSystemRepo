@@ -1,7 +1,8 @@
 package com.netanel.coupons.clients;
 
 import com.netanel.coupons.crypt.Password;
+import com.netanel.coupons.exception.LoginException;
 
 public interface CouponClientFacade {
-	CouponClientFacade login(String name, Password password, ClientType clientType);
+	CouponClientFacade login(String name, char[] password, ClientType clientType) throws LoginException;
 }

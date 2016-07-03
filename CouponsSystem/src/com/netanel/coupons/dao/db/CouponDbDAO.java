@@ -53,7 +53,7 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public void removeCoupon(long couponId) throws DAOException {
+	public void deleteCoupon(long couponId) throws DAOException {
 		// Check if Coupon ID is in DB
 		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(couponId))) {
 			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
@@ -72,8 +72,8 @@ public class CouponDbDAO implements CouponDAO {
 	}
 	
 	@Override
-	public void removeCoupon(Coupon coupon) throws DAOException {
-		removeCoupon(coupon.getId());		
+	public void deleteCoupon(Coupon coupon) throws DAOException {
+		deleteCoupon(coupon.getId());		
 	}
 
 	@Override
@@ -170,6 +170,24 @@ public class CouponDbDAO implements CouponDAO {
 			e.printStackTrace();
 		}
 		return coupons;
+	}
+
+	@Override
+	public Set<Long> getCustomersId(Coupon coupon) {
+		Set<Long> customers = new HashSet<>();
+		try (Connection con = DB.getConnection()){
+			String sqlCmdStr = "SELECT CUST_ID FROM Customer_Coupon WHERE COUPON_ID=?";
+			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
+			stat.setLong(1, coupon.getId());
+			ResultSet rs = stat.executeQuery(sqlCmdStr);
+			while (rs.next()) {
+				customers.add(rs.getLong(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return customers;
 	}
 
 }

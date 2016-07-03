@@ -20,14 +20,14 @@ public interface CouponDAO {
 	 * @param coupon a {@code Coupon} object.
 	 * @throws DAOException
 	 */
-	void removeCoupon(Coupon coupon) throws DAOException;
+	void deleteCoupon(Coupon coupon) throws DAOException;
 	
 	/**
 	 * Remove a Company from the underling database (or any other persistence storage).
 	 * @param couponId a {@code long} Coupon ID.
 	 * @throws DAOException
 	 */
-	void removeCoupon(long couponId) throws DAOException;
+	void deleteCoupon(long couponId) throws DAOException;
 
 	/**
 	 * Updates a Coupon in the underling database (or any other persistence storage), from a given {@code Coupon} object.
@@ -56,5 +56,7 @@ public interface CouponDAO {
 	 * @return a {@code Set<Coupon>}.
 	 */
 	Set<Coupon> getCouponByType(CouponType couponType);
+	
+	Set<Long> getCustomersId(Coupon coupon);
 
 }

@@ -17,17 +17,17 @@ public class Test2 {
 //		System.out.println(DB.foundInDb(Tables.Company_Coupon, Columns.COMP_ID, Columns.COUPON_ID,"1","2"));
 //		System.out.println(DB.foundInDb(Tables.Company_Coupon, Columns.COMP_ID, Columns.COUPON_ID,"1","4"));
 		
-//		String name = "Admin";
-//		char[] password = "1234".toCharArray();
-//		ClientType clientType = ClientType.ADMIN;
-//		CouponClientFacade admin;
-//		try {
-//			admin = new AdminFacade().login(name, password, clientType);
-//			System.out.println(admin);
-//		} catch (LoginException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		String name = "Admin";
+		char[] password = "1234".toCharArray();
+		ClientType clientType = ClientType.ADMIN;
+		CouponClientFacade admin;
+		try {
+			admin = new AdminFacade().login(name, password, clientType);
+			System.out.println(admin);
+		} catch (LoginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

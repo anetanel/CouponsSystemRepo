@@ -57,6 +57,11 @@ public interface CouponDAO {
 	 */
 	Set<Coupon> getCouponByType(CouponType couponType);
 	
+	/**
+	 * Returns a {@code Set<Long>} of the IDs of the Customers that correlate to the Coupon in the underling database (or any other persistence storage).
+	 * @param coupon a {@code Coupon} object.
+	 * @return a {@code Set<Long>}.
+	 */
 	Set<Long> getCustomersId(Coupon coupon);
 
 }

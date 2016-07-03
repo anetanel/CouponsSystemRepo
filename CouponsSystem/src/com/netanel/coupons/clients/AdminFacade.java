@@ -2,10 +2,11 @@ package com.netanel.coupons.clients;
 
 import java.util.Set;
 
-import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.dao.CompanyDAO;
+import com.netanel.coupons.dao.CouponDAO;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.dao.db.CompanyDbDAO;
+import com.netanel.coupons.dao.db.CouponDbDAO;
 import com.netanel.coupons.dao.db.CustomerDbDAO;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.exception.LoginException;
@@ -37,12 +38,19 @@ public class AdminFacade implements CouponClientFacade {
 	public void deleteCompany(Company company) throws DAOException {
 		CompanyDAO compDao = new CompanyDbDAO();
 		CustomerDAO custDao = new CustomerDbDAO();
+		CouponDAO couponDao = new CouponDbDAO();
 		
-		Set<Coupon> coupons = company.getCoupons();
-		for (Coupon coupon : coupons) {
+		for (Coupon coupon : company.getCoupons()) {
+			// Remove coupon from company
 			compDao.removeCoupon(company.getId(), coupon.getId());
-			//custDao.removeCoupon(customer, coupon);
+			//Remove coupon from all customers
+			for (long custId : couponDao.getCustomersId(coupon)) {
+				custDao.removeCoupon(custId, coupon.getId());
+			}
+			// Delete coupon
+			couponDao.deleteCoupon(coupon);
 		}
+		// Remove company
 		compDao.removeCompany(company);
 		
 	}

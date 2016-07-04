@@ -105,7 +105,12 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public Coupon getCoupon(long id) {
+	public Coupon getCoupon(long couponId) throws DAOException {
+		// Check if Coupon ID is in DB
+		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(couponId))) {
+			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
+		}
+				
 		Coupon coupon = null;
 		String title, message, image;
 		Date startDate, endDate;
@@ -116,7 +121,7 @@ public class CouponDbDAO implements CouponDAO {
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT * FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
-			stat.setLong(1, id);
+			stat.setLong(1, couponId);
 			ResultSet rs = stat.executeQuery();
 			rs.next();
 			title = rs.getString("TITLE");
@@ -128,7 +133,7 @@ public class CouponDbDAO implements CouponDAO {
 			price = rs.getDouble("PRICE");
 			image = rs.getString("IMAGE");
 			
-			coupon = new Coupon(id, title, startDate.toLocalDate(),
+			coupon = new Coupon(couponId, title, startDate.toLocalDate(),
 					endDate.toLocalDate(), amount, type, message, price, image);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -138,7 +143,7 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public Set<Coupon> getAllCoupons() {
+	public Set<Coupon> getAllCoupons() throws DAOException {
 		Set<Coupon> coupons = new HashSet<>(); 
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT ID FROM Coupon";
@@ -155,7 +160,7 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public Set<Coupon> getCouponByType(CouponType couponType) {
+	public Set<Coupon> getCouponByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT ID FROM Coupon WHERE TYPE=?";
@@ -172,6 +177,7 @@ public class CouponDbDAO implements CouponDAO {
 		return coupons;
 	}
 
+	
 	@Override
 	public Set<Long> getCustomersId(Coupon coupon) {
 		Set<Long> customers = new HashSet<>();

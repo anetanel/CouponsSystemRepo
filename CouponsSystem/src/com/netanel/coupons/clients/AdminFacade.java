@@ -2,27 +2,36 @@ package com.netanel.coupons.clients;
 
 import java.util.Set;
 
-import com.netanel.coupons.dao.CompanyDAO;
-import com.netanel.coupons.dao.CouponDAO;
-import com.netanel.coupons.dao.CustomerDAO;
-import com.netanel.coupons.dao.db.CompanyDbDAO;
-import com.netanel.coupons.dao.db.CouponDbDAO;
-import com.netanel.coupons.dao.db.CustomerDbDAO;
-import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.LoginException;
-import com.netanel.coupons.jbeans.Company;
-import com.netanel.coupons.jbeans.Coupon;
-import com.netanel.coupons.jbeans.Customer;
+import com.netanel.coupons.dao.*;
+import com.netanel.coupons.dao.db.*;
+import com.netanel.coupons.exception.*;
+import com.netanel.coupons.jbeans.*;
 
 public class AdminFacade implements CouponClientFacade {
 
+	//
+	// Attributes
+	//
+	private CompanyDAO compDao;
+	private CustomerDAO custDao;
+	private CouponDAO couponDao;
+	private static final String ADMIN_PASS = "1234";
+	
+	//
+	// Constructors
+	//
 	public AdminFacade() {
-		// TODO Auto-generated constructor stub
+		this.compDao = new CompanyDbDAO();
+		this.custDao = new CustomerDbDAO();
+		this.couponDao = new CouponDbDAO();
 	}
 
+	//
+	// Functions
+	//
 	@Override
 	public CouponClientFacade login(String name, char[] password, ClientType clientType) throws LoginException {
-		if (name.toLowerCase().equals("admin") && String.valueOf(password).equals("1234")
+		if (name.toLowerCase().equals("admin") && String.valueOf(password).equals(ADMIN_PASS)
 				&& clientType.equals(ClientType.ADMIN)) {
 			return this;
 		} else {
@@ -31,15 +40,10 @@ public class AdminFacade implements CouponClientFacade {
 	}
 
 	public void createCompany(Company company) throws DAOException {
-		CompanyDAO compDao = new CompanyDbDAO();
 		compDao.createCompany(company);
 	}
 
 	public void deleteCompany(Company company) throws DAOException {
-		CompanyDAO compDao = new CompanyDbDAO();
-		CustomerDAO custDao = new CustomerDbDAO();
-		CouponDAO couponDao = new CouponDbDAO();
-		
 		for (Coupon coupon : company.getCoupons()) {
 			// Remove coupon from company
 			compDao.removeCoupon(company.getId(), coupon.getId());
@@ -51,43 +55,48 @@ public class AdminFacade implements CouponClientFacade {
 			couponDao.deleteCoupon(coupon);
 		}
 		// Remove company
-		compDao.removeCompany(company);
-		
+		compDao.removeCompany(company);		
 	}
 
-	public void updateCompanyDetails(Company company) {
-
+	public void updateCompanyDetails(Company company) throws DAOException {
+		compDao.updateCompany(company);
 	}
 
-	public Company getCompany(long compId) {
-		Company company = null;
-		return company;
+	public Company getCompany(long compId) throws DAOException {
+		return compDao.getCompany(compId);
 	}
 
-	public Set<Company> getAllCompanies() {
-		Set<Company> companies = null;
-		return companies;
+	public Set<Company> getAllCompanies() throws DAOException {
+		return compDao.getAllCompanies();
 	}
 
-	public void createCustomer(Customer customer) {
-
+	public void createCustomer(Customer customer) throws DAOException {
+		custDao.createCustomer(customer);
 	}
 
-	public void deleteCustomer(Customer customer) {
-
+	public void deleteCustomer(Customer customer) throws DAOException {
+		// Remove all Coupons from Customer
+		for (Coupon coupon : customer.getCoupons()) {
+			custDao.removeCoupon(customer, coupon);
+		}
+		// Remove Customer
+		custDao.removeCustomer(customer);
 	}
 
-	public void updateCustomerDetails(Customer customer) {
-
+	public void updateCustomerDetails(Customer customer) throws DAOException {
+		custDao.updateCustomer(customer);
 	}
 
-	public Customer getCustomer(long custID) {
-		Customer customer = null;
-		return customer;
+	public Customer getCustomer(long custId) throws DAOException {
+		return custDao.getCustomer(custId);
 	}
 
-	public Set<Customer> getAllCustomers() {
-		Set<Customer> customers = null;
-		return customers;
+	public Set<Customer> getAllCustomers() throws DAOException {
+		return custDao.getAllCustomers();
+	}
+
+	@Override
+	public String toString() {
+		return "AdminFacade [compDao=" + compDao + ", custDao=" + custDao + ", couponDao=" + couponDao + "]";
 	}
 }

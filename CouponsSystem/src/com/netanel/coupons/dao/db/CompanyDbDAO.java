@@ -108,6 +108,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setLong(5, company.getId());
 			stat.executeUpdate();
 			// Insert all coupons to the Company_Coupon join table
+			//TODO: what about removing coupons? 
 			for (Coupon coupon : company.getCoupons()) {
 				addCoupon(company, coupon);
 			}

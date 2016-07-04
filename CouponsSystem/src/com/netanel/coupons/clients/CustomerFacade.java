@@ -1,40 +1,66 @@
 package com.netanel.coupons.clients;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import com.netanel.coupons.crypt.Password;
-import com.netanel.coupons.exception.LoginException;
-import com.netanel.coupons.jbeans.Coupon;
-import com.netanel.coupons.jbeans.CouponType;
+import com.netanel.coupons.dao.*;
+import com.netanel.coupons.dao.db.*;
+import com.netanel.coupons.exception.*;
+import com.netanel.coupons.jbeans.*;
 
 public class CustomerFacade implements CouponClientFacade{
-
-	public CustomerFacade() {
-		// TODO Auto-generated constructor stub
+	//
+	// Attributes
+	//
+	private Customer customer;
+	private CustomerDAO custDao;
+	
+	//
+	// Constructors
+	//
+	public CustomerFacade(Customer customer) {
+		this.customer = customer;
+		this.custDao = new CustomerDbDAO();
 	}
 	
+	//
+	// Functions
+	//
 	@Override
-	public CouponClientFacade login(String name, char[] password, ClientType clientType) throws LoginException {
-		// TODO Auto-generated method stub
-		return null;
+	public CouponClientFacade login(String custName, char[] password, ClientType clientType) throws LoginException {
+		boolean loginSuccessful = custDao.login(custName, password);
+		if (loginSuccessful && clientType.equals(ClientType.CUSTOMER)) {
+			return this;
+		} else {
+			throw new LoginException("Customer Login Failed. Incorrect parameters.");
+		}		
 	}
 
-	public void buyCoupon(Coupon coupon){
-		
+	public void buyCoupon(Coupon coupon) throws DAOException{		
+		custDao.addCoupon(customer, coupon);
 	}
 	
-	public Set<Coupon> getAllCoupons(){
-		Set<Coupon> coupons = null;
+	public Set<Coupon> getAllCoupons() throws DAOException{
+		return custDao.getCoupons(customer.getId());
+	}
+	
+	public Set<Coupon> getCouponsByType(CouponType couponType) throws DAOException {
+		Set<Coupon> coupons = new HashSet<>();
+		for (Coupon coupon : custDao.getCoupons(customer.getId())) {
+			if (coupon.getType().equals(couponType) ) {
+				coupons.add(coupon);
+			}
+		}
 		return coupons;
 	}
 	
-	public Set<Coupon> getCouponsByType(CouponType couponType) {
-		Set<Coupon> coupons = null;
-		return coupons;
-	}
-	
-	public Set<Coupon> getCouponsByPrice(double price){
-		Set<Coupon> coupons = null;
+	public Set<Coupon> getCouponsByPrice(double price) throws DAOException{
+		Set<Coupon> coupons = new HashSet<>();
+		for (Coupon coupon : custDao.getCoupons(customer.getId())) {
+			if (coupon.getPrice() == price ) {
+				coupons.add(coupon);
+			}
+		}
 		return coupons;
 	}
 	

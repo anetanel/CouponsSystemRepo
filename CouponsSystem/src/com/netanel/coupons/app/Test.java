@@ -47,9 +47,11 @@ public class Test {
 		String name = "Admin";
 		char[] password = "1234".toCharArray();
 		ClientType clientType = ClientType.ADMIN;
+		
 		AdminFacade admin = null;
 		try {
 			admin = (AdminFacade) new AdminFacade().login(name, password, clientType);
+			System.out.println(admin);
 		} catch (LoginException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +100,7 @@ public class Test {
 //
 		// Create Companies
 		Company a = new Company("CompA", p1, "compa@compa.com", coupons);
-		Company b = new Company("CompA", p2, "compb@compb.com", coupons2);
+		Company b = new Company("CompB", p2, "compb@compb.com", coupons2);
 //		Company c = new Company("CompC", p3, "compc@compc.com", new HashSet<Coupon>());
 //		// Company d = new Company("CompD", p4, "compd@compd.com");
 //

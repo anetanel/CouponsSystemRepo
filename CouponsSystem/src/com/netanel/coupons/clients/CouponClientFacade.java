@@ -1,6 +1,5 @@
 package com.netanel.coupons.clients;
 
-import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.exception.LoginException;
 
 public interface CouponClientFacade {

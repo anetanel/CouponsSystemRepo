@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import com.netanel.coupons.exception.DAOException;
@@ -41,21 +42,24 @@ public interface CouponDAO {
 	 * Returns a {@code Coupon} object from the underling database (or any other persistence storage).
 	 * @param couponId a {@code long} Coupon ID.
 	 * @return a {@code Coupon} object.
+	 * @throws DAOException 
 	 */
-	Coupon getCoupon(long couponId);
+	Coupon getCoupon(long couponId) throws DAOException;
 	
 	/**
 	 * Returns a {@code Set<Coupon>} of all Coupons from the underling database (or any other persistence storage).
 	 * @return a {@code Set<Coupon>}.
+	 * @throws DAOException 
 	 */
-	Set<Coupon> getAllCoupons();
+	Set<Coupon> getAllCoupons() throws DAOException;
 	
 	/**
 	 * Returns a {@code Set<Coupon>} of all Coupons of a specific {@code CouponType} from the underling database (or any other persistence storage).
 	 * @param couponType a {@code CouponType} enum by which to filter the coupons.
 	 * @return a {@code Set<Coupon>}.
+	 * @throws DAOException 
 	 */
-	Set<Coupon> getCouponByType(CouponType couponType);
+	Set<Coupon> getCouponByType(CouponType couponType) throws DAOException;
 	
 	/**
 	 * Returns a {@code Set<Long>} of the IDs of the Customers that correlate to the Coupon in the underling database (or any other persistence storage).
@@ -63,5 +67,6 @@ public interface CouponDAO {
 	 * @return a {@code Set<Long>}.
 	 */
 	Set<Long> getCustomersId(Coupon coupon);
+
 
 }

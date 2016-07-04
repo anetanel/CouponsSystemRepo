@@ -28,10 +28,13 @@ import com.netanel.coupons.exception.LoginException;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
 
 public class MainWindow {
 
-	private JFrame frmCouponSystemLogin;
+	private JFrame frmCouponSystemGui;
 	private JTextField customerNameTextField;
 	private JPasswordField customerPassField;
 	private JTextField companyNameTextField;
@@ -52,7 +55,7 @@ public class MainWindow {
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
-					window.frmCouponSystemLogin.setVisible(true);
+					window.frmCouponSystemGui.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -71,21 +74,26 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmCouponSystemLogin = new JFrame();
-		frmCouponSystemLogin.setTitle("Coupon System Login");
-		frmCouponSystemLogin.setResizable(false);
-		frmCouponSystemLogin.setBounds(100, 100, 450, 200);
-		frmCouponSystemLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmCouponSystemLogin.getContentPane().setLayout(new BorderLayout(0, 0));
+		frmCouponSystemGui = new JFrame();
+		frmCouponSystemGui.setTitle("Coupon System");
+		frmCouponSystemGui.setResizable(false);
+		frmCouponSystemGui.setBounds(100, 100, 450, 200);
+		frmCouponSystemGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmCouponSystemGui.getContentPane().setLayout(new CardLayout(0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setToolTipText("");
-		frmCouponSystemLogin.getContentPane().add(tabbedPane);
+		JPanel panel = new JPanel();
+		CardLayout cl = new CardLayout(0,0);
+		frmCouponSystemGui.getContentPane().add(panel, "login");
+		panel.setLayout(cl);
+		
+		JTabbedPane loginTabsPane = new JTabbedPane(JTabbedPane.TOP);
+		panel.add(loginTabsPane, "name_961269142384174");
+		loginTabsPane.setToolTipText("");
 		
 		JPanel customerLoginPanel = new JPanel();
-		tabbedPane.addTab("Customers Login", null, customerLoginPanel, null);
+		loginTabsPane.addTab("Customers Login", null, customerLoginPanel, null);
 		customerLoginPanel.setLayout(null);
-		
+				
 		JLabel customerNameLoginLabel = new JLabel("Customer Name:");
 		customerNameLoginLabel.setBounds(29, 11, 89, 33);
 		customerLoginPanel.add(customerNameLoginLabel);
@@ -105,11 +113,15 @@ public class MainWindow {
 		customerPassField.setColumns(10);
 		
 		JButton customerLoginBtn = new JButton("Login");
+		customerLoginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		customerLoginBtn.setBounds(224, 99, 89, 23);
 		customerLoginPanel.add(customerLoginBtn);
 		
 		JPanel CompanyLoginPanel = new JPanel();
-		tabbedPane.addTab("Company Login", null, CompanyLoginPanel, null);
+		loginTabsPane.addTab("Company Login", null, CompanyLoginPanel, null);
 		CompanyLoginPanel.setLayout(null);
 		
 		JLabel companyNameLoginLabel = new JLabel("Company Name:");
@@ -135,7 +147,7 @@ public class MainWindow {
 		CompanyLoginPanel.add(companyLoginBtn);
 		
 		JPanel adminLoginPanel = new JPanel();
-		tabbedPane.addTab("Admin Login", null, adminLoginPanel, null);
+		loginTabsPane.addTab("Admin Login", null, adminLoginPanel, null);
 		adminLoginPanel.setLayout(null);
 		
 		JLabel adminNameLoginLabel = new JLabel("Admin Name:");
@@ -157,20 +169,26 @@ public class MainWindow {
 		adminLoginPanel.add(adminPassField);
 		
 		JButton adminLoginBtn = new JButton("Login");
+		
 		adminLoginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AdminFacade admin = new AdminFacade();
 				try {
 					admin.login(adminNameTextField.getText(), adminPassField.getPassword(), ClientType.ADMIN);
-					JOptionPane.showMessageDialog(frmCouponSystemLogin, "Login ok!");
+					JOptionPane.showMessageDialog(frmCouponSystemGui, "Login ok!");
+					frmCouponSystemGui.setBounds(100, 100, 800, 600);
+					cl.show(panel, "app");
 				} catch (LoginException e1) {
-					JOptionPane.showMessageDialog(frmCouponSystemLogin, e1.getMessage(),"Login Failed!", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(frmCouponSystemGui, e1.getMessage(),"Login Failed!", JOptionPane.WARNING_MESSAGE);
 		
 				}
 				
 			}
 		});
 		adminLoginBtn.setBounds(224, 99, 89, 23);
-		adminLoginPanel.add(adminLoginBtn);
+		adminLoginPanel.add(adminLoginBtn);	
+		
+		JPanel appPanel = new JPanel();
+		panel.add(appPanel, "app");
 	}
 }

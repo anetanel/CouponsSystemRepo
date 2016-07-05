@@ -21,11 +21,12 @@ public class CompanyFacade implements CouponClientFacade{
 	//
 	// Constructors
 	//
-	public CompanyFacade(Company company) {
-		this.company = company;
+	public CompanyFacade(String compName) throws DAOException {
+		//this.company = company;
 		this.compDao = new CompanyDbDAO();
 		this.couponDao = new CouponDbDAO();
 		this.custDao = new CustomerDbDAO();
+		this.company = compDao.getCompany(compName);
 	}
 
 	//

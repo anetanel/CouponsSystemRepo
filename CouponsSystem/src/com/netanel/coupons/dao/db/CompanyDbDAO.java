@@ -149,6 +149,38 @@ public class CompanyDbDAO implements CompanyDAO {
 		}
 		return company;
 	}
+	
+	@Override
+	public Company getCompany(String compName) throws DAOException {
+		// Check if Company ID is in DB
+		if (!DB.foundInDb(Tables.Company, Columns.COMP_NAME, compName)) {
+			throw new DAOException("Company Name does not exist in DB: " + compName);
+		}
+		long compId;
+		Company company = null;
+		String email;
+		Password password = null;
+		Set<Coupon> coupons = null;
+
+		try (Connection con = DB.getConnection()) {
+			// SQL command:
+			String sqlCmdStr = "SELECT * FROM Company WHERE COMP_NAME=?";
+			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
+			stat.setString(1, compName);
+			ResultSet rs = stat.executeQuery();
+
+			rs.next();
+			compId = rs.getLong("ID");
+			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
+			email = rs.getString("EMAIL");
+			coupons = getCoupons(compId);
+			company = new Company(compId, compName, password, email, coupons);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return company;
+	}
 
 	@Override
 	public Set<Company> getAllCompanies() throws DAOException {

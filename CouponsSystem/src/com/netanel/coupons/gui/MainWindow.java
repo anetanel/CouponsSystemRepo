@@ -24,24 +24,39 @@ import javax.swing.UIManager;
 
 import com.netanel.coupons.clients.AdminFacade;
 import com.netanel.coupons.clients.ClientType;
+import com.netanel.coupons.clients.CompanyFacade;
+import com.netanel.coupons.clients.CouponClientFacade;
+import com.netanel.coupons.clients.CustomerFacade;
+import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.exception.LoginException;
+import com.netanel.coupons.jbeans.Company;
+import com.netanel.coupons.jbeans.Customer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import java.awt.Font;
+import javax.swing.JToolBar;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.SwingConstants;
 
 public class MainWindow {
 
 	private JFrame frmCouponSystemGui;
-	private JTextField customerNameTextField;
-	private JPasswordField customerPassField;
-	private JTextField companyNameTextField;
-	private JPasswordField companyPassField;
-	private JTextField adminNameTextField;
-	private JPasswordField adminPassField;
-
+	private JTextField nameTextField;
+	private JPasswordField passField;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private CardLayout cl_mainPanel = new CardLayout(0,0);
+	private JPanel mainPanel = new JPanel();
+	private ClientType clientType = ClientType.CUSTOMER;
+	private CouponClientFacade client = null;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -77,118 +92,127 @@ public class MainWindow {
 		frmCouponSystemGui = new JFrame();
 		frmCouponSystemGui.setTitle("Coupon System");
 		frmCouponSystemGui.setResizable(false);
-		frmCouponSystemGui.setBounds(100, 100, 450, 200);
+		frmCouponSystemGui.setBounds(100, 100, 370, 200);
 		frmCouponSystemGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCouponSystemGui.getContentPane().setLayout(new CardLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		CardLayout cl = new CardLayout(0,0);
-		frmCouponSystemGui.getContentPane().add(panel, "login");
-		panel.setLayout(cl);
 		
-		JTabbedPane loginTabsPane = new JTabbedPane(JTabbedPane.TOP);
-		panel.add(loginTabsPane, "name_961269142384174");
-		loginTabsPane.setToolTipText("");
 		
-		JPanel customerLoginPanel = new JPanel();
-		loginTabsPane.addTab("Customers Login", null, customerLoginPanel, null);
-		customerLoginPanel.setLayout(null);
-				
-		JLabel customerNameLoginLabel = new JLabel("Customer Name:");
-		customerNameLoginLabel.setBounds(29, 11, 89, 33);
-		customerLoginPanel.add(customerNameLoginLabel);
+		frmCouponSystemGui.getContentPane().add(mainPanel);
+		mainPanel.setLayout(cl_mainPanel);
 		
-		JLabel customerPassLabel = new JLabel("Password:");
-		customerPassLabel.setBounds(29, 55, 89, 33);
-		customerLoginPanel.add(customerPassLabel);
+		JPanel loginPanel = new JPanel();
+		mainPanel.add(loginPanel, "card_login");
+		loginPanel.setLayout(null);
 		
-		customerNameTextField = new JTextField();
-		customerNameTextField.setBounds(128, 11, 185, 33);
-		customerLoginPanel.add(customerNameTextField);
-		customerNameTextField.setColumns(10);
+		JLabel NameLoginLabel = new JLabel("Login Name:");
+		NameLoginLabel.setBounds(29, 11, 89, 33);
+		loginPanel.add(NameLoginLabel);
 		
-		customerPassField = new JPasswordField();
-		customerPassField.setBounds(128, 55, 185, 33);
-		customerLoginPanel.add(customerPassField);
-		customerPassField.setColumns(10);
+		JLabel passLabel = new JLabel("Password:");
+		passLabel.setBounds(29, 55, 89, 33);
+		loginPanel.add(passLabel);
 		
-		JButton customerLoginBtn = new JButton("Login");
-		customerLoginBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		customerLoginBtn.setBounds(224, 99, 89, 23);
-		customerLoginPanel.add(customerLoginBtn);
+		nameTextField = new JTextField();
+		nameTextField.setBounds(128, 11, 185, 33);
+		nameTextField.setColumns(10);
+		loginPanel.add(nameTextField);
 		
-		JPanel CompanyLoginPanel = new JPanel();
-		loginTabsPane.addTab("Company Login", null, CompanyLoginPanel, null);
-		CompanyLoginPanel.setLayout(null);
+		passField = new JPasswordField();
+		passField.addActionListener(new LoginActionListener());
+		passField.setBounds(128, 55, 185, 33);
+		passField.setColumns(10);
+		loginPanel.add(passField);
 		
-		JLabel companyNameLoginLabel = new JLabel("Company Name:");
-		companyNameLoginLabel.setBounds(29, 11, 89, 33);
-		CompanyLoginPanel.add(companyNameLoginLabel);
+		JButton loginBtn = new JButton("Login");
+		loginBtn.addActionListener(new LoginActionListener());
+		loginBtn.setBounds(224, 125, 89, 23);
+		loginPanel.add(loginBtn);	
 		
-		JLabel companyPassLabel = new JLabel("Password:");
-		companyPassLabel.setBounds(29, 55, 89, 33);
-		CompanyLoginPanel.add(companyPassLabel);
+		JRadioButton rdbtnCustomer = new JRadioButton("Customer");
+		rdbtnCustomer.addActionListener(new RdbtnCustomerActionListener());
+		rdbtnCustomer.setSelected(true);
+		buttonGroup.add(rdbtnCustomer);
+		rdbtnCustomer.setBounds(128, 95, 71, 23);
+		loginPanel.add(rdbtnCustomer);
 		
-		companyNameTextField = new JTextField();
-		companyNameTextField.setColumns(10);
-		companyNameTextField.setBounds(128, 11, 185, 33);
-		CompanyLoginPanel.add(companyNameTextField);
+		JRadioButton rdbtnCompany = new JRadioButton("Company");
+		rdbtnCompany.addActionListener(new RdbtnCompanyActionListener());
+		buttonGroup.add(rdbtnCompany);
+		rdbtnCompany.setBounds(204, 95, 71, 23);
+		loginPanel.add(rdbtnCompany);
 		
-		companyPassField = new JPasswordField();
-		companyPassField.setColumns(10);
-		companyPassField.setBounds(128, 55, 185, 33);
-		CompanyLoginPanel.add(companyPassField);
+		JRadioButton rdbtnAdmin = new JRadioButton("Admin");
+		rdbtnAdmin.addActionListener(new RdbtnAdminActionListener());
+		buttonGroup.add(rdbtnAdmin);
+		rdbtnAdmin.setBounds(277, 95, 71, 23);
+		loginPanel.add(rdbtnAdmin);
 		
-		JButton companyLoginBtn = new JButton("Login");
-		companyLoginBtn.setBounds(224, 99, 89, 23);
-		CompanyLoginPanel.add(companyLoginBtn);
-		
-		JPanel adminLoginPanel = new JPanel();
-		loginTabsPane.addTab("Admin Login", null, adminLoginPanel, null);
-		adminLoginPanel.setLayout(null);
-		
-		JLabel adminNameLoginLabel = new JLabel("Admin Name:");
-		adminNameLoginLabel.setBounds(29, 11, 89, 33);
-		adminLoginPanel.add(adminNameLoginLabel);
-		
-		JLabel adminPassLabel = new JLabel("Password:");
-		adminPassLabel.setBounds(29, 55, 89, 33);
-		adminLoginPanel.add(adminPassLabel);
-		
-		adminNameTextField = new JTextField();
-		adminNameTextField.setBounds(128, 11, 185, 33);
-		adminNameTextField.setColumns(10);
-		adminLoginPanel.add(adminNameTextField);
-		
-		adminPassField = new JPasswordField();
-		adminPassField.setBounds(128, 55, 185, 33);
-		adminPassField.setColumns(10);
-		adminLoginPanel.add(adminPassField);
-		
-		JButton adminLoginBtn = new JButton("Login");
-		
-		adminLoginBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AdminFacade admin = new AdminFacade();
-				try {
-					admin.login(adminNameTextField.getText(), adminPassField.getPassword(), ClientType.ADMIN);
-					JOptionPane.showMessageDialog(frmCouponSystemGui, "Login ok!");
-					frmCouponSystemGui.setBounds(100, 100, 800, 600);
-					cl.show(panel, "app");
-				} catch (LoginException e1) {
-					JOptionPane.showMessageDialog(frmCouponSystemGui, e1.getMessage(),"Login Failed!", JOptionPane.WARNING_MESSAGE);
-		
-				}
-				
-			}
-		});
-		adminLoginBtn.setBounds(224, 99, 89, 23);
-		adminLoginPanel.add(adminLoginBtn);	
+		JLabel identityLabel = new JLabel("Identity:");
+		identityLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		identityLabel.setBounds(29, 99, 63, 14);
+		loginPanel.add(identityLabel);
 		
 		JPanel appPanel = new JPanel();
-		panel.add(appPanel, "app");
+		mainPanel.add(appPanel, "card_app");
+		appPanel.setLayout(new BorderLayout(0, 0));
+		
+		JMenuBar menuBar = new JMenuBar();
+		appPanel.add(menuBar, BorderLayout.NORTH);
+		
+		JMenu mnActions = new JMenu("Actions");
+		menuBar.add(mnActions);
+		
+		JMenuItem mntmLogout = new JMenuItem("Logout");
+		mntmLogout.addActionListener(new MntmLogoutActionListener());
+		mnActions.add(mntmLogout);
 	}
+	
+	private class LoginActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (clientType.equals(ClientType.CUSTOMER)) {
+				client = new CustomerFacade(new Customer());
+			} else if (clientType.equals(ClientType.COMPANY)){
+				try {
+					client = new CompanyFacade(nameTextField.getText());
+				} catch (DAOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} else if (clientType.equals(ClientType.ADMIN)) {
+				client = new AdminFacade();
+			}
+			try {
+				client.login(nameTextField.getText(), passField.getPassword(), clientType);
+				JOptionPane.showMessageDialog(frmCouponSystemGui, "Login ok!");
+				frmCouponSystemGui.setBounds(100, 100, 800, 600);
+				cl_mainPanel.show(mainPanel, "card_app");
+			} catch (LoginException e1) {
+				JOptionPane.showMessageDialog(frmCouponSystemGui, e1.getMessage(),"Login Failed!", JOptionPane.WARNING_MESSAGE);
+	
+			}
+		}
+	}
+	private class RdbtnCompanyActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			clientType = ClientType.COMPANY;
+		}
+	}
+	private class RdbtnCustomerActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			clientType = ClientType.CUSTOMER;
+		}
+	}
+	private class RdbtnAdminActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			clientType = ClientType.ADMIN;
+		}
+	}
+	private class MntmLogoutActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			cl_mainPanel.show(mainPanel, "card_login");
+			frmCouponSystemGui.setBounds(100, 100, 370, 200);
+		}
+	}
+
 }

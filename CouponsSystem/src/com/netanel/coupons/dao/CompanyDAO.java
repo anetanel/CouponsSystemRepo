@@ -89,5 +89,7 @@ public interface CompanyDAO {
 	 * @throws DAOException
 	 */
 	void removeCoupon(Company company, Coupon coupon) throws DAOException;
+
+	Company getCompany(String compName) throws DAOException;
 	
 }

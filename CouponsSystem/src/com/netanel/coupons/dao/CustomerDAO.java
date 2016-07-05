@@ -46,6 +46,14 @@ public interface CustomerDAO {
 	Customer getCustomer(long custId) throws DAOException;
 	
 	/**
+	 * Returns a {@code Customer} object from the underling database (or any other persistence storage).
+	 * @param custName a {@code String} Customer name.
+	 * @return a {@code Customer} object.
+	 * @throws DAOException
+	 */
+	Customer getCustomer(String custName) throws DAOException;
+	
+	/**
 	 * Returns a {@code Set<Customer>} of all Customers from the underling database (or any other persistence storage).
 	 * @return a {@code Set<Customer>}.
 	 * @throws DAOException
@@ -91,4 +99,5 @@ public interface CustomerDAO {
 	 * @throws DAOException
 	 */
 	void removeCoupon(Customer customer, Coupon coupon) throws DAOException;
+
 }

@@ -13,6 +13,7 @@ import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
@@ -134,6 +135,36 @@ public class CustomerDbDAO implements CustomerDAO {
 		return customer;
 	}
 
+	@Override
+	public Customer getCustomer(String custName) throws DAOException {
+		// Check if Company ID is in DB
+		if (!DB.foundInDb(Tables.Customer, Columns.CUST_NAME, custName)) {
+			throw new DAOException("Customer Name does not exist in DB: " + custName);
+		}
+		long custId;
+		Customer customer = null;
+		Password password = null;
+		Set<Coupon> coupons = null;
+
+		try (Connection con = DB.getConnection()) {
+			// SQL command:
+			String sqlCmdStr = "SELECT * FROM Company WHERE COMP_NAME=?";
+			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
+			stat.setString(1, custName);
+			ResultSet rs = stat.executeQuery();
+
+			rs.next();
+			custId = rs.getLong("ID");
+			password = new Password(rs.getString("PASSWORD"), rs.getString("SALT"));
+			coupons = getCoupons(custId);
+			customer = new Customer(custId, custName, password, coupons);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return customer;
+	}
+	
 	@Override
 	public Set<Customer> getAllCustomers() throws DAOException {
 		Set<Customer> customers = new HashSet<>();

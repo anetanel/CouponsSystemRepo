@@ -171,7 +171,12 @@ public class MainWindow {
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (clientType.equals(ClientType.CUSTOMER)) {
-				client = new CustomerFacade(new Customer());
+				try {
+					client = new CustomerFacade(nameTextField.getText());
+				} catch (DAOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} else if (clientType.equals(ClientType.COMPANY)){
 				try {
 					client = new CompanyFacade(nameTextField.getText());

@@ -18,9 +18,10 @@ public class CustomerFacade implements CouponClientFacade{
 	//
 	// Constructors
 	//
-	public CustomerFacade(Customer customer) {
-		this.customer = customer;
+	public CustomerFacade(String custName) throws DAOException {
+		//this.customer = customer;
 		this.custDao = new CustomerDbDAO();
+		this.customer = custDao.getCustomer(custName);
 	}
 	
 	//

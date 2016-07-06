@@ -21,21 +21,28 @@ public class CompanyFacade implements CouponClientFacade{
 	//
 	// Constructors
 	//
-	public CompanyFacade(String compName) throws DAOException {
+	public CompanyFacade() {
 		//this.company = company;
 		this.compDao = new CompanyDbDAO();
 		this.couponDao = new CouponDbDAO();
 		this.custDao = new CustomerDbDAO();
-		this.company = compDao.getCompany(compName);
+		//this.company = compDao.getCompany(compName);
 	}
 
 	//
 	// Functions
 	//
 	@Override
-	public CouponClientFacade login(String compName, char[] password, ClientType clientType) throws LoginException {
-		boolean loginSuccessful = compDao.login(compName, password);
+	public CouponClientFacade login(String compName, char[] password, ClientType clientType) throws LoginException, DAOException {
+		boolean loginSuccessful = false;
+		try {
+			loginSuccessful = compDao.login(compName, password);
+		} catch (Exception e) {
+			throw new LoginException("Company Login Failed. Incorrect parameters.");
+		}
+		
 		if (loginSuccessful && clientType.equals(ClientType.COMPANY)) {
+			company = compDao.getCompany(compName);
 			return this;
 		} else {
 			throw new LoginException("Company Login Failed. Incorrect parameters.");

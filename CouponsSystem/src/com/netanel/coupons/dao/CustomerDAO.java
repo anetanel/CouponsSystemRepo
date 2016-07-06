@@ -72,9 +72,10 @@ public interface CustomerDAO {
 	 * Checks if the password and customer name given, matches the credentials stored in the underling database (or any other persistence storage).
 	 * @param custName a {@code String} Customer name. 
 	 * @param password a {@code char[]} password.
-	 * @return
+	 * @return {@code true} if the credentials match, otherwise {@code false}.
+	 * @throws DAOException 
 	 */
-	boolean login(String custName, char[] password);
+	boolean login(String custName, char[] password) throws DAOException;
 	
 	/**
 	 * Adds a correlation between a Coupon and a Customer in the underling database (or any other persistence storage).

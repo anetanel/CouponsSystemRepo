@@ -152,7 +152,7 @@ public class CompanyDbDAO implements CompanyDAO {
 	
 	@Override
 	public Company getCompany(String compName) throws DAOException {
-		// Check if Company ID is in DB
+		// Check if Company Name is in DB
 		if (!DB.foundInDb(Tables.Company, Columns.COMP_NAME, compName)) {
 			throw new DAOException("Company Name does not exist in DB: " + compName);
 		}
@@ -228,7 +228,11 @@ public class CompanyDbDAO implements CompanyDAO {
 	}
 
 	@Override
-	public boolean login(String compName, char[] password) {
+	public boolean login(String compName, char[] password) throws DAOException {
+		// Check if Company Name is in DB
+		if (!DB.foundInDb(Tables.Company, Columns.COMP_NAME, compName)) {
+			throw new DAOException("Company Name does not exist in DB: " + compName);
+		}
 		boolean passwordMatch = false;
 		String saltHexStr, hashHexStr;
 		try (Connection con = DB.getConnection()) {

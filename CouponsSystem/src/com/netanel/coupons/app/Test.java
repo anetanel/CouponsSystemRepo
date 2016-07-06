@@ -63,7 +63,7 @@ public class Test {
 		Password p2 = new Password("1234".toCharArray());
 //		Password p3 = new Password("1234".toCharArray());
 //		Password p4 = new Password("1234".toCharArray());
-//		Password p5 = new Password("1234".toCharArray());
+		Password p5 = new Password("1234".toCharArray());
 //		Password p6 = new Password("1234".toCharArray());
 //		Password p7 = new Password("1234".toCharArray());
 //
@@ -118,20 +118,20 @@ public class Test {
 //		}
 //
 //		// Create Customers
-//		Customer cust1 = new Customer("moshe", p5, new HashSet<Coupon>());
+		Customer cust1 = new Customer("moshe", p5, new HashSet<Coupon>());
 //		Customer cust2 = new Customer("david", p6, new HashSet<Coupon>());
 //		Customer cust3 = new Customer("sarah", p7, new HashSet<Coupon>());
 //
-//		CustomerDbDAO custDB = new CustomerDbDAO();
-//		try {
-//			custDB.createCustomer(cust1);
+		CustomerDbDAO custDB = new CustomerDbDAO();
+		try {
+			custDB.createCustomer(cust1);
 //			custDB.createCustomer(cust2);
 //			custDB.createCustomer(cust3);
 //
-//		} catch (DAOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 //
 //		////
 //		////

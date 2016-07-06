@@ -64,8 +64,9 @@ public interface CompanyDAO {
 	 * @param compName a {@code String} Company name. 
 	 * @param password a {@code char[]} password.
 	 * @return {@code true} if the credentials match, otherwise {@code false}.
+	 * @throws DAOException 
 	 */
-	boolean login(String compName, char[] password);
+	boolean login(String compName, char[] password) throws DAOException;
 	
 	/**
 	 * Adds a correlation between a Coupon and a Company in the underling database (or any other persistence storage).

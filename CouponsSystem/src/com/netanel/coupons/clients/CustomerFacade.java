@@ -18,23 +18,30 @@ public class CustomerFacade implements CouponClientFacade{
 	//
 	// Constructors
 	//
-	public CustomerFacade(String custName) throws DAOException {
+	public CustomerFacade() {
 		//this.customer = customer;
 		this.custDao = new CustomerDbDAO();
-		this.customer = custDao.getCustomer(custName);
+		//this.customer = custDao.getCustomer(custName);
 	}
 	
 	//
 	// Functions
 	//
 	@Override
-	public CouponClientFacade login(String custName, char[] password, ClientType clientType) throws LoginException {
-		boolean loginSuccessful = custDao.login(custName, password);
+	public CouponClientFacade login(String custName, char[] password, ClientType clientType) throws LoginException, DAOException {
+		boolean loginSuccessful = false;
+		try {
+			loginSuccessful = custDao.login(custName, password);
+		} catch (Exception e) {
+			throw new LoginException("Customer Login Failed. Incorrect parameters.");
+		}
+		
 		if (loginSuccessful && clientType.equals(ClientType.CUSTOMER)) {
+			customer = custDao.getCustomer(custName);
 			return this;
 		} else {
 			throw new LoginException("Customer Login Failed. Incorrect parameters.");
-		}		
+		}
 	}
 
 	public void buyCoupon(Coupon coupon) throws DAOException{		

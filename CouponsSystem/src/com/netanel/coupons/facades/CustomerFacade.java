@@ -13,13 +13,15 @@ public class CustomerFacade implements CouponClientFacade{
 	// Attributes
 	//
 	private Customer customer;
-	private CustomerDAO custDao;
+	private static CustomerDAO custDao = null;
 	
 	//
 	// Constructors
 	//
 	public CustomerFacade() {
-		this.custDao = new CustomerDbDAO();
+		if (custDao == null) {
+			custDao = new CustomerDbDAO();
+		}
 	}
 	
 	//

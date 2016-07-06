@@ -2,7 +2,6 @@ package com.netanel.coupons.dao.db;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,14 +18,28 @@ public class DB {
 //		return con;
 //	}
 	
-	public static Connection getConnection() {
-		ComboPooledDataSource cpds = new ComboPooledDataSource();
-		Connection con = null;
+	private static ComboPooledDataSource cpds = null;
+	
+	public static void startPool() {
+		cpds = new ComboPooledDataSource();
 		try {
 			cpds.setDriverClass( "org.sqlite.JDBC" );
 			cpds.setJdbcUrl( "jdbc:sqlite:db/CouponsDB.db" );
+			cpds.setMaxStatements( 180 ); 
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static Connection getConnection() {
+		if (cpds == null) {
+			startPool();
+		}
+		Connection con = null;
+		try {		
 			con = cpds.getConnection();
-		} catch (PropertyVetoException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

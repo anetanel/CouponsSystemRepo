@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 import com.netanel.coupons.exception.DAOException;

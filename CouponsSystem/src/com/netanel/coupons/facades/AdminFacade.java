@@ -12,18 +12,24 @@ public class AdminFacade implements CouponClientFacade {
 	//
 	// Attributes
 	//
-	private CompanyDAO compDao;
-	private CustomerDAO custDao;
-	private CouponDAO couponDao;
+	private static CompanyDAO compDao = null;
+	private static CustomerDAO custDao = null;
+	private static CouponDAO couponDao = null;
 	private static final String ADMIN_PASS = "1234";
 	
 	//
 	// Constructors
 	//
 	public AdminFacade() {
-		this.compDao = new CompanyDbDAO();
-		this.custDao = new CustomerDbDAO();
-		this.couponDao = new CouponDbDAO();
+		if (compDao == null) {
+			compDao = new CompanyDbDAO();
+		}
+		if (custDao == null) {
+			custDao = new CustomerDbDAO();
+		}
+		if (couponDao == null) {
+			couponDao = new CouponDbDAO();
+		}
 	}
 
 	//

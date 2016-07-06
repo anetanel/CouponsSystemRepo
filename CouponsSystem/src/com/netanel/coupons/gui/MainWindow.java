@@ -36,11 +36,6 @@ import java.awt.event.InputEvent;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JList;
-import javax.swing.AbstractListModel;
 
 public class MainWindow {
 

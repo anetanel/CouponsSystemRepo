@@ -14,17 +14,23 @@ public class CompanyFacade implements CouponClientFacade{
 	// Attributes
 	//
 	private Company company;
-	private CompanyDAO compDao;
-	private CouponDAO couponDao;
-	private CustomerDAO custDao;
+	private static CompanyDAO compDao = null;
+	private static CouponDAO couponDao = null;
+	private static CustomerDAO custDao = null;
 	
 	//
 	// Constructors
 	//
 	public CompanyFacade() {
-		this.compDao = new CompanyDbDAO();
-		this.couponDao = new CouponDbDAO();
-		this.custDao = new CustomerDbDAO();
+		if (compDao == null) {
+			compDao = new CompanyDbDAO();
+		}
+		if (custDao == null) {
+			custDao = new CustomerDbDAO();
+		}
+		if (couponDao == null) {
+			couponDao = new CouponDbDAO();
+		}
 	}
 
 	//
@@ -68,7 +74,7 @@ public class CompanyFacade implements CouponClientFacade{
 	}
 	
 	public Company getCompany() throws DAOException{
-		return compDao.getCompany(company.getId());
+		return this.company = compDao.getCompany(company.getId());
 	}
 	
 	public Set<Coupon> getAllCoupons() throws DAOException{

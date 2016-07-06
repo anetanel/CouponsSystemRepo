@@ -237,18 +237,14 @@ public class CustomerDbDAO implements CustomerDAO {
 	@Override
 	public void addCoupon(Customer customer, Coupon coupon) throws DAOException {
 		// Check if Customer ID, Coupon ID, and join information exist in DB
-		boolean customerExist = DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()));
-		boolean couponExist = DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()));
-		boolean joinExist = DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
-				String.valueOf(customer.getId()), String.valueOf(coupon.getId()));
-
-		if (!customerExist) {
+		if (!DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
 			throw new DAOException("Customer ID does not exist in DB: " + customer.getId());
 		}
-		if (!couponExist) {
+		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
 			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
 		}
-		if (joinExist) {
+		if (DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
+				String.valueOf(customer.getId()), String.valueOf(coupon.getId()))) {
 			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + customer.getId());
 		}
 

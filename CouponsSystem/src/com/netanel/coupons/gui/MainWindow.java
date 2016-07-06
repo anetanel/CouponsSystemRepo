@@ -13,13 +13,14 @@ import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 
-import com.netanel.coupons.clients.AdminFacade;
-import com.netanel.coupons.clients.ClientType;
-import com.netanel.coupons.clients.CompanyFacade;
-import com.netanel.coupons.clients.CouponClientFacade;
-import com.netanel.coupons.clients.CustomerFacade;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.exception.LoginException;
+import com.netanel.coupons.facades.AdminFacade;
+import com.netanel.coupons.facades.ClientType;
+import com.netanel.coupons.facades.CompanyFacade;
+import com.netanel.coupons.facades.CouponClientFacade;
+import com.netanel.coupons.facades.CustomerFacade;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
@@ -33,15 +34,24 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import javax.swing.SwingConstants;
+import java.awt.Toolkit;
+import javax.swing.JTabbedPane;
+import javax.swing.JTree;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JList;
+import javax.swing.AbstractListModel;
 
 public class MainWindow {
 
-	private JFrame frmCouponSystemGui;
+	private JFrame frmCouponSystemLogin;
 	private JTextField nameTextField;
 	private JPasswordField passField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private CardLayout cl_mainPanel = new CardLayout(0, 0);
+	private CardLayout clMainPanel = new CardLayout(0, 0);
+	private CardLayout clClientPanel = new CardLayout(0, 0);
 	private JPanel mainPanel = new JPanel();
+	private JPanel clientCardTopPanel = new JPanel();
 	private ClientType clientType = ClientType.CUSTOMER;
 	private CouponClientFacade client = null;
 	private JMenuItem mntmLogout;
@@ -50,6 +60,7 @@ public class MainWindow {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		// Disable connection pool logging to console
 		System.setProperty("com.mchange.v2.log.MLog", "fallback");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		try {
@@ -61,7 +72,7 @@ public class MainWindow {
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
-					window.frmCouponSystemGui.setVisible(true);
+					window.frmCouponSystemLogin.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -80,15 +91,16 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmCouponSystemGui = new JFrame();
-		frmCouponSystemGui.setTitle("Coupon System");
-		frmCouponSystemGui.setResizable(false);
-		frmCouponSystemGui.setBounds(100, 100, 370, 200);
-		frmCouponSystemGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmCouponSystemGui.getContentPane().setLayout(new CardLayout(0, 0));
+		frmCouponSystemLogin = new JFrame();
+		frmCouponSystemLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/images/icon.png")));
+		frmCouponSystemLogin.setTitle("Coupon System Login");
+		frmCouponSystemLogin.setResizable(false);
+		frmCouponSystemLogin.setSize(370, 200);
+		frmCouponSystemLogin.setLocationRelativeTo(null);
+		frmCouponSystemLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		frmCouponSystemGui.getContentPane().add(mainPanel);
-		mainPanel.setLayout(cl_mainPanel);
+		frmCouponSystemLogin.getContentPane().add(mainPanel);
+		mainPanel.setLayout(clMainPanel);
 
 		JPanel loginPanel = new JPanel();
 		mainPanel.add(loginPanel, "card_login");
@@ -159,25 +171,71 @@ public class MainWindow {
 		mntmLogout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		mntmLogout.addActionListener(new MntmLogoutActionListener());
 		mnActions.add(mntmLogout);
+
+		clientCardTopPanel = new JPanel();
+		appPanel.add(clientCardTopPanel, BorderLayout.CENTER);
+		clientCardTopPanel.setLayout(clClientPanel);
+
+		JPanel adminPanel = new JPanel();
+		clientCardTopPanel.add(adminPanel, "card_admin");
+		adminPanel.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblAdminControlPanel = new JLabel("Admin Control Panel");
+		adminPanel.add(lblAdminControlPanel, BorderLayout.NORTH);
+		
+		JTabbedPane adminTabs = new JTabbedPane(JTabbedPane.TOP);
+		adminPanel.add(adminTabs, BorderLayout.CENTER);
+		
+		JPanel adminCompanyTab = new JPanel();
+		adminTabs.addTab("Companies", null, adminCompanyTab, null);
+		
+		JPanel adminCustomerTab = new JPanel();
+		adminTabs.addTab("Customers", null, adminCustomerTab, null);
+		
+		JPanel adminCouponTab = new JPanel();
+		adminTabs.addTab("Coupons", null, adminCouponTab, null);
+
+		JPanel customerPanel = new JPanel();
+		clientCardTopPanel.add(customerPanel, "card_customer");
+		customerPanel.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblCustomer = new JLabel("Customer");
+		customerPanel.add(lblCustomer, BorderLayout.NORTH);
+
+		JPanel companyPanel = new JPanel();
+		clientCardTopPanel.add(companyPanel, "card_company");
+		companyPanel.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblCompany = new JLabel("Company");
+		companyPanel.add(lblCompany, BorderLayout.NORTH);
 	}
 
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			String clientCardStr = null;
 			if (clientType.equals(ClientType.CUSTOMER)) {
 				client = new CustomerFacade();
+				clientCardStr = "card_customer";
 			} else if (clientType.equals(ClientType.COMPANY)) {
 				client = new CompanyFacade();
+				clientCardStr = "card_company";
 			} else if (clientType.equals(ClientType.ADMIN)) {
 				client = new AdminFacade();
+				clientCardStr = "card_admin";
 			}
 			try {
 				client.login(nameTextField.getText(), passField.getPassword(), clientType);
-				JOptionPane.showMessageDialog(frmCouponSystemGui, "Welcome " + nameTextField.getText() + "!");
-				frmCouponSystemGui.setBounds(100, 100, 800, 600);
-				cl_mainPanel.show(mainPanel, "card_app");
-				mntmLogout.setText("Logout " + nameTextField.getText());
+				JOptionPane.showMessageDialog(frmCouponSystemLogin, "Welcome " + nameTextField.getText() + "!",
+						"Login Successful", JOptionPane.INFORMATION_MESSAGE);
+				frmCouponSystemLogin.setSize(800, 600);
+				frmCouponSystemLogin.setLocationRelativeTo(null);
+				frmCouponSystemLogin.setTitle("Coupon System: " + nameTextField.getText());
+				clMainPanel.show(mainPanel, "card_app");
+				clClientPanel.show(clientCardTopPanel, clientCardStr);
+
+				mntmLogout.setText("Logout: " + nameTextField.getText());
 			} catch (LoginException | DAOException e1) {
-				JOptionPane.showMessageDialog(frmCouponSystemGui, e1.getMessage(), "Login Failed!",
+				JOptionPane.showMessageDialog(frmCouponSystemLogin, e1.getMessage(), "Login Failed!",
 						JOptionPane.WARNING_MESSAGE);
 
 			}
@@ -205,8 +263,11 @@ public class MainWindow {
 	private class MntmLogoutActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			client = null;
-			cl_mainPanel.show(mainPanel, "card_login");
-			frmCouponSystemGui.setBounds(100, 100, 370, 200);
+			passField.setText("");
+			clMainPanel.show(mainPanel, "card_login");
+			frmCouponSystemLogin.setSize(370, 200);
+			frmCouponSystemLogin.setLocationRelativeTo(null);
+			frmCouponSystemLogin.setTitle("Coupon System Login");
 		}
 	}
 

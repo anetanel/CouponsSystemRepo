@@ -1,4 +1,4 @@
-package com.netanel.coupons.clients;
+package com.netanel.coupons.facades;
 
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class AdminFacade implements CouponClientFacade {
 				&& clientType.equals(ClientType.ADMIN)) {
 			return this;
 		} else {
-			throw new LoginException("Admin Login Failed. Incorrect parameters.");
+			throw new LoginException("Admin Login Failed.");
 		}
 	}
 

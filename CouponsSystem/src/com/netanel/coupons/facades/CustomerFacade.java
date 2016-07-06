@@ -1,4 +1,4 @@
-package com.netanel.coupons.clients;
+package com.netanel.coupons.facades;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,14 +33,14 @@ public class CustomerFacade implements CouponClientFacade{
 		try {
 			loginSuccessful = custDao.login(custName, password);
 		} catch (Exception e) {
-			throw new LoginException("Customer Login Failed. Incorrect parameters.");
+			throw new LoginException("Customer Login Failed.");
 		}
 		
 		if (loginSuccessful && clientType.equals(ClientType.CUSTOMER)) {
 			customer = custDao.getCustomer(custName);
 			return this;
 		} else {
-			throw new LoginException("Customer Login Failed. Incorrect parameters.");
+			throw new LoginException("Customer Login Failed.");
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.netanel.coupons.clients;
+package com.netanel.coupons.facades;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -38,14 +38,14 @@ public class CompanyFacade implements CouponClientFacade{
 		try {
 			loginSuccessful = compDao.login(compName, password);
 		} catch (Exception e) {
-			throw new LoginException("Company Login Failed. Incorrect parameters.");
+			throw new LoginException("Company Login Failed.");
 		}
 		
 		if (loginSuccessful && clientType.equals(ClientType.COMPANY)) {
 			company = compDao.getCompany(compName);
 			return this;
 		} else {
-			throw new LoginException("Company Login Failed. Incorrect parameters.");
+			throw new LoginException("Company Login Failed.");
 		}
 	}
 

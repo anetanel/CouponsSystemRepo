@@ -1,4 +1,4 @@
-package com.netanel.coupons.clients;
+package com.netanel.coupons.facades;
 
 public enum ClientType {
 	COMPANY,

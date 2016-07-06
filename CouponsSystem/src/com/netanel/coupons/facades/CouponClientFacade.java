@@ -1,4 +1,4 @@
-package com.netanel.coupons.clients;
+package com.netanel.coupons.facades;
 
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.exception.LoginException;

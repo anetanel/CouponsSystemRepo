@@ -1,12 +1,12 @@
 package com.netanel.coupons.app;
 
-import com.netanel.coupons.clients.AdminFacade;
-import com.netanel.coupons.clients.ClientType;
-import com.netanel.coupons.clients.CouponClientFacade;
 import com.netanel.coupons.dao.db.Columns;
 import com.netanel.coupons.dao.db.DB;
 import com.netanel.coupons.dao.db.Tables;
 import com.netanel.coupons.exception.LoginException;
+import com.netanel.coupons.facades.AdminFacade;
+import com.netanel.coupons.facades.ClientType;
+import com.netanel.coupons.facades.CouponClientFacade;
 
 public class Test2 {
 	public static void main(String[] args) {

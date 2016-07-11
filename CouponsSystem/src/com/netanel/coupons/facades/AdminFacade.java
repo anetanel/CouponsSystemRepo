@@ -72,6 +72,10 @@ public class AdminFacade implements CouponClientFacade {
 		return compDao.getCompany(compId);
 	}
 
+	public Company getCompany(String compName) throws DAOException {
+		return compDao.getCompany(compName);
+	}
+	
 	public Set<Company> getAllCompanies() throws DAOException {
 		return compDao.getAllCompanies();
 	}

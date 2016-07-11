@@ -83,13 +83,22 @@ public class CompanyFacade implements CouponClientFacade{
 		return compDao.getCoupons(compId);
 	}
 	
-	public Coupon getCoupon(long couponId) throws DAOException {
+	public Coupon getCoupon(long couponId) throws DAOException, CouponException {
 		for (Coupon coupon : compDao.getCoupons(compId)) {
 			if (coupon.getId() == couponId ) {
 				return coupon;
 			}
 		}
-		return null;
+		throw new CouponException("Could not find Coupon ID:" + couponId);
+	}
+	
+	public Coupon getCoupon(String couponTitle) throws DAOException, CouponException {
+		for (Coupon coupon : compDao.getCoupons(compId)) {
+			if (coupon.getTitle().equals(couponTitle)) {
+				return coupon;
+			}
+		}
+		throw new CouponException("Could not find Coupon Title:'" + couponTitle + "'" );
 	}
 	
 	public Set<Coupon> getCouponsByType(CouponType couponType) throws DAOException {

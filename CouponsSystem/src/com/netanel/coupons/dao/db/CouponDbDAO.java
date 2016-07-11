@@ -166,7 +166,7 @@ public class CouponDbDAO implements CouponDAO {
 			String sqlCmdStr = "SELECT ID FROM Coupon WHERE TYPE=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
 			stat.setString(1, couponType.toString());
-			ResultSet rs = stat.executeQuery(sqlCmdStr);
+			ResultSet rs = stat.executeQuery();
 			while (rs.next()) {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
@@ -185,7 +185,7 @@ public class CouponDbDAO implements CouponDAO {
 			String sqlCmdStr = "SELECT CUST_ID FROM Customer_Coupon WHERE COUPON_ID=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
 			stat.setLong(1, coupon.getId());
-			ResultSet rs = stat.executeQuery(sqlCmdStr);
+			ResultSet rs = stat.executeQuery();
 			while (rs.next()) {
 				customers.add(rs.getLong(1));
 			}

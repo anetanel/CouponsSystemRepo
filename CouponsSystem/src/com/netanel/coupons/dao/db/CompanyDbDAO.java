@@ -89,7 +89,6 @@ public class CompanyDbDAO implements CompanyDAO {
 	@Override
 	public void updateCompany(Company company) throws DAOException {
 		// Check if Company ID is in DB, and if new Company Name is not taken
-
 		if (!DB.foundInDb(Tables.Company, Columns.ID,
 				String.valueOf(company.getId()))) {
 			throw new DAOException("Company ID does not exist in DB: "
@@ -111,7 +110,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			Map<String, String> hashAndSalt = company.getPassword()
 					.getHashAndSalt();
 			// SQL command:
-			String sqlCmdStr = "UPDATE Company SET COMP_NAME=?, EMAIL=?, PASSWORD=?, SALT=?, WHERE ID=?";
+			String sqlCmdStr = "UPDATE Company SET COMP_NAME=?, EMAIL=?, PASSWORD=?, SALT=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getEmail());
@@ -119,11 +118,11 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setString(4, hashAndSalt.get("salt"));
 			stat.setLong(5, company.getId());
 			stat.executeUpdate();
-			// Insert all coupons to the Company_Coupon join table
-			// TODO: what about removing coupons?
-			for (Coupon coupon : company.getCoupons()) {
-				addCoupon(company, coupon);
-			}
+//			// Insert all coupons to the Company_Coupon join table
+//			// TODO: what about removing coupons?
+//			for (Coupon coupon : company.getCoupons()) {
+//				addCoupon(company, coupon);
+//			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -275,27 +274,6 @@ public class CompanyDbDAO implements CompanyDAO {
 	@Override
 	public void addCoupon(Company company, Coupon coupon) throws DAOException {
 		addCoupon(company.getId(), coupon);
-//		// TODO: can be more efficient? maybe one query..
-//		// Check if Company ID, Coupon ID, and join information exist in DB
-//		if (!DB.foundInDb(Tables.Company, Columns.ID,
-//				String.valueOf(company.getId()))) {
-//			throw new DAOException("Company ID does not exist in DB: "
-//					+ company.getId());
-//		}
-//		if (!DB.foundInDb(Tables.Coupon, Columns.ID,
-//				String.valueOf(coupon.getId()))) {
-//			throw new DAOException("Coupon ID does not exist in DB: "
-//					+ coupon.getId());
-//		}
-//		if (DB.foundInDb(Tables.Company_Coupon, Columns.COMP_ID,
-//				Columns.COUPON_ID, String.valueOf(company.getId()),
-//				String.valueOf(coupon.getId()))) {
-//			throw new DAOException("Coupon " + coupon.getId()
-//					+ " already associated to Company " + company.getId());
-//		}
-//
-//		DB.updateJoin(SqlCmd.INSERT, Tables.Company_Coupon, company.getId(),
-//				coupon.getId());
 	}
 	
 	@Override

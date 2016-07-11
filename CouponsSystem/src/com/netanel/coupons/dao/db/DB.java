@@ -60,7 +60,7 @@ public class DB {
 				sqlCmdStr = "INSERT INTO " + joinDb + " VALUES(?,?)";
 				break;
 			case DELETE:
-				sqlCmdStr = "DELETE FROM " + joinDb + "WHERE "+ column1 + "=? AND COUPON_ID=?";
+				sqlCmdStr = "DELETE FROM " + joinDb + " WHERE "+ column1 + "=? AND COUPON_ID=?";
 				break;
 			
 		}

@@ -93,10 +93,10 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.setString(3, hashAndSalt.get("salt"));
 			stat.setLong(4, customer.getId());
 			stat.executeUpdate();
-			// Insert all coupons to the Customer_Coupon join table
-			for (Coupon coupon : customer.getCoupons()) {
-				addCoupon(customer, coupon);
-			}
+//			// Insert all coupons to the Customer_Coupon join table
+//			for (Coupon coupon : customer.getCoupons()) {
+//				addCoupon(customer, coupon);
+//			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

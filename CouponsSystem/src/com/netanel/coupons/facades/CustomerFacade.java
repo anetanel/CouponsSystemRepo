@@ -52,13 +52,15 @@ public class CustomerFacade implements CouponClientFacade{
 	}
 
 	public void buyCoupon(Coupon coupon) throws DAOException, CouponException{
+		// Check amount
 		if (coupon.getAmount() < 1) {
 			throw new CouponException("Coupon ID:" + coupon.getId() + " (" + coupon.getTitle() + ") is not in stock");
 		}
-	
+		// Check Date
 		if (LocalDate.now().isAfter(coupon.getEndDate())) {
 			throw new CouponException("Coupon ID:" + coupon.getId() + " (" + coupon.getTitle() + ") is expired. EndDate:" + coupon.getEndDate());
 		}
+		
 		custDao.addCoupon(custId, coupon);
 		coupon.setAmount(coupon.getAmount() - 1);
 		couponDao.updateCoupon(coupon);

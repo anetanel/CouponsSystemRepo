@@ -74,14 +74,13 @@ public class Test3 {
 			e.printStackTrace();
 		}
 
-		
 		// Get Companies facades
 		CompanyFacade ibm = null;
 		CompanyFacade emc = null;
 		try {
 			ibm = new CompanyFacade().login("IBM", "12345".toCharArray(), ClientType.COMPANY);
 			emc = new CompanyFacade().login("EMC", "1q2w3e".toCharArray(), ClientType.COMPANY);
-			
+
 		} catch (LoginException | DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,23 +97,21 @@ public class Test3 {
 			ibm.createCoupon(
 					new Coupon("25% Mainframe", LocalDate.now(), LocalDate.of(2016, 8, 18), 1, CouponType.ELECTRONICS,
 							"25% discount off any new IBM Mainframe Purchase", 399.9, "images/ibm/mf.png"));
-			
-			emc.createCoupon(
-					new Coupon("Free VMAX", LocalDate.now(), LocalDate.of(2016, 8, 18), 1, CouponType.ELECTRONICS,
-							"Free EMC VMAX Storage System", 5999.9, "images/emc/vmax.png"));
-			emc.createCoupon(
-					new Coupon("Free VNX", LocalDate.now(), LocalDate.of(2016, 8, 18), 5, CouponType.ELECTRONICS,
-							"Free EMC VNX Storage System", 4899.9, "images/emc/vnx.png"));
-			
+
+			emc.createCoupon(new Coupon("Free VMAX", LocalDate.now(), LocalDate.of(2016, 8, 18), 1,
+					CouponType.ELECTRONICS, "Free EMC VMAX Storage System", 5999.9, "images/emc/vmax.png"));
+			emc.createCoupon(new Coupon("Free VNX", LocalDate.now(), LocalDate.of(2016, 8, 18), 5,
+					CouponType.ELECTRONICS, "Free EMC VNX Storage System", 4899.9, "images/emc/vnx.png"));
+
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Get customers facades
 		CustomerFacade moshe = null;
 		CustomerFacade dana = null;
-		
+
 		try {
 			moshe = new CustomerFacade().login("moshe", "1234".toCharArray(), ClientType.CUSTOMER);
 			dana = new CustomerFacade().login("dana", "1234".toCharArray(), ClientType.CUSTOMER);
@@ -122,23 +119,71 @@ public class Test3 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Buy some coupons
 		try {
 			moshe.buyCoupon("Free VMAX");
-			//moshe.buyCoupon("Free VMAX");
+			// moshe.buyCoupon("Free VMAX");
 			moshe.buyCoupon("Free VNX");
 			dana.buyCoupon("5% Mainframe");
-			//dana.buyCoupon("Free VMAX");
+			// dana.buyCoupon("Free VMAX");
 			dana.buyCoupon("Free VNX");
-		} catch (DAOException |CouponException e) {
+		} catch (DAOException | CouponException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		// Show customers coupons
+		try {
+			System.out.println("moshe:");
+			System.out.println(moshe.getMyCoupons());
+			System.out.println("dana:");
+			System.out.println(dana.getMyCoupons());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//		// Delete coupon
+//		try {
+//			emc.deleteCoupon(emc.getCoupon("Free VNX"));
+//		} catch (DAOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (CouponException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+//		// Delete company
+//		
+//		try {
+//			admin.deleteCompany(admin.getCompany("EMC"));
+//		} catch (DAOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+		// Update company
+		try {
+			Company lenovo = admin.getCompany("IBM");
+
+			lenovo.setEmail("support@lenovo.com");
+			lenovo.setCompName("Lenovo");
+			admin.updateCompanyDetails(lenovo);
+			
+//			System.out.println(admin.getAllCompanies());
+//			System.out.println(admin.getCompany("Dell"));
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		// Show customers coupons
 		try {
+			System.out.println("moshe:");
 			System.out.println(moshe.getMyCoupons());
+			System.out.println("dana:");
 			System.out.println(dana.getMyCoupons());
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block

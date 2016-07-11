@@ -24,6 +24,7 @@ public class Coupon {
 	
 	public Coupon(String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
 			double price, String image) {
+		// TODO: check for validity of dates?
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;

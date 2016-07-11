@@ -237,19 +237,6 @@ public class CustomerDbDAO implements CustomerDAO {
 	@Override
 	public void addCoupon(Customer customer, Coupon coupon) throws DAOException {
 		addCoupon(customer.getId(), coupon);
-//		// Check if Customer ID, Coupon ID, and join information exist in DB
-//		if (!DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
-//			throw new DAOException("Customer ID does not exist in DB: " + customer.getId());
-//		}
-//		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
-//			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
-//		}
-//		if (DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
-//				String.valueOf(customer.getId()), String.valueOf(coupon.getId()))) {
-//			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + customer.getId());
-//		}
-//
-//		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, customer.getId(), coupon.getId());
 	}
 
 	@Override
@@ -263,7 +250,7 @@ public class CustomerDbDAO implements CustomerDAO {
 		}
 		if (DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
 				String.valueOf(custId), String.valueOf(coupon.getId()))) {
-			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + custId);
+			throw new DAOException("Coupon ID:" + coupon.getId() + " (" + coupon.getTitle() + ") already associated to Customer ID:" + custId);
 		}
 
 		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, custId, coupon.getId());
@@ -275,7 +262,7 @@ public class CustomerDbDAO implements CustomerDAO {
 		boolean joinExist = DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
 				String.valueOf(custId), String.valueOf(couponId));
 		if (!joinExist) {
-			throw new DAOException("Coupon " + couponId + " is not associated to Customer " + custId);
+			throw new DAOException("Coupon ID:" + couponId + " is not associated to Customer ID:" + custId);
 		}
 		DB.updateJoin(SqlCmd.DELETE, Tables.Customer_Coupon, custId, couponId);
 	}

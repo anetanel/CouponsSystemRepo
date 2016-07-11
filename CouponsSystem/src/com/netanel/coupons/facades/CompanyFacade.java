@@ -38,7 +38,7 @@ public class CompanyFacade implements CouponClientFacade{
 	// Functions
 	//
 	@Override
-	public CouponClientFacade login(String compName, char[] password, ClientType clientType) throws LoginException, DAOException {
+	public CompanyFacade login(String compName, char[] password, ClientType clientType) throws LoginException, DAOException {
 		boolean loginSuccessful = false;
 		try {
 			loginSuccessful = compDao.login(compName, password);

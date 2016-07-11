@@ -1,5 +1,6 @@
 package com.netanel.coupons.facades;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class CustomerFacade implements CouponClientFacade{
 	//private Customer customer;
 	private long custId;
 	private static CustomerDAO custDao = null;
+	private static CouponDAO couponDao = null;
 	
 	//
 	// Constructors
@@ -23,13 +25,16 @@ public class CustomerFacade implements CouponClientFacade{
 		if (custDao == null) {
 			custDao = new CustomerDbDAO();
 		}
+		if (couponDao == null) {
+			couponDao = new CouponDbDAO();
+		}
 	}
 	
 	//
 	// Functions
 	//
 	@Override
-	public CouponClientFacade login(String custName, char[] password, ClientType clientType) throws LoginException, DAOException {
+	public CustomerFacade login(String custName, char[] password, ClientType clientType) throws LoginException, DAOException {
 		boolean loginSuccessful = false;
 		try {
 			loginSuccessful = custDao.login(custName, password);
@@ -46,15 +51,47 @@ public class CustomerFacade implements CouponClientFacade{
 		}
 	}
 
-	public void buyCoupon(Coupon coupon) throws DAOException{		
+	public void buyCoupon(Coupon coupon) throws DAOException, CouponException{
+		if (coupon.getAmount() < 1) {
+			throw new CouponException("Coupon ID:" + coupon.getId() + " (" + coupon.getTitle() + ") is not in stock");
+		}
+	
+		if (LocalDate.now().isAfter(coupon.getEndDate())) {
+			throw new CouponException("Coupon ID:" + coupon.getId() + " (" + coupon.getTitle() + ") is expired. EndDate:" + coupon.getEndDate());
+		}
 		custDao.addCoupon(custId, coupon);
+		coupon.setAmount(coupon.getAmount() - 1);
+		couponDao.updateCoupon(coupon);
 	}
 	
-	public Set<Coupon> getAllCoupons() throws DAOException{
+	
+	public void buyCoupon(long couponId) throws DAOException, CouponException{		
+		for (Coupon coupon : getAllCoupons()) {
+			if (coupon.getId() == couponId) {
+				buyCoupon(coupon);
+				break;
+			}
+		}
+	}
+	
+	public void buyCoupon(String couponTitle) throws DAOException, CouponException{		
+		for (Coupon coupon : getAllCoupons()) {
+			if (coupon.getTitle().equals(couponTitle)) {
+				buyCoupon(coupon);
+				break;
+			}
+		}
+	}
+	
+	public Set<Coupon> getAllCoupons() throws DAOException {
+		return couponDao.getAllCoupons();
+	}
+	
+	public Set<Coupon> getMyCoupons() throws DAOException{
 		return custDao.getCoupons(custId);
 	}
 	
-	public Set<Coupon> getCouponsByType(CouponType couponType) throws DAOException {
+	public Set<Coupon> getMyCouponsByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {
 			if (coupon.getType().equals(couponType) ) {
@@ -64,7 +101,7 @@ public class CustomerFacade implements CouponClientFacade{
 		return coupons;
 	}
 	
-	public Set<Coupon> getCouponsByPrice(double price) throws DAOException{
+	public Set<Coupon> getMyCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {
 			if (coupon.getPrice() == price ) {

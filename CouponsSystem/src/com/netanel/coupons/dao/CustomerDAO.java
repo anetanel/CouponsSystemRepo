@@ -101,4 +101,6 @@ public interface CustomerDAO {
 	 */
 	void removeCoupon(Customer customer, Coupon coupon) throws DAOException;
 
+	void addCoupon(long custId, Coupon coupon) throws DAOException;
+
 }

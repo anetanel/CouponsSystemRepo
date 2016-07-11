@@ -12,7 +12,8 @@ public class CustomerFacade implements CouponClientFacade{
 	//
 	// Attributes
 	//
-	private Customer customer;
+	//private Customer customer;
+	private long custId;
 	private static CustomerDAO custDao = null;
 	
 	//
@@ -37,7 +38,8 @@ public class CustomerFacade implements CouponClientFacade{
 		}
 		
 		if (loginSuccessful && clientType.equals(ClientType.CUSTOMER)) {
-			customer = custDao.getCustomer(custName);
+		//	customer = custDao.getCustomer(custName);
+			custId = custDao.getCustomer(custName).getId();
 			return this;
 		} else {
 			throw new LoginException("Customer Login Failed.");
@@ -45,16 +47,16 @@ public class CustomerFacade implements CouponClientFacade{
 	}
 
 	public void buyCoupon(Coupon coupon) throws DAOException{		
-		custDao.addCoupon(customer, coupon);
+		custDao.addCoupon(custId, coupon);
 	}
 	
 	public Set<Coupon> getAllCoupons() throws DAOException{
-		return custDao.getCoupons(customer.getId());
+		return custDao.getCoupons(custId);
 	}
 	
 	public Set<Coupon> getCouponsByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
-		for (Coupon coupon : custDao.getCoupons(customer.getId())) {
+		for (Coupon coupon : custDao.getCoupons(custId)) {
 			if (coupon.getType().equals(couponType) ) {
 				coupons.add(coupon);
 			}
@@ -64,7 +66,7 @@ public class CustomerFacade implements CouponClientFacade{
 	
 	public Set<Coupon> getCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
-		for (Coupon coupon : custDao.getCoupons(customer.getId())) {
+		for (Coupon coupon : custDao.getCoupons(custId)) {
 			if (coupon.getPrice() == price ) {
 				coupons.add(coupon);
 			}

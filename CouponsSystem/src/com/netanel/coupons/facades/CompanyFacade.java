@@ -13,7 +13,8 @@ public class CompanyFacade implements CouponClientFacade{
 	//
 	// Attributes
 	//
-	private Company company;
+	//private Company company;
+	private long compId;
 	private static CompanyDAO compDao = null;
 	private static CouponDAO couponDao = null;
 	private static CustomerDAO custDao = null;
@@ -46,7 +47,8 @@ public class CompanyFacade implements CouponClientFacade{
 		}
 		
 		if (loginSuccessful && clientType.equals(ClientType.COMPANY)) {
-			company = compDao.getCompany(compName);
+			//company = compDao.getCompany(compName);
+			compId = compDao.getCompany(compName).getId();
 			return this;
 		} else {
 			throw new LoginException("Company Login Failed.");
@@ -55,12 +57,12 @@ public class CompanyFacade implements CouponClientFacade{
 
 	public void createCoupon(Coupon coupon) throws DAOException{
 		couponDao.createCoupon(coupon);
-		compDao.addCoupon(company, coupon);
+		compDao.addCoupon(compId, coupon);
 	}
 	
 	public void deleteCoupon(Coupon coupon) throws DAOException{
 		// Remove coupon from company
-		compDao.removeCoupon(company, coupon);
+		compDao.removeCoupon(compId, coupon.getId());
 		//Remove coupon from all customers
 		for (long custId : couponDao.getCustomersId(coupon)) {
 			custDao.removeCoupon(custId, coupon.getId());
@@ -74,15 +76,15 @@ public class CompanyFacade implements CouponClientFacade{
 	}
 	
 	public Company getCompany() throws DAOException{
-		return this.company = compDao.getCompany(company.getId());
+		return compDao.getCompany(compId);
 	}
 	
 	public Set<Coupon> getAllCoupons() throws DAOException{
-		return compDao.getCoupons(company.getId());
+		return compDao.getCoupons(compId);
 	}
 	
 	public Coupon getCoupon(long couponId) throws DAOException {
-		for (Coupon coupon : compDao.getCoupons(company.getId())) {
+		for (Coupon coupon : compDao.getCoupons(compId)) {
 			if (coupon.getId() == couponId ) {
 				return coupon;
 			}
@@ -92,7 +94,7 @@ public class CompanyFacade implements CouponClientFacade{
 	
 	public Set<Coupon> getCouponsByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
-		for (Coupon coupon : compDao.getCoupons(company.getId())) {
+		for (Coupon coupon : compDao.getCoupons(compId)) {
 			if (coupon.getType().equals(couponType) ) {
 				coupons.add(coupon);
 			}
@@ -102,7 +104,7 @@ public class CompanyFacade implements CouponClientFacade{
 	
 	public Set<Coupon> getCouponsByDate(LocalDate endDate) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
-		for (Coupon coupon : compDao.getCoupons(company.getId())) {
+		for (Coupon coupon : compDao.getCoupons(compId)) {
 			if (coupon.getEndDate().equals(endDate) ) {
 				coupons.add(coupon);
 			}
@@ -112,7 +114,7 @@ public class CompanyFacade implements CouponClientFacade{
 	
 	public Set<Coupon> getCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
-		for (Coupon coupon : compDao.getCoupons(company.getId())) {
+		for (Coupon coupon : compDao.getCoupons(compId)) {
 			if (coupon.getPrice() == price ) {
 				coupons.add(coupon);
 			}

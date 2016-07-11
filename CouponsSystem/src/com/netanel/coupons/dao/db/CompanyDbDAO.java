@@ -274,12 +274,38 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public void addCoupon(Company company, Coupon coupon) throws DAOException {
+		addCoupon(company.getId(), coupon);
+//		// TODO: can be more efficient? maybe one query..
+//		// Check if Company ID, Coupon ID, and join information exist in DB
+//		if (!DB.foundInDb(Tables.Company, Columns.ID,
+//				String.valueOf(company.getId()))) {
+//			throw new DAOException("Company ID does not exist in DB: "
+//					+ company.getId());
+//		}
+//		if (!DB.foundInDb(Tables.Coupon, Columns.ID,
+//				String.valueOf(coupon.getId()))) {
+//			throw new DAOException("Coupon ID does not exist in DB: "
+//					+ coupon.getId());
+//		}
+//		if (DB.foundInDb(Tables.Company_Coupon, Columns.COMP_ID,
+//				Columns.COUPON_ID, String.valueOf(company.getId()),
+//				String.valueOf(coupon.getId()))) {
+//			throw new DAOException("Coupon " + coupon.getId()
+//					+ " already associated to Company " + company.getId());
+//		}
+//
+//		DB.updateJoin(SqlCmd.INSERT, Tables.Company_Coupon, company.getId(),
+//				coupon.getId());
+	}
+	
+	@Override
+	public void addCoupon(long compId, Coupon coupon) throws DAOException {
 		// TODO: can be more efficient? maybe one query..
 		// Check if Company ID, Coupon ID, and join information exist in DB
 		if (!DB.foundInDb(Tables.Company, Columns.ID,
-				String.valueOf(company.getId()))) {
+				String.valueOf(compId))) {
 			throw new DAOException("Company ID does not exist in DB: "
-					+ company.getId());
+					+ compId);
 		}
 		if (!DB.foundInDb(Tables.Coupon, Columns.ID,
 				String.valueOf(coupon.getId()))) {
@@ -287,13 +313,13 @@ public class CompanyDbDAO implements CompanyDAO {
 					+ coupon.getId());
 		}
 		if (DB.foundInDb(Tables.Company_Coupon, Columns.COMP_ID,
-				Columns.COUPON_ID, String.valueOf(company.getId()),
+				Columns.COUPON_ID, String.valueOf(compId),
 				String.valueOf(coupon.getId()))) {
 			throw new DAOException("Coupon " + coupon.getId()
-					+ " already associated to Company " + company.getId());
+					+ " already associated to Company " + compId);
 		}
 
-		DB.updateJoin(SqlCmd.INSERT, Tables.Company_Coupon, company.getId(),
+		DB.updateJoin(SqlCmd.INSERT, Tables.Company_Coupon, compId,
 				coupon.getId());
 	}
 

@@ -236,21 +236,39 @@ public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
 	public void addCoupon(Customer customer, Coupon coupon) throws DAOException {
+		addCoupon(customer.getId(), coupon);
+//		// Check if Customer ID, Coupon ID, and join information exist in DB
+//		if (!DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
+//			throw new DAOException("Customer ID does not exist in DB: " + customer.getId());
+//		}
+//		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
+//			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
+//		}
+//		if (DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
+//				String.valueOf(customer.getId()), String.valueOf(coupon.getId()))) {
+//			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + customer.getId());
+//		}
+//
+//		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, customer.getId(), coupon.getId());
+	}
+
+	@Override
+	public void addCoupon(long custId, Coupon coupon) throws DAOException {
 		// Check if Customer ID, Coupon ID, and join information exist in DB
-		if (!DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
-			throw new DAOException("Customer ID does not exist in DB: " + customer.getId());
+		if (!DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(custId))) {
+			throw new DAOException("Customer ID does not exist in DB: " + custId);
 		}
 		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(coupon.getId()))) {
 			throw new DAOException("Coupon ID does not exist in DB: " + coupon.getId());
 		}
 		if (DB.foundInDb(Tables.Customer_Coupon, Columns.CUST_ID, Columns.COUPON_ID,
-				String.valueOf(customer.getId()), String.valueOf(coupon.getId()))) {
-			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + customer.getId());
+				String.valueOf(custId), String.valueOf(coupon.getId()))) {
+			throw new DAOException("Coupon " + coupon.getId() + " already associated to Customer " + custId);
 		}
 
-		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, customer.getId(), coupon.getId());
+		DB.updateJoin(SqlCmd.INSERT, Tables.Customer_Coupon, custId, coupon.getId());
 	}
-
+	
 	@Override
 	public void removeCoupon(long custId, long couponId) throws DAOException {
 		// Check if the coupon is associated to the customer in the join table

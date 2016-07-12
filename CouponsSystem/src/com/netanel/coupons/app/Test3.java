@@ -67,7 +67,6 @@ public class Test3 {
 			admin.createCustomer(new Customer("david", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("sarah", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("dana", new Password("1234".toCharArray()), new HashSet<Coupon>()));
-			admin.createCustomer(new Customer("dana", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,6 +176,22 @@ public class Test3 {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		
+		
+		
+		// Update customer
+		
+		try {
+			Customer misha = admin.getCustomer("moshe");
+			misha.setCustName("misha");
+			admin.updateCustomerDetails(misha);
+			System.out.println(admin.getAllCustomers());
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		
 		// Show customers coupons
 		try {

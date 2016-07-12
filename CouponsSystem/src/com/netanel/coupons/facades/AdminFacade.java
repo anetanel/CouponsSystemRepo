@@ -101,6 +101,10 @@ public class AdminFacade implements CouponClientFacade {
 		return custDao.getCustomer(custId);
 	}
 
+	public Customer getCustomer(String custName) throws DAOException {
+		return custDao.getCustomer(custName);
+	}
+	
 	public Set<Customer> getAllCustomers() throws DAOException {
 		return custDao.getAllCustomers();
 	}

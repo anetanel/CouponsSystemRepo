@@ -24,6 +24,9 @@ public class CustomerDbDAO implements CustomerDAO {
 		if (DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
 			throw new DAOException("Customer ID already exist in DB: " + customer.getId());
 		}
+		if (DB.foundInDb(Tables.Customer, Columns.CUST_NAME, String.valueOf(customer.getCustName()))) {
+			throw new DAOException("Customer Name already exist in DB: " + customer.getCustName());
+		}
 		// Initialize id to -1
 		long id = -1;
 		try (Connection con = DB.getConnection()) {

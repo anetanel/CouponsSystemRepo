@@ -3,8 +3,6 @@ package com.netanel.coupons.app;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
-
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.dao.db.DB;
 import com.netanel.coupons.exception.CouponException;
@@ -68,6 +66,7 @@ public class Test3 {
 			admin.createCustomer(new Customer("moshe", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("david", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("sarah", new Password("1234".toCharArray()), new HashSet<Coupon>()));
+			admin.createCustomer(new Customer("dana", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("dana", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block

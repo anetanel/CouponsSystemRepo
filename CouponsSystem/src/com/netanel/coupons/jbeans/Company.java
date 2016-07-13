@@ -83,6 +83,11 @@ public class Company {
 		this.coupons = coupons;
 	}
 
+	public String[] getDetails() {
+		String[] detail = {String.valueOf(getId()), getCompName(), getEmail(), String.valueOf(getCoupons().size())};
+		return detail;
+	}
+	
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", compName=" + compName + ", password=" + password + ", email=" + email

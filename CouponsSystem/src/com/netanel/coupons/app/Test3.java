@@ -2,7 +2,10 @@ package com.netanel.coupons.app;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
+
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.dao.db.DB;
 import com.netanel.coupons.exception.CouponException;
@@ -218,6 +221,15 @@ public class Test3 {
 //			e.printStackTrace();
 //		}
 		
-
+		try {
+			System.out.println();
+			Set<Company> companies = admin.getAllCompanies();
+			for (Company a : companies) {
+				System.out.println(Arrays.toString(a.getDetails()));
+			}
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

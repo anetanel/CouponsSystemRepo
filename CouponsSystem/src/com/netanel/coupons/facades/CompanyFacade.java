@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.netanel.coupons.dao.db.*;
+import com.netanel.coupons.app.CouponSystem;
 import com.netanel.coupons.dao.*;
 import com.netanel.coupons.exception.*;
 import com.netanel.coupons.jbeans.*;
@@ -15,23 +16,17 @@ public class CompanyFacade implements CouponClientFacade{
 	//
 	//private Company company;
 	private long compId;
-	private static CompanyDAO compDao = null;
-	private static CouponDAO couponDao = null;
-	private static CustomerDAO custDao = null;
+	private CompanyDAO compDao = null;
+	private CouponDAO couponDao = null;
+	private CustomerDAO custDao = null;
 	
 	//
 	// Constructors
 	//
 	public CompanyFacade() {
-		if (compDao == null) {
-			compDao = new CompanyDbDAO();
-		}
-		if (custDao == null) {
-			custDao = new CustomerDbDAO();
-		}
-		if (couponDao == null) {
-			couponDao = new CouponDbDAO();
-		}
+		compDao = CouponSystem.getInstance().getCompDao();
+		custDao = CouponSystem.getInstance().getCustDao();
+		couponDao = CouponSystem.getInstance().getCouponDao();
 	}
 
 	//

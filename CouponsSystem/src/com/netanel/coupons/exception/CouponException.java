@@ -2,14 +2,17 @@ package com.netanel.coupons.exception;
 
 public class CouponException extends Exception{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CouponException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public CouponException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 }

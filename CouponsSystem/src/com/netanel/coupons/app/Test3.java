@@ -93,10 +93,10 @@ public class Test3 {
 					new Coupon("5% Mainframe", LocalDate.now(), LocalDate.of(2017, 5, 15), 10, CouponType.ELECTRONICS,
 							"5% discount off any new IBM Mainframe Purchase", 199.9, "images/ibm/mf.png"));
 			ibm.createCoupon(
-					new Coupon("15% Mainframe", LocalDate.now(), LocalDate.of(2018, 6, 16), 5, CouponType.ELECTRONICS,
+					new Coupon("15% Mainframe", LocalDate.now(), LocalDate.of(2014, 6, 16), 5, CouponType.ELECTRONICS,
 							"15% discount off any new IBM Mainframe Purchase", 299.9, "images/ibm/mf.png"));
 			ibm.createCoupon(
-					new Coupon("25% Mainframe", LocalDate.now(), LocalDate.of(2016, 8, 18), 1, CouponType.ELECTRONICS,
+					new Coupon("25% Mainframe", LocalDate.now(), LocalDate.of(2014, 8, 18), 1, CouponType.ELECTRONICS,
 							"25% discount off any new IBM Mainframe Purchase", 399.9, "images/ibm/mf.png"));
 
 			emc.createCoupon(new Coupon("Free VMAX", LocalDate.now(), LocalDate.of(2016, 8, 18), 1,
@@ -220,16 +220,5 @@ public class Test3 {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
-		try {
-			System.out.println();
-			Set<Company> companies = admin.getAllCompanies();
-			for (Company a : companies) {
-				System.out.println(Arrays.toString(a.getDetails()));
-			}
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

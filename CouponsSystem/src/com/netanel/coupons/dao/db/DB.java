@@ -32,19 +32,11 @@ public class DB {
 		}
 	}
 	
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
 		if (cpds == null) {
 			startPool();
 		}
-		Connection con = null;
-		try {		
-			con = cpds.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return con;
+		return cpds.getConnection();
 	}
 	
 	public static void updateJoin(SqlCmd sqlCmd, Tables joinDb, long companyOrCustomerID, long couponID) {

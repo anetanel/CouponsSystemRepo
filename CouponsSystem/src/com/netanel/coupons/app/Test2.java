@@ -1,20 +1,13 @@
 package com.netanel.coupons.app;
 
-import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 public class Test2 {
-	public static void main(String[] args) {
-	
-		LocalDate a = LocalDate.of(2015, 10, 10);
-//		LocalDate a = LocalDate.now();
-		LocalDate b = LocalDate.now();
-//		LocalDate c = LocalDate.now();
-		LocalDate c = LocalDate.of(2017, 1, 1);
+	public static void main(String[] args) throws InterruptedException {
+	CouponSystem a = CouponSystem.getInstance();
 		
-		boolean t = !(!b.isBefore(a) && !b.isAfter(c));
-		
-		System.out.println(t);
-		
+	TimeUnit.SECONDS.sleep(6);
+	a.stop();
 	}
 
 }

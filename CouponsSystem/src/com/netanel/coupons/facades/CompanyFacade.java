@@ -114,7 +114,7 @@ public class CompanyFacade implements CouponClientFacade{
 	public Set<Coupon> getCouponsByDate(LocalDate endDate) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : compDao.getCoupons(compId)) {
-			if (coupon.getEndDate().equals(endDate) ) {
+			if (coupon.getEndDate().equals(endDate) || coupon.getEndDate().isBefore(endDate) ) {
 				coupons.add(coupon);
 			}
 		}
@@ -124,7 +124,7 @@ public class CompanyFacade implements CouponClientFacade{
 	public Set<Coupon> getCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : compDao.getCoupons(compId)) {
-			if (coupon.getPrice() == price ) {
+			if (coupon.getPrice() <= price ) {
 				coupons.add(coupon);
 			}
 		}

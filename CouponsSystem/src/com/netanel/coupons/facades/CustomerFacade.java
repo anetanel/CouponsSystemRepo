@@ -106,7 +106,7 @@ public class CustomerFacade implements CouponClientFacade{
 	public Set<Coupon> getMyCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {
-			if (coupon.getPrice() == price ) {
+			if (coupon.getPrice() <= price ) {
 				coupons.add(coupon);
 			}
 		}

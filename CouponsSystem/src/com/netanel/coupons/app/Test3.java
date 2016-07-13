@@ -98,8 +98,15 @@ public class Test3 {
 
 			emc.createCoupon(new Coupon("Free VMAX", LocalDate.now(), LocalDate.of(2016, 8, 18), 1,
 					CouponType.ELECTRONICS, "Free EMC VMAX Storage System", 5999.9, "images/emc/vmax.png"));
-			emc.createCoupon(new Coupon("Free VNX", LocalDate.now(), LocalDate.of(2016, 8, 18), 5,
-					CouponType.ELECTRONICS, "Free EMC VNX Storage System", 4899.9, "images/emc/vnx.png"));
+			emc.createCoupon(new Coupon("Free VNX", LocalDate.now(), LocalDate.of(2016, 12, 18), 5,
+					CouponType.ELECTRONICS, "Free EMC VNX Storage System", 1899.9, "images/emc/vnx.png"));
+
+			emc.createCoupon(new Coupon("EMC Coupon 1", LocalDate.now(), LocalDate.of(2016, 11, 18), 5,
+					CouponType.CARS, "EMC Coupon number 1 description", 2899.9, "images/emc/vnx.png"));
+			emc.createCoupon(new Coupon("EMC Coupon 2", LocalDate.now(), LocalDate.of(2016, 10, 18), 5,
+					CouponType.HEALTH, "EMC Coupon number 2 description", 3899.9, "images/emc/vnx.png"));
+			emc.createCoupon(new Coupon("EMC Coupon 3", LocalDate.now(), LocalDate.of(2016, 9, 18), 5,
+					CouponType.KIDS, "EMC Coupon number 3 description", 4899.9, "images/emc/vnx.png"));
 
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
@@ -126,6 +133,9 @@ public class Test3 {
 			dana.buyCoupon("5% Mainframe");
 			// dana.buyCoupon("Free VMAX");
 			dana.buyCoupon("Free VNX");
+			dana.buyCoupon("EMC Coupon 1");
+			dana.buyCoupon("EMC Coupon 2");
+			dana.buyCoupon("EMC Coupon 3");
 		} catch (DAOException | CouponException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -133,10 +143,14 @@ public class Test3 {
 
 		// Show customers coupons
 		try {
-			System.out.println("moshe:");
-			System.out.println(moshe.getMyCoupons());
-			System.out.println("dana:");
-			System.out.println(dana.getMyCoupons());
+//			System.out.println("moshe:");
+//			System.out.println(moshe.getMyCoupons());
+//			System.out.println("dana:");
+//			System.out.println(dana.getMyCoupons());
+//			System.out.println("KIDS:");
+//			System.out.println(dana.getMyCouponsByType(CouponType.KIDS));
+//			System.out.println(dana.getMyCouponsByPrice(3000));
+			System.out.println(emc.getCouponsByDate(LocalDate.of(2016, 10, 18)));
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -186,7 +200,7 @@ public class Test3 {
 			Customer misha = admin.getCustomer("moshe");
 			misha.setCustName("misha");
 			admin.updateCustomerDetails(misha);
-			System.out.println(admin.getAllCustomers());
+//			System.out.println(admin.getAllCustomers());
 		} catch (DAOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -194,15 +208,15 @@ public class Test3 {
 		
 		
 		// Show customers coupons
-		try {
-			System.out.println("moshe:");
-			System.out.println(moshe.getMyCoupons());
-			System.out.println("dana:");
-			System.out.println(dana.getMyCoupons());
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("moshe:");
+//			System.out.println(moshe.getMyCoupons());
+//			System.out.println("dana:");
+//			System.out.println(dana.getMyCoupons());
+//		} catch (DAOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 
 	}

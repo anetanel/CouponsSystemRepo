@@ -36,6 +36,12 @@ import java.awt.event.InputEvent;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import javax.swing.JTabbedPane;
+import javax.swing.BoxLayout;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
 
 public class MainWindow {
 
@@ -50,6 +56,7 @@ public class MainWindow {
 	private ClientType clientType = ClientType.CUSTOMER;
 	private CouponClientFacade client = null;
 	private JMenuItem mntmLogout;
+	private JTable adminCompTable;
 
 	/**
 	 * Launch the application.
@@ -90,10 +97,11 @@ public class MainWindow {
 		frmCouponSystemLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/images/icon.png")));
 		frmCouponSystemLogin.setTitle("Coupon System Login");
 		frmCouponSystemLogin.setResizable(false);
-		frmCouponSystemLogin.setSize(370, 200);
+		frmCouponSystemLogin.setSize(600, 450);
 		frmCouponSystemLogin.setLocationRelativeTo(null);
 		frmCouponSystemLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
+		
 		frmCouponSystemLogin.getContentPane().add(mainPanel);
 		mainPanel.setLayout(clMainPanel);
 
@@ -160,7 +168,8 @@ public class MainWindow {
 		JMenu mnActions = new JMenu("Actions");
 		mnActions.setMnemonic('a');
 		menuBar.add(mnActions);
-
+		
+		
 		mntmLogout = new JMenuItem("Logout");
 		mntmLogout.setHorizontalTextPosition(SwingConstants.CENTER);
 		mntmLogout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
@@ -183,6 +192,31 @@ public class MainWindow {
 		
 		JPanel adminCompanyTab = new JPanel();
 		adminTabs.addTab("Companies", null, adminCompanyTab, null);
+		adminCompanyTab.setLayout(new BorderLayout(0, 0));
+		
+		JPanel adminActionPanel = new JPanel();
+		adminCompanyTab.add(adminActionPanel, BorderLayout.NORTH);
+		adminActionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		
+		JButton btnNewCompany = new JButton("New Company");
+		adminActionPanel.add(btnNewCompany);
+		
+		JButton btnUpdateDetails = new JButton("Update Details");
+		adminActionPanel.add(btnUpdateDetails);
+		
+		JButton btnShowCoupons = new JButton("Show Coupons");
+		adminActionPanel.add(btnShowCoupons);
+		
+		JButton btnDeleteCompany = new JButton("Delete Company");
+		btnDeleteCompany.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		adminActionPanel.add(btnDeleteCompany);
+		
+		adminCompTable = new JTable();
+		adminCompanyTab.add(adminCompTable, BorderLayout.SOUTH);
+		adminCompTable.setFillsViewportHeight(true);
+		
+		JScrollPane scrollPane = new JScrollPane(adminCompTable);
+		adminCompanyTab.add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel adminCustomerTab = new JPanel();
 		adminTabs.addTab("Customers", null, adminCustomerTab, null);

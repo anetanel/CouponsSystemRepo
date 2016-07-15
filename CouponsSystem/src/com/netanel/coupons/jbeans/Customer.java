@@ -71,8 +71,13 @@ public class Customer {
 	}
 
 	
-	public String[] getDetails() {
-		String[] detail = {String.valueOf(getId()), getCustName(), String.valueOf(getCoupons().size())};
+//	public String[] getDetails() {
+//		String[] detail = {String.valueOf(getId()), getCustName(), String.valueOf(getCoupons().size())};
+//		return detail;
+//	}
+	
+	public Object[] getDetails() {
+		Object[] detail = {getId(), getCustName(), getCoupons().size()};
 		return detail;
 	}
 	

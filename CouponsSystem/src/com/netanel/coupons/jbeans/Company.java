@@ -83,8 +83,13 @@ public class Company {
 		this.coupons = coupons;
 	}
 
-	public String[] getDetails() {
-		String[] detail = {String.valueOf(getId()), getCompName(), getEmail(), String.valueOf(getCoupons().size())};
+//	public String[] getDetails() {
+//		String[] detail = {String.valueOf(getId()), getCompName(), getEmail(), String.valueOf(getCoupons().size())};
+//		return detail;
+//	}
+	
+	public Object[] getDetails() {
+		Object[] detail = {getId(), getCompName(), getEmail(), getCoupons().size()};
 		return detail;
 	}
 	

@@ -56,9 +56,49 @@ public class Test3 {
 			admin.createCompany(
 					new Company("EMC", new Password("1q2w3e".toCharArray()), "info@emc.com", new HashSet<Coupon>()));
 			admin.createCompany(
-					new Company("DELL", new Password("abcde".toCharArray()), "info@dell.com", new HashSet<Coupon>()));
+					new Company("Dell", new Password("abcde".toCharArray()), "info@dell.com", new HashSet<Coupon>()));
 			admin.createCompany(
 					new Company("HP", new Password("1234".toCharArray()), "info@hp.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Tnuva", new Password("1234".toCharArray()), "info@tnuva.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Tara", new Password("1234".toCharArray()), "info@tara.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Osem", new Password("1234".toCharArray()), "info@osem.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Samsung", new Password("1234".toCharArray()), "info@samsung.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Nike", new Password("1234".toCharArray()), "info@nike.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Adidas", new Password("1234".toCharArray()), "info@adidas.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Shilav", new Password("1234".toCharArray()), "info@shilav.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Gazit", new Password("1234".toCharArray()), "info@gazit.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Mazda", new Password("1234".toCharArray()), "info@mazda.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Toyota", new Password("1234".toCharArray()), "info@toyota.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("BMW", new Password("1234".toCharArray()), "info@bmw.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Bagir", new Password("1234".toCharArray()), "info@bagir.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Home Center", new Password("1234".toCharArray()), "info@homecenter.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("ACE", new Password("1234".toCharArray()), "info@ace.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Yamaha", new Password("1234".toCharArray()), "info@yamaha.com", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Habima", new Password("1234".toCharArray()), "info@habima.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Globus Group", new Password("1234".toCharArray()), "info@gg.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Opticana", new Password("1234".toCharArray()), "info@opticana.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Erroca", new Password("1234".toCharArray()), "info@erroca.co.il", new HashSet<Coupon>()));
+			admin.createCompany(
+					new Company("Sony", new Password("1234".toCharArray()), "info@sony.com", new HashSet<Coupon>()));
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

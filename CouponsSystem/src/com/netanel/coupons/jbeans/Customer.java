@@ -70,6 +70,12 @@ public class Customer {
 		this.password.setNewPassword(password);
 	}
 
+	
+	public String[] getDetails() {
+		String[] detail = {String.valueOf(getId()), getCustName(), String.valueOf(getCoupons().size())};
+		return detail;
+	}
+	
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", custName=" + custName + ", password=" + password + ", coupons=" + coupons

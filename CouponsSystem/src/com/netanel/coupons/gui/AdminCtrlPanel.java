@@ -2,19 +2,28 @@ package com.netanel.coupons.gui;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.util.Set;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.facades.AdminFacade;
 import com.netanel.coupons.gui.models.CompanyTableModel;
 import com.netanel.coupons.gui.models.CustomersTableModel;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Customer;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
 
 public class AdminCtrlPanel extends JPanel {
 
@@ -22,12 +31,14 @@ public class AdminCtrlPanel extends JPanel {
 	private JTable companyTable;
 	private AdminFacade admin;
 	private JTable customersTable;
+	private CompanyTableModel companyTableModel;
 
 	/**
 	 * Create the panel.
 	 * @throws DAOException 
 	 */
 	public AdminCtrlPanel(AdminFacade admin) throws DAOException {
+		setName("Admin Control Panel");
 		this.admin = admin;
 		
 		setLayout(new BorderLayout(0, 0));
@@ -43,6 +54,7 @@ public class AdminCtrlPanel extends JPanel {
 		companyPanel.add(companyBtnsPanel, BorderLayout.NORTH);
 		
 		JButton btnNewCompany = new JButton("New Company");
+		btnNewCompany.addActionListener(new BtnNewCompanyActionListener());
 		companyBtnsPanel.add(btnNewCompany);
 		
 		JButton btnEditCompany = new JButton("Edit Company");
@@ -52,6 +64,7 @@ public class AdminCtrlPanel extends JPanel {
 		companyBtnsPanel.add(btnDeleteCompany);
 		
 		JButton btnRefreshCopmanies = new JButton("Refresh");
+		btnRefreshCopmanies.addActionListener(new BtnRefreshCopmaniesActionListener());
 		companyBtnsPanel.add(btnRefreshCopmanies);
 		
 		JPanel companyTablePanel = new JPanel();
@@ -63,7 +76,7 @@ public class AdminCtrlPanel extends JPanel {
 		
 		companyTable = new JTable();
 		companyTable.setAutoCreateRowSorter(true);
-		CompanyTableModel companyTableModel = new CompanyTableModel(getAllCompaniesTable(), new String[]{"ID", "Name", "Email", "Coupons"});
+		companyTableModel = new CompanyTableModel(getAllCompaniesTable(), new String[]{"ID", "Name", "Email", "Coupons"});
 		companyTable.setModel(companyTableModel);
 		companyTableScrollPane.setViewportView(companyTable);
 		
@@ -121,5 +134,31 @@ public class AdminCtrlPanel extends JPanel {
 			cnt++;
 		}
 		return table;
+	}
+	private class BtnNewCompanyActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			NewCompanyDialog dialog = new NewCompanyDialog((JFrame)SwingUtilities.getRoot(AdminCtrlPanel.this), true, admin);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setLocationRelativeTo(dialog.getParent());
+			dialog.pack();
+			dialog.setVisible(true);
+		}
+	}
+	private class BtnRefreshCopmaniesActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				refreshCompanyTable();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	public void refreshCompanyTable() throws DAOException {
+		companyTableModel = new CompanyTableModel(getAllCompaniesTable(), new String[]{"ID", "Name", "Email", "Coupons"});
+		companyTable.setModel(companyTableModel);
+		//companyTable.revalidate();
 	}
 }

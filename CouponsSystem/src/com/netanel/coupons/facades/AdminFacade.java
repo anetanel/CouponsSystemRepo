@@ -40,6 +40,12 @@ public class AdminFacade implements CouponClientFacade {
 	}
 
 	public void createCompany(Company company) throws DAOException {
+		if (company.getCompName().equals("")){
+			throw new DAOException("Company name can't be empty.");
+		}
+		if (company.getEmail().equals("")){
+			throw new DAOException("Company Email can't be empty.");
+		}
 		compDao.createCompany(company);
 	}
 

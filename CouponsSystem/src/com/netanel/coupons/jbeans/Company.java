@@ -3,6 +3,7 @@ package com.netanel.coupons.jbeans;
 import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
+import com.netanel.coupons.exception.JbeansException;
 
 public class Company {
 	//
@@ -21,9 +22,11 @@ public class Company {
 	public Company() { }
 	
 	public Company(String compName, Password password, String email, Set<Coupon> coupons) {
-		this.compName = compName;
+		setCompName(compName);
+		//this.compName = compName;
 		this.password = password;
-		this.email = email;
+		setEmail(email);
+		//this.email = email;
 		this.coupons = coupons;
 	}
 	
@@ -82,11 +85,6 @@ public class Company {
 	public void setCoupons(Set<Coupon> coupons) {
 		this.coupons = coupons;
 	}
-
-//	public String[] getDetails() {
-//		String[] detail = {String.valueOf(getId()), getCompName(), getEmail(), String.valueOf(getCoupons().size())};
-//		return detail;
-//	}
 	
 	public Object[] getDetails() {
 		Object[] detail = {getId(), getCompName(), getEmail(), getCoupons().size()};

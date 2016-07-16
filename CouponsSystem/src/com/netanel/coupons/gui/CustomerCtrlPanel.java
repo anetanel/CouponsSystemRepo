@@ -10,7 +10,6 @@ import javax.swing.JTable;
 
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.CustomerFacade;
-import com.netanel.coupons.gui.models.CouponTableModel;
 import com.netanel.coupons.gui.models.CustomerCouponTableModel;
 import com.netanel.coupons.jbeans.Coupon;
 
@@ -26,7 +25,8 @@ public class CustomerCtrlPanel extends JPanel {
 	 */
 	public CustomerCtrlPanel(CustomerFacade client) throws DAOException {
 		this.customerFcd = client;
-		
+		setName("Customer Control Panel: " + customerFcd.getCustName());
+
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel btnPanel = new JPanel();

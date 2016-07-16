@@ -11,6 +11,7 @@ import com.netanel.coupons.facades.CustomerFacade;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import java.awt.Toolkit;
 
 public class TopControlPanel extends JFrame {
 
@@ -22,6 +23,7 @@ public class TopControlPanel extends JFrame {
 	 * @throws DAOException 
 	 */
 	public TopControlPanel(CouponClientFacade client) throws DAOException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TopControlPanel.class.getResource("/images/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		
@@ -39,7 +41,11 @@ public class TopControlPanel extends JFrame {
 			clientPanel = new CustomerCtrlPanel((CustomerFacade) client);
 		}
 		setContentPane(clientPanel);
+		setTitle(clientPanel.getName());
 		pack();
 	}
 
+	public JPanel getClientPanel() {
+		return clientPanel;
+	}
 }

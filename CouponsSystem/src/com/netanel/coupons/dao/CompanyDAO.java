@@ -3,6 +3,7 @@ package com.netanel.coupons.dao;
 import java.util.*;
 
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.jbeans.*;
 
 public interface CompanyDAO {

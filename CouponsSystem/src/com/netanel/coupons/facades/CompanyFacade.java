@@ -16,6 +16,7 @@ public class CompanyFacade implements CouponClientFacade{
 	//
 	//private Company company;
 	private long compId;
+	private String compName;
 	private CompanyDAO compDao = null;
 	private CouponDAO couponDao = null;
 	private CustomerDAO custDao = null;
@@ -43,7 +44,8 @@ public class CompanyFacade implements CouponClientFacade{
 		
 		if (loginSuccessful && clientType.equals(ClientType.COMPANY)) {
 			//company = compDao.getCompany(compName);
-			compId = compDao.getCompany(compName).getId();
+			this.compId = compDao.getCompany(compName).getId();
+			this.compName = compName;
 			return this;
 		} else {
 			throw new LoginException("Company Login Failed.");
@@ -125,4 +127,13 @@ public class CompanyFacade implements CouponClientFacade{
 		}
 		return coupons;
 	}
+
+	public long getCompId() {
+		return compId;
+	}
+
+	public String getCompName() {
+		return compName;
+	}
+	
 }

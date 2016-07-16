@@ -7,6 +7,7 @@ import com.netanel.coupons.dao.CompanyDAO;
 import com.netanel.coupons.dao.CouponDAO;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 

@@ -27,7 +27,7 @@ public class CompanyCtrlPanel extends JPanel {
 	 */
 	public CompanyCtrlPanel(CompanyFacade client) throws DAOException {
 		this.companyFcd = client;
-		
+		setName("Company Control Panel: " + companyFcd.getCompName());
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel btnPanel = new JPanel();

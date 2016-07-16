@@ -120,6 +120,11 @@ public class Coupon {
 		this.image = image;
 	}
 
+	public Object[] getDetails() {
+		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(), getImage()};
+		return detail;
+	}
+	
 	@Override
 	public String toString() {
 		return "Coupon [id=" + id + ", title=" + title + ", startDate="

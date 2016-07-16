@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.AdminFacade;
+import com.netanel.coupons.gui.models.CompanyTableModel;
+import com.netanel.coupons.gui.models.CustomersTableModel;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Customer;
 
@@ -27,6 +29,7 @@ public class AdminCtrlPanel extends JPanel {
 	 */
 	public AdminCtrlPanel(AdminFacade admin) throws DAOException {
 		this.admin = admin;
+		
 		setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -60,25 +63,7 @@ public class AdminCtrlPanel extends JPanel {
 		
 		companyTable = new JTable();
 		companyTable.setAutoCreateRowSorter(true);
-		DefaultTableModel companyTableModel = new DefaultTableModel(getAllCompaniesTable(), new String[]{"ID", "Name", "Email", "Coupons"}){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            public Class<?> getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Long.class;
-                    case 1:
-                        return String.class;
-                    case 2:
-                        return String.class;
-                    case 3:
-                    	return Integer.class;
-                    default:
-                        return String.class;
-                }
-            }
-        };
+		CompanyTableModel companyTableModel = new CompanyTableModel(getAllCompaniesTable(), new String[]{"ID", "Name", "Email", "Coupons"});
 		companyTable.setModel(companyTableModel);
 		companyTableScrollPane.setViewportView(companyTable);
 		
@@ -110,23 +95,7 @@ public class AdminCtrlPanel extends JPanel {
 		
 		customersTable = new JTable();
 		customersTable.setAutoCreateRowSorter(true);
-		DefaultTableModel customersTableModel = new DefaultTableModel(getAllCustomersTable(), new String[]{"ID", "Name", "Coupons"}){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            public Class<?> getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Long.class;
-                    case 1:
-                        return String.class;
-                    case 2:
-                    	return Integer.class;
-                    default:
-                        return String.class;
-                }
-            }
-        };
+		CustomersTableModel customersTableModel = new CustomersTableModel(getAllCustomersTable(), new String[]{"ID", "Name", "Coupons"});
 		customersTable.setModel(customersTableModel);
 		customersTableScrollPane.setViewportView(customersTable);
 

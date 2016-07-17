@@ -28,6 +28,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.reflect.Array;
 import java.awt.event.ActionEvent;
+import java.awt.ComponentOrientation;
 
 public class AdminCtrlPanel extends JPanel {
 

@@ -132,6 +132,7 @@ public class LoginWindow extends JFrame {
 			login();
 		}
 	}
+
 	
 	private void login() {
 		CouponClientFacade client = null;

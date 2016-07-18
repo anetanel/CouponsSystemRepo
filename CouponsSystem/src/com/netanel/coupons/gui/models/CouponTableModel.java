@@ -16,27 +16,27 @@ public class CouponTableModel extends DefaultTableModel{
 	
 	@Override
     public Class<?> getColumnClass(int column) {
-        switch (column) {
-            case 0:
-                return Long.class;
-            case 1:
-                return String.class;
-            case 2:
-                return LocalDate.class;
-            case 3:
-            	return LocalDate.class;
-            case 4:
-            	return Integer.class;
-            case 5:
-            	return CouponType.class;
-            case 6:
-            	return String.class;
-            case 7:
-            	return Double.class;
-            case 8:
-            	return String.class;
-            default:
-                return String.class;
-        }
+		return getValueAt(0, column).getClass();
     }
 }
+
+//        switch (column) {
+//            case 0:
+//                return Long.class;
+//            case 1:
+//                return String.class;
+//            case 2:
+//                return LocalDate.class;
+//            case 3:
+//            	return LocalDate.class;
+//            case 4:
+//            	return CouponType.class;
+//            case 5:
+//            	return String.class;
+//            case 6:
+//            	return Double.class;
+//            case 7:
+//            	return String.class;
+//            default:
+//                return String.class;
+//        }

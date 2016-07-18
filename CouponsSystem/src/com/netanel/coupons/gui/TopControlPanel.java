@@ -39,7 +39,7 @@ public class TopControlPanel extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnActions = new JMenu("Actions");
+		JMenu mnActions = new JMenu("Menu");
 		menuBar.add(mnActions);
 		
 		JMenuItem mntmLogout = new JMenuItem("Logout");

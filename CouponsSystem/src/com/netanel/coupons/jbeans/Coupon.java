@@ -1,6 +1,11 @@
 package com.netanel.coupons.jbeans;
 
+import java.awt.Toolkit;
 import java.time.LocalDate;
+
+import javax.swing.ImageIcon;
+
+import com.netanel.coupons.gui.LoginWindow;
 
 public class Coupon {
 
@@ -120,8 +125,9 @@ public class Coupon {
 		this.image = image;
 	}
 
-	public Object[] getDetails() {
-		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(), getImage()};
+	public Object[] getDetails(int iconSize) {
+		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
+				new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(image)).getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
 		return detail;
 	}
 	

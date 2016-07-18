@@ -15,8 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.AdminFacade;
-import com.netanel.coupons.gui.models.CompanyTableModel;
-import com.netanel.coupons.gui.models.CustomersTableModel;
+import com.netanel.coupons.gui.models.CouponTableModel;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Customer;
 import java.awt.event.ActionListener;
@@ -25,6 +24,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AdminCtrlPanel extends JPanel {
 
@@ -32,7 +33,7 @@ public class AdminCtrlPanel extends JPanel {
 	private JTable companyTable;
 	private AdminFacade admin;
 	private JTable customersTable;
-	private CompanyTableModel companyTableModel;
+	private CouponTableModel companyTableModel;
 
 	/**
 	 * Create the panel.
@@ -78,10 +79,17 @@ public class AdminCtrlPanel extends JPanel {
 		JScrollPane companyTableScrollPane = new JScrollPane();
 		companyTablePanel.add(companyTableScrollPane);
 
-		companyTable = new JTable();
+		companyTable = new JTable(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
+		companyTable.addMouseListener(new TableMouseListener());
 		companyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		companyTable.setAutoCreateRowSorter(true);
-		companyTableModel = new CompanyTableModel(getAllCompaniesTable(),
+		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
 				new String[] { "ID", "Name", "Email", "Coupons" });
 		companyTable.setModel(companyTableModel);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -115,10 +123,17 @@ public class AdminCtrlPanel extends JPanel {
 		JScrollPane customersTableScrollPane = new JScrollPane();
 		customersTablePanel.add(customersTableScrollPane);
 
-		customersTable = new JTable();
+		customersTable = new JTable(){
+	        private static final long serialVersionUID = 1L;
+
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
+		customersTable.addMouseListener(new TableMouseListener());
 		customersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		customersTable.setAutoCreateRowSorter(true);
-		CustomersTableModel customersTableModel = new CustomersTableModel(getAllCustomersTable(),
+		CouponTableModel customersTableModel = new CouponTableModel(getAllCustomersTable(),
 				new String[] { "ID", "Name", "Coupons" });
 		customersTable.setModel(customersTableModel);
 		customersTable.setDefaultRenderer(Number.class, centerRenderer);
@@ -174,8 +189,8 @@ public class AdminCtrlPanel extends JPanel {
 		}
 	}
 
-	public void refreshCompanyTable() throws DAOException {
-		companyTableModel = new CompanyTableModel(getAllCompaniesTable(),
+	private void refreshCompanyTable() throws DAOException {
+		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
 				new String[] { "ID", "Name", "Email", "Coupons" });
 		companyTable.setModel(companyTableModel);
 	}
@@ -194,19 +209,7 @@ public class AdminCtrlPanel extends JPanel {
 
 	private class BtnEditCompanyActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			try {
-				EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
-						true, admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setLocationRelativeTo(dialog.getParent());
-				dialog.pack();
-				dialog.setVisible(true);
-				dialog.addWindowListener(new DialogListener());
-				// System.out.println(admin.getCompany(getSelectedIdFromTable(companyTable)));
-			} catch (DAOException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
-			}
-
+			editCompany();
 		}
 	}
 
@@ -230,8 +233,16 @@ public class AdminCtrlPanel extends JPanel {
 			}
 		}
 	}
+	private class TableMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			 if (e.getClickCount() == 2) {
+		           editCompany();
+		        }
+		}
+	}
 
-	public long getSelectedIdFromTable(JTable table) {
+	private long getSelectedIdFromTable(JTable table) {
 		int row = table.getSelectedRow();
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			if (table.getColumnName(i).equals("ID")) {
@@ -239,5 +250,19 @@ public class AdminCtrlPanel extends JPanel {
 			}
 		}
 		return -1;
+	}
+	
+	private void editCompany() {
+		try {
+			EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
+					true, admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setLocationRelativeTo(dialog.getParent());
+			dialog.pack();
+			dialog.setVisible(true);
+			dialog.addWindowListener(new DialogListener());
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 }

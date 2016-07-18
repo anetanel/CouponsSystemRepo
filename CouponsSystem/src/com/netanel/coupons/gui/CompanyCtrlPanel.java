@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class CompanyCtrlPanel extends JPanel {
 
@@ -50,6 +52,7 @@ public class CompanyCtrlPanel extends JPanel {
 		tablePanel.add(scrollPane);
 		
 		couponsTable = new JTable();
+		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), 
 											new String []{"ID","Title", "Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image"});
@@ -63,7 +66,7 @@ public class CompanyCtrlPanel extends JPanel {
 		Object[][] table = new Object[coupons.size()][];
 		int cnt = 0;
 		for (Coupon coupon : coupons) {
-			table[cnt] = coupon.getDetails();
+			table[cnt] = coupon.getDetails(40);
 			cnt++;
 		}
 		return table;

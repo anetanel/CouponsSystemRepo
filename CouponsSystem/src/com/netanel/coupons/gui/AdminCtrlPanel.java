@@ -8,15 +8,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Set;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.DefaultTableCellRenderer;
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.facades.AdminFacade;
 import com.netanel.coupons.gui.models.CompanyTableModel;
 import com.netanel.coupons.gui.models.CustomersTableModel;
@@ -25,10 +22,9 @@ import com.netanel.coupons.jbeans.Customer;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.lang.reflect.Array;
 import java.awt.event.ActionEvent;
-import java.awt.ComponentOrientation;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 
 public class AdminCtrlPanel extends JPanel {
 
@@ -83,10 +79,14 @@ public class AdminCtrlPanel extends JPanel {
 		companyTablePanel.add(companyTableScrollPane);
 
 		companyTable = new JTable();
+		companyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		companyTable.setAutoCreateRowSorter(true);
 		companyTableModel = new CompanyTableModel(getAllCompaniesTable(),
 				new String[] { "ID", "Name", "Email", "Coupons" });
 		companyTable.setModel(companyTableModel);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		companyTable.setDefaultRenderer(Number.class, centerRenderer);
 		companyTableScrollPane.setViewportView(companyTable);
 
 		JPanel customersPanel = new JPanel();
@@ -116,10 +116,12 @@ public class AdminCtrlPanel extends JPanel {
 		customersTablePanel.add(customersTableScrollPane);
 
 		customersTable = new JTable();
+		customersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		customersTable.setAutoCreateRowSorter(true);
 		CustomersTableModel customersTableModel = new CustomersTableModel(getAllCustomersTable(),
 				new String[] { "ID", "Name", "Coupons" });
 		customersTable.setModel(customersTableModel);
+		customersTable.setDefaultRenderer(Number.class, centerRenderer);
 		customersTableScrollPane.setViewportView(customersTable);
 
 	}

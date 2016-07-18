@@ -185,7 +185,7 @@ public class Test3 {
 		}
 
 		// Show customers coupons
-		try {
+//		try {
 //			System.out.println("moshe:");
 //			System.out.println(moshe.getMyCoupons());
 //			System.out.println("dana:");
@@ -193,11 +193,11 @@ public class Test3 {
 //			System.out.println("KIDS:");
 //			System.out.println(dana.getMyCouponsByType(CouponType.KIDS));
 //			System.out.println(dana.getMyCouponsByPrice(3000));
-			System.out.println(emc.getCouponsByDate(LocalDate.of(2016, 10, 18)));
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			System.out.println(emc.getCouponsByDate(LocalDate.of(2016, 10, 18)));
+//		} catch (DAOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 //		// Delete coupon
 //		try {

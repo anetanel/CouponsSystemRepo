@@ -54,6 +54,7 @@ public class DailyCouponExpirationTask implements Runnable {
 				TimeUnit.SECONDS.sleep(10);
 			} catch (InterruptedException e) {
 				System.out.println("bye bye");
+				System.exit(0);
 			}
 		}
 	}
@@ -66,6 +67,7 @@ public class DailyCouponExpirationTask implements Runnable {
 			custDao.removeCoupon(custId, coupon.getId());
 		}
 		// Delete coupon
+		System.out.println("Deleted expired coupon: " + coupon);
 		couponDao.deleteCoupon(coupon);
 	}
 

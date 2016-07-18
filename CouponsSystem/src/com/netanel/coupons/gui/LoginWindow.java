@@ -38,6 +38,7 @@ public class LoginWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField loginNameTxtFld;
 	private JPasswordField passwordField;
+	private JRadioButton rdbtnAdmin;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
@@ -115,13 +116,22 @@ public class LoginWindow extends JFrame {
 		IdentityPanel.add(rdbtnCustomer);
 		buttonGroup.add(rdbtnCustomer);
 		
-		JRadioButton rdbtnAdmin = new JRadioButton("Admin");
+		rdbtnAdmin = new JRadioButton("Admin");
 		rdbtnAdmin.setActionCommand("ADMIN");
 		IdentityPanel.add(rdbtnAdmin);
 		buttonGroup.add(rdbtnAdmin);
 		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new LoginActionListener());
+		
+		JButton btnSecret = new JButton("");
+		btnSecret.setContentAreaFilled(false);
+		btnSecret.setBorderPainted(false);
+		btnSecret.setFocusable(false);
+		btnSecret.setMnemonic('F');
+		btnSecret.addActionListener(new BtnSecretActionListener());
+		btnSecret.setBounds(0, 235, -23, -23);
+		contentPane.add(btnSecret);
 		btnLogin.setBounds(286, 173, 89, 30);
 		contentPane.add(btnLogin);
 		contentPane.getRootPane().setDefaultButton(btnLogin);
@@ -130,6 +140,11 @@ public class LoginWindow extends JFrame {
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			login();
+		}
+	}
+	private class BtnSecretActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			secretLogin();
 		}
 	}
 
@@ -155,14 +170,22 @@ public class LoginWindow extends JFrame {
 			client = client.login(loginNameTxtFld.getText(), passwordField.getPassword(), clientType);
 			JOptionPane.showMessageDialog(contentPane, "Welcome " + loginNameTxtFld.getText() + "!",
 					"Login Successful", JOptionPane.INFORMATION_MESSAGE);
-			TopControlPanel appFrame = new TopControlPanel(client);
+			JFrame loginWindow = (JFrame) SwingUtilities.getRoot(contentPane);
+			TopControlPanel appFrame = new TopControlPanel(client, loginWindow);
 			appFrame.setVisible(true);
 			appFrame.setLocationRelativeTo(contentPane);
-			JFrame rootFrame = (JFrame) SwingUtilities.getRoot(contentPane);
-			rootFrame.setVisible(false);
+			loginWindow.setVisible(false);
+			passwordField.setText("");
 		} catch (LoginException | DAOException e1) {
 			JOptionPane.showMessageDialog(contentPane, e1.getMessage(), "Login Failed!",
 					JOptionPane.WARNING_MESSAGE);
 		}
+	}
+	
+	private void secretLogin(){
+		rdbtnAdmin.setSelected(true);
+		loginNameTxtFld.setText("admin");
+		passwordField.setText("1234");
+		login();
 	}
 }

@@ -42,7 +42,13 @@ public class CustomerCtrlPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		tablePanel.add(scrollPane);
 		
-		couponsTable = new JTable();
+		couponsTable = new JTable(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), 

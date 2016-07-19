@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.netanel.coupons.app.CouponSystem;
 import com.netanel.coupons.dao.*;
+import com.netanel.coupons.email.Email;
 import com.netanel.coupons.exception.*;
 import com.netanel.coupons.jbeans.*;
 
@@ -43,8 +44,8 @@ public class AdminFacade implements CouponClientFacade {
 		if (company.getCompName().equals("")){
 			throw new DAOException("Company name can't be empty.");
 		}
-		if (company.getEmail().equals("")){
-			throw new DAOException("Company Email can't be empty.");
+		if (!Email.validate(company.getEmail())){
+			throw new DAOException("Invalid Email address!");
 		}
 		compDao.createCompany(company);
 	}
@@ -65,6 +66,9 @@ public class AdminFacade implements CouponClientFacade {
 	}
 	
 	public void updateCompanyDetails(Company company) throws DAOException {
+		if (!Email.validate(company.getEmail())) {
+			throw new DAOException("Invalid Email address!");
+		}
 		compDao.updateCompany(company);
 	}
 

@@ -51,7 +51,7 @@ public class DailyCouponExpirationTask implements Runnable {
 			}
 			try {
 				// TimeUnit.HOURS.sleep(24);
-				TimeUnit.SECONDS.sleep(10);
+				TimeUnit.SECONDS.sleep(30);
 			} catch (InterruptedException e) {
 				System.out.println("bye bye");
 				System.exit(0);

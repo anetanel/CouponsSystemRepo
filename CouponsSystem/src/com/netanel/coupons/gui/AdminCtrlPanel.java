@@ -37,6 +37,7 @@ public class AdminCtrlPanel extends JPanel {
 	private AdminFacade admin;
 	private JTable customersTable;
 	private CouponTableModel companyTableModel;
+	private CouponTableModel customersTableModel;
 
 	/**
 	 * Create the panel.
@@ -89,7 +90,7 @@ public class AdminCtrlPanel extends JPanel {
 	                return false;               
 	        };
 	    };
-		companyTable.addMouseListener(new TableMouseListener());
+		companyTable.addMouseListener(new TableMouseListener(companyTable));
 		companyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		companyTable.setAutoCreateRowSorter(true);
 		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
@@ -137,10 +138,10 @@ public class AdminCtrlPanel extends JPanel {
 	                return false;               
 	        };
 	    };
-		customersTable.addMouseListener(new TableMouseListener());
+		customersTable.addMouseListener(new TableMouseListener(customersTable));
 		customersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		customersTable.setAutoCreateRowSorter(true);
-		CouponTableModel customersTableModel = new CouponTableModel(getAllCustomersTable(),
+		customersTableModel = new CouponTableModel(getAllCustomersTable(),
 				new String[] { "ID", "Name", "Coupons" });
 		customersTable.setModel(customersTableModel);
 		customersTable.setDefaultRenderer(Number.class, centerRenderer);
@@ -169,16 +170,27 @@ public class AdminCtrlPanel extends JPanel {
 	}
 	
 	private class DialogListener extends WindowAdapter {
+		JTable table;
+		public DialogListener(JTable table) {
+			this.table = table;
+		}
+		
 		@Override
 		public void windowClosed(WindowEvent e) {
 			try {
-				refreshCompanyTable();
+				if (table.equals(companyTable)) {
+					refreshCompanyTable();	
+				}
+				if (table.equals(customersTable)) {
+					refreshCustomerTable();
+				}
 			} catch (DAOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 	}
+
 
 	private class BtnEditCompanyActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -193,10 +205,18 @@ public class AdminCtrlPanel extends JPanel {
 	}
 	
 	private class TableMouseListener extends MouseAdapter {
+		JTable table;
+		public TableMouseListener(JTable table) {
+			this.table = table;
+		}
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			 if (e.getClickCount() == 2) {
-		           editCompany();
+				 if (table.equals(companyTable)) {
+					 editCompany();					}
+					if (table.equals(customersTable)) {
+						editCustomer();
+					}		           
 		        }
 		}
 	}
@@ -218,7 +238,12 @@ public class AdminCtrlPanel extends JPanel {
 	}
 	private class BtnRefreshCustomersActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			refreshCustomerTable();
+			try {
+				refreshCustomerTable();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -237,24 +262,61 @@ public class AdminCtrlPanel extends JPanel {
 		return table;
 	}
 
-	public void refreshCustomerTable() {
-		// TODO Auto-generated method stub
+	public void refreshCustomerTable() throws DAOException {
+		customersTableModel = new CouponTableModel(getAllCustomersTable(),
+				new String[] { "ID", "Name", "Coupons" });
+		customersTable.setModel(customersTableModel);
 		
 	}
 
 	public void deleteCustomer() {
-		// TODO Auto-generated method stub
+		if (customersTable.getSelectedRow() == -1) {
+			return;
+		}
+		Customer customer = null;
+		try {
+			customer = admin.getCustomer(getSelectedIdFromTable(customersTable));
+
+			int delete = JOptionPane.showConfirmDialog(null,
+					"Are you sure you want to delete customer '" + customer.getCustName() + "'?", "Delete Customer",
+					JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE);
+			if (delete == 0) {
+				admin.deleteCustomer(customer);
+				JOptionPane.showMessageDialog(null, "Customer '" + customer.getCustName() + "' deleted!",
+						"Customer deleted", JOptionPane.INFORMATION_MESSAGE);
+				refreshCustomerTable();
+			}
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}
 		
 	}
 
 	public void editCustomer() {
-		// TODO Auto-generated method stub
-		
+		if (customersTable.getSelectedRow() == -1) {
+			return;
+		}
+		try {
+			EditCustomerDialog dialog = new EditCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
+					true, admin, admin.getCustomer(getSelectedIdFromTable(customersTable)));
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setLocationRelativeTo(dialog.getParent());
+			dialog.pack();
+			dialog.setVisible(true);
+			dialog.addWindowListener(new DialogListener(customersTable));
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}		
 	}
 
 	public void newCustomer() {
-		// TODO Auto-generated method stub
-		
+		NewCustomerDialog dialog = new NewCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
+				admin);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setLocationRelativeTo(dialog.getParent());
+		dialog.pack();
+		dialog.setVisible(true);
+		dialog.addWindowListener(new DialogListener(customersTable));
 	}
 
 	private Object[][] getAllCustomersTable() throws DAOException {
@@ -295,10 +357,13 @@ public class AdminCtrlPanel extends JPanel {
 		dialog.setLocationRelativeTo(dialog.getParent());
 		dialog.pack();
 		dialog.setVisible(true);
-		dialog.addWindowListener(new DialogListener());
+		dialog.addWindowListener(new DialogListener(companyTable));
 	}
 	
 	private void editCompany() {
+		if (companyTable.getSelectedRow() == -1) {
+			return;
+		}
 		try {
 			EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
 					true, admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
@@ -306,13 +371,16 @@ public class AdminCtrlPanel extends JPanel {
 			dialog.setLocationRelativeTo(dialog.getParent());
 			dialog.pack();
 			dialog.setVisible(true);
-			dialog.addWindowListener(new DialogListener());
+			dialog.addWindowListener(new DialogListener(companyTable));
 		} catch (DAOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
 	private void deleteCompany() {
+		if (companyTable.getSelectedRow() == -1) {
+			return;
+		}
 		Company company = null;
 		try {
 			company = admin.getCompany(getSelectedIdFromTable(companyTable));
@@ -329,7 +397,5 @@ public class AdminCtrlPanel extends JPanel {
 		} catch (DAOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
 		}
-	}
-	
-	
+	}	
 }

@@ -150,6 +150,8 @@ public class Test3 {
 					CouponType.HEALTH, "EMC Coupon number 2 description", 3899.9, "images/emc/vnx.png"));
 			emc.createCoupon(new Coupon("EMC Coupon 3", LocalDate.now(), LocalDate.of(2017, 9, 18), 5,
 					CouponType.KIDS, "EMC Coupon number 3 description", 4899.9, "images/emc/vnx.png"));
+			emc.createCoupon(new Coupon("EMC Coupon 4", LocalDate.now(), LocalDate.of(2017, 9, 18), 5,
+					CouponType.KIDS, "EMC Coupon number 4 description", 4899.9, "images/emc/vnx2.png"));
 
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block

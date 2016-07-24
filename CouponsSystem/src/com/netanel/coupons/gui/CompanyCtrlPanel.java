@@ -11,10 +11,13 @@ import java.awt.BorderLayout;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CompanyCtrlPanel extends JPanel {
 
@@ -36,6 +39,7 @@ public class CompanyCtrlPanel extends JPanel {
 		add(btnPanel, BorderLayout.NORTH);
 		
 		JButton btnNewCoupon = new JButton("New Coupon");
+		btnNewCoupon.addActionListener(new BtnNewCouponActionListener());
 		btnPanel.add(btnNewCoupon);
 		
 		JButton btnEditCoupon = new JButton("Edit Coupon");
@@ -76,5 +80,20 @@ public class CompanyCtrlPanel extends JPanel {
 			cnt++;
 		}
 		return table;
+	}
+	private class BtnNewCouponActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			newCoupon();
+		}
+	}
+	public void newCoupon() {
+		NewCouponDialog dialog = new NewCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
+				companyFcd);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setLocationRelativeTo(dialog.getParent());
+		dialog.pack();
+		dialog.setVisible(true);
+		//dialog.addWindowListener(new DialogListener(couponsTable));
+		
 	}
 }

@@ -20,7 +20,7 @@ public class Coupon {
 	private CouponType type;
 	private String message;
 	private double price;
-	private String image;
+	private String image = "images/icon.png";
 	
 	//
 	// Constructor
@@ -37,7 +37,8 @@ public class Coupon {
 		this.type = type;
 		this.message = message;
 		this.price = price;
-		this.image = image;
+		//this.image = image;
+		setImage(image);
 	}
 	
 	public Coupon(long id, String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
@@ -122,7 +123,9 @@ public class Coupon {
 	}
 
 	public void setImage(String image) {
-		this.image = image;
+		if (ClassLoader.getSystemResource(image) != null) {
+			this.image = image;
+		}
 	}
 
 	public Object[] getDetails(int iconSize) {

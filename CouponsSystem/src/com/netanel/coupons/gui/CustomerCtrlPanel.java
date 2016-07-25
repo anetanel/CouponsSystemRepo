@@ -35,6 +35,9 @@ public class CustomerCtrlPanel extends JPanel {
 		JButton btnBuyCoupons = new JButton("Buy Coupons");
 		btnPanel.add(btnBuyCoupons);
 		
+		JButton btnRefresh = new JButton("Refresh");
+		btnPanel.add(btnRefresh);
+		
 		JPanel tablePanel = new JPanel();
 		add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));

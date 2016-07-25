@@ -53,6 +53,9 @@ public class CompanyFacade implements CouponClientFacade{
 	}
 
 	public void createCoupon(Coupon coupon) throws DAOException{
+		if (coupon.getTitle().equals("")) {
+			throw new DAOException("Coupon name can't be empty.");
+		}
 		couponDao.createCoupon(coupon);
 		compDao.addCoupon(compId, coupon);
 	}
@@ -69,6 +72,9 @@ public class CompanyFacade implements CouponClientFacade{
 	}
 	
 	public void updateCoupon(Coupon coupon) throws DAOException {
+		if (coupon.getTitle().equals("")) {
+			throw new DAOException("Coupon name can't be empty.");
+		}
 		couponDao.updateCoupon(coupon);
 	}
 	

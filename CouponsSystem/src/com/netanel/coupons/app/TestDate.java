@@ -56,6 +56,7 @@ public class TestDate extends JFrame {
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		model.setSelected(true);
+		model.setDate(2015, 5, 18);
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		

@@ -46,7 +46,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-public class NewCouponDialog extends JDialog {
+public class EditCouponDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -55,14 +55,16 @@ public class NewCouponDialog extends JDialog {
 	private JDatePickerImpl startDatePicker, endDatePicker;
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
+	Coupon coupon = null;
 
 	/**
 	 * Create the dialog.
 	 */
-	public NewCouponDialog(Frame owner, boolean modal, CompanyFacade company) {
+	public EditCouponDialog(Frame owner, boolean modal, CompanyFacade company, Coupon coupon) {
 		super(owner, modal);
 		this.company = company;
-		setTitle("New Coupon");
+		this.coupon = coupon;
+		setTitle("Edit Coupon");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,7 +75,7 @@ public class NewCouponDialog extends JDialog {
 			contentPanel.add(lblCouponTitle);
 		}
 		{
-			titleTxtFld = new JTextField();
+			titleTxtFld = new JTextField(coupon.getTitle());
 			contentPanel.add(titleTxtFld);
 			titleTxtFld.setColumns(10);
 		}
@@ -83,7 +85,7 @@ public class NewCouponDialog extends JDialog {
 			contentPanel.add(lblCouponMessage);
 		}
 		{
-			messageTxtFld = new JTextField();
+			messageTxtFld = new JTextField(coupon.getMessage());
 			contentPanel.add(messageTxtFld);
 			messageTxtFld.setColumns(10);
 		}
@@ -99,6 +101,7 @@ public class NewCouponDialog extends JDialog {
 			p.put("text.month", "Month");
 			p.put("text.year", "Year");
 			model.setSelected(true);
+			model.setDate(coupon.getStartDate().getYear(), coupon.getStartDate().getMonthValue(), coupon.getStartDate().getDayOfMonth());
 			JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 			startDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 			contentPanel.add(startDatePicker);
@@ -115,6 +118,7 @@ public class NewCouponDialog extends JDialog {
 			p.put("text.month", "Month");
 			p.put("text.year", "Year");
 			model.setSelected(true);
+			model.setDate(coupon.getEndDate().getYear(), coupon.getEndDate().getMonthValue(), coupon.getEndDate().getDayOfMonth());
 			JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 			endDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 			contentPanel.add(endDatePicker);
@@ -126,7 +130,7 @@ public class NewCouponDialog extends JDialog {
 		}
 		{
 			amountSpinner = new JSpinner();
-			amountSpinner.setModel(new SpinnerNumberModel(0, 0, 200, 1));
+			amountSpinner.setModel(new SpinnerNumberModel(coupon.getAmount(), 0, 200, 1));
 			contentPanel.add(amountSpinner);
 		}
 		
@@ -136,7 +140,14 @@ public class NewCouponDialog extends JDialog {
 		}
 		{
 			couponTypeComboBox = new JComboBox<CouponType>();
-			couponTypeComboBox.setModel(new DefaultComboBoxModel<CouponType>(CouponType.values()));
+			DefaultComboBoxModel<CouponType> comboModel = new DefaultComboBoxModel<CouponType>(CouponType.values());
+			couponTypeComboBox.setModel(comboModel);
+			for (int i=0; i < comboModel.getSize(); i++) {
+				if (coupon.getType().equals(comboModel.getElementAt(i))) {
+					couponTypeComboBox.setSelectedIndex(i);
+					break;
+				}
+			}
 			contentPanel.add(couponTypeComboBox);
 		}
 		
@@ -146,7 +157,7 @@ public class NewCouponDialog extends JDialog {
 		}
 		{
 			priceSpinner = new JSpinner();
-			priceSpinner.setModel(new SpinnerNumberModel(0.0, 0.0, 99999.0, 0.1));
+			priceSpinner.setModel(new SpinnerNumberModel(coupon.getPrice(), 0.0, 99999.0, 0.1));
 			contentPanel.add(priceSpinner);
 		}
 		
@@ -166,7 +177,7 @@ public class NewCouponDialog extends JDialog {
 		{
 			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
-			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/images/icon.png")));
+			lblImageIcon.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(coupon.getImage())).getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
 			contentPanel.add(lblImageIcon);
 		}
 
@@ -193,9 +204,9 @@ public class NewCouponDialog extends JDialog {
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
-				createCoupon();
-				JOptionPane.showMessageDialog(null, "New Coupon '" + titleTxtFld.getText() + "' created.",
-						"New Coupon created", JOptionPane.INFORMATION_MESSAGE);
+				updateCoupon();
+				JOptionPane.showMessageDialog(null, "Coupon '" + titleTxtFld.getText() + "' was updated.",
+						"Coupon Updated", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			} catch (DAOException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!",
@@ -209,15 +220,15 @@ public class NewCouponDialog extends JDialog {
 		}
 	}
 
-	public void createCoupon() throws DAOException{
+	public void updateCoupon() throws DAOException{
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
 		LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		
-		Coupon coupon = new Coupon(titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
+		coupon = new Coupon(coupon.getId(), titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
 				, (double) priceSpinner.getValue(), "");
-		company.createCoupon(coupon);
+		company.updateCoupon(coupon);
 	}
 	
 	public class DateLabelFormatter extends AbstractFormatter {

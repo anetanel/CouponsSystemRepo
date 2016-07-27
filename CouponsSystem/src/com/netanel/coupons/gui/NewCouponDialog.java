@@ -13,14 +13,9 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.netanel.coupons.app.TestDate.DateLabelFormatter;
-import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.facades.AdminFacade;
 import com.netanel.coupons.facades.CompanyFacade;
 import com.netanel.coupons.jbeans.Coupon;
-import com.netanel.coupons.jbeans.Customer;
-
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,10 +29,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
-import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -146,7 +139,7 @@ public class NewCouponDialog extends JDialog {
 		}
 		{
 			priceSpinner = new JSpinner();
-			priceSpinner.setModel(new SpinnerNumberModel(0.0, 0.0, 99999.0, 0.1));
+			priceSpinner.setModel(new SpinnerNumberModel(0.0, 0.0, 99999.9, 0.1));
 			contentPanel.add(priceSpinner);
 		}
 		
@@ -166,7 +159,7 @@ public class NewCouponDialog extends JDialog {
 		{
 			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
-			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/images/icon.png")));
+			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/images/default_coupon_icon.png")));
 			contentPanel.add(lblImageIcon);
 		}
 

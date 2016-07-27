@@ -93,9 +93,10 @@ public class AdminCtrlPanel extends JPanel {
 		companyTable.addMouseListener(new TableMouseListener(companyTable));
 		companyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		companyTable.setAutoCreateRowSorter(true);
-		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
-				new String[] { "ID", "Name", "Email", "Coupons" });
-		companyTable.setModel(companyTableModel);
+		refreshCompanyTable();
+//		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
+//				new String[] { "ID", "Name", "Email", "Coupons" });
+//		companyTable.setModel(companyTableModel);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		companyTable.setDefaultRenderer(Number.class, centerRenderer);
@@ -141,8 +142,9 @@ public class AdminCtrlPanel extends JPanel {
 		customersTable.addMouseListener(new TableMouseListener(customersTable));
 		customersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		customersTable.setAutoCreateRowSorter(true);
-		customersTableModel = new CouponTableModel(getAllCustomersTable(), new String[] { "ID", "Name", "Coupons" });
-		customersTable.setModel(customersTableModel);
+		refreshCustomerTable();
+//		customersTableModel = new CouponTableModel(getAllCustomersTable(), new String[] { "ID", "Name", "Coupons" });
+//		customersTable.setModel(customersTableModel);
 		customersTable.setDefaultRenderer(Number.class, centerRenderer);
 		customersTableScrollPane.setViewportView(customersTable);
 
@@ -267,13 +269,13 @@ public class AdminCtrlPanel extends JPanel {
 		return table;
 	}
 
-	public void refreshCustomerTable() throws DAOException {
+	private void refreshCustomerTable() throws DAOException {
 		customersTableModel = new CouponTableModel(getAllCustomersTable(), new String[] { "ID", "Name", "Coupons" });
 		customersTable.setModel(customersTableModel);
 
 	}
 
-	public void deleteCustomer() {
+	private void deleteCustomer() {
 		if (customersTable.getSelectedRow() == -1) {
 			return;
 		}
@@ -296,7 +298,7 @@ public class AdminCtrlPanel extends JPanel {
 
 	}
 
-	public void editCustomer() {
+	private void editCustomer() {
 		if (customersTable.getSelectedRow() == -1) {
 			return;
 		}
@@ -313,7 +315,7 @@ public class AdminCtrlPanel extends JPanel {
 		}
 	}
 
-	public void newCustomer() {
+	private void newCustomer() {
 		NewCustomerDialog dialog = new NewCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
 				admin);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

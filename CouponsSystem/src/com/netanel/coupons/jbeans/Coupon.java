@@ -1,11 +1,8 @@
 package com.netanel.coupons.jbeans;
 
-import java.awt.Toolkit;
 import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
-
-import com.netanel.coupons.gui.LoginWindow;
 
 public class Coupon {
 
@@ -20,7 +17,7 @@ public class Coupon {
 	private CouponType type;
 	private String message;
 	private double price;
-	private String image = "images/icon.png";
+	private String image = "images/default_coupon_icon.png";
 	
 	//
 	// Constructor
@@ -123,7 +120,7 @@ public class Coupon {
 	}
 
 	public void setImage(String image) {
-		if (ClassLoader.getSystemResource(image) != null) {
+		if (ClassLoader.getSystemResource(image) != null && !image.equals("")) {
 			this.image = image;
 		}
 	}

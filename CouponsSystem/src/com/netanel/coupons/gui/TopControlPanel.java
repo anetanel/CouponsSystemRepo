@@ -16,8 +16,6 @@ import java.awt.Toolkit;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Component;
-import javax.swing.Box;
 import javax.swing.JSeparator;
 
 public class TopControlPanel extends JFrame {

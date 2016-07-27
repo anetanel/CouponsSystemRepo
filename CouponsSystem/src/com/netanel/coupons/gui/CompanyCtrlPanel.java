@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -55,6 +56,7 @@ public class CompanyCtrlPanel extends JPanel {
 		btnPanel.add(btnEditCoupon);
 
 		JButton btnDeleteCoupon = new JButton("Delete Coupon");
+		btnDeleteCoupon.addActionListener(new BtnDeleteCouponActionListener());
 		btnPanel.add(btnDeleteCoupon);
 
 		JButton btnRefresh = new JButton("Refresh");
@@ -128,7 +130,7 @@ public class CompanyCtrlPanel extends JPanel {
 		}
 	}
 
-	public void newCoupon() {
+	private void newCoupon() {
 		NewCouponDialog dialog = new NewCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
 				companyFcd);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -139,7 +141,7 @@ public class CompanyCtrlPanel extends JPanel {
 
 	}
 
-	public void editCoupon() throws DAOException, CouponException {
+	private void editCoupon() throws DAOException, CouponException {
 		if (couponsTable.getSelectedRow() == -1) {
 			return;
 		}
@@ -163,7 +165,7 @@ public class CompanyCtrlPanel extends JPanel {
 		return -1;
 	}
 	
-	public void refreshCouponTable() throws DAOException {
+	private void refreshCouponTable() throws DAOException {
 
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",
 				"Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image" });
@@ -180,5 +182,38 @@ public class CompanyCtrlPanel extends JPanel {
 				e1.printStackTrace();
 			}
 		}
+	}
+	private class BtnDeleteCouponActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				deleteCoupon();
+			} catch (CouponException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	private void deleteCoupon() throws CouponException {
+		if (couponsTable.getSelectedRow() == -1) {
+			return;
+		}
+		Coupon coupon = null;
+		try {
+			coupon = companyFcd.getCoupon(getSelectedIdFromTable(couponsTable));
+
+			int delete = JOptionPane.showConfirmDialog(null,
+					"Are you sure you want to delete coupon '" + coupon.getTitle() + "'?", "Delete Coupon",
+					JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE);
+			if (delete == 0) {
+				companyFcd.deleteCoupon(coupon);
+				JOptionPane.showMessageDialog(null, "Coupon '" + coupon.getTitle() + "' deleted!",
+						"Coupon deleted", JOptionPane.INFORMATION_MESSAGE);
+				refreshCouponTable();
+			}
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}
+		
 	}
 }

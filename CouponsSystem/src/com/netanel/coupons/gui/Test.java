@@ -1,20 +1,17 @@
 package com.netanel.coupons.gui;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.awt.EventQueue;
 
-public class Test {
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
 
-	private JFrame frame;
-	private JTable table;
+public class Test extends JFrame {
+
+	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
@@ -23,8 +20,8 @@ public class Test {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Test window = new Test();
-					window.frame.setVisible(true);
+					Test frame = new Test();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -33,53 +30,18 @@ public class Test {
 	}
 
 	/**
-	 * Create the application.
+	 * Create the frame.
 	 */
 	public Test() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		table.setRowHeight(40);
-		table.setModel(new MyModel(
-			new Object[][] {
-				{0, 0, new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("images/ibm/mf.png")).getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH))},
-			},
-			new String[] {
-				"New column", "New column", "New column"			
-			}
-			
-		));
-		scrollPane.setViewportView(table);
-	}
-	class MyModel extends DefaultTableModel {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		public MyModel(Object[][] data, Object[] columnNames) {
-			super(data, columnNames);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-	    public Class<?> getColumnClass(int column) {
-			return getValueAt(0, column).getClass();
-	    }
-		
+		JButton btnNewButton = new JButton("New button");
+		contentPane.add(btnNewButton);
 	}
 
 }

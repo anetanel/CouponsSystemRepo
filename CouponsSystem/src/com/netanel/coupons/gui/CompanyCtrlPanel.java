@@ -28,6 +28,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.ListSelectionModel;
 
 public class CompanyCtrlPanel extends JPanel {
 
@@ -55,6 +56,7 @@ public class CompanyCtrlPanel extends JPanel {
 		btnPanel.add(btnNewCoupon);
 
 		JButton btnEditCoupon = new JButton("Edit Coupon");
+		btnEditCoupon.addActionListener(new BtnEditCouponActionListener());
 		btnEditCoupon.setIcon(new ImageIcon(CompanyCtrlPanel.class.getResource("/images/edit.png")));
 		btnPanel.add(btnEditCoupon);
 
@@ -82,6 +84,7 @@ public class CompanyCtrlPanel extends JPanel {
 				return false;
 			};
 		};
+		couponsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		couponsTable.addMouseListener(new TableMouseListener());
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
@@ -193,6 +196,16 @@ public class CompanyCtrlPanel extends JPanel {
 			try {
 				deleteCoupon();
 			} catch (CouponException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	private class BtnEditCouponActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				editCoupon();
+			} catch (DAOException | CouponException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

@@ -26,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 public class AdminCtrlPanel extends JPanel {
 
@@ -61,18 +62,22 @@ public class AdminCtrlPanel extends JPanel {
 		companyPanel.add(companyBtnsPanel, BorderLayout.NORTH);
 
 		JButton btnNewCompany = new JButton("New Company");
+		btnNewCompany.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/add.png")));
 		btnNewCompany.addActionListener(new BtnNewCompanyActionListener());
 		companyBtnsPanel.add(btnNewCompany);
 
 		JButton btnEditCompany = new JButton("Edit Company");
+		btnEditCompany.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/edit.png")));
 		btnEditCompany.addActionListener(new BtnEditCompanyActionListener());
 		companyBtnsPanel.add(btnEditCompany);
 
 		JButton btnDeleteCompany = new JButton("Delete Company");
+		btnDeleteCompany.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/delete.png")));
 		btnDeleteCompany.addActionListener(new BtnDeleteCompanyActionListener());
 		companyBtnsPanel.add(btnDeleteCompany);
 
 		JButton btnRefreshCopmanies = new JButton("Refresh");
+		btnRefreshCopmanies.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/refresh.png")));
 		btnRefreshCopmanies.addActionListener(new BtnRefreshCopmaniesActionListener());
 		companyBtnsPanel.add(btnRefreshCopmanies);
 
@@ -110,18 +115,22 @@ public class AdminCtrlPanel extends JPanel {
 		customersPanel.add(customersBtnsPanel, BorderLayout.NORTH);
 
 		JButton btnNewCustomer = new JButton("New Customer");
+		btnNewCustomer.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/add.png")));
 		btnNewCustomer.addActionListener(new BtnNewCustomerActionListener());
 		customersBtnsPanel.add(btnNewCustomer);
 
 		JButton btnEditCustomer = new JButton("Edit Customer");
+		btnEditCustomer.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/edit.png")));
 		btnEditCustomer.addActionListener(new BtnEditCustomerActionListener());
 		customersBtnsPanel.add(btnEditCustomer);
 
 		JButton btnDeleteCustomer = new JButton("Delete Customer");
+		btnDeleteCustomer.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/delete.png")));
 		btnDeleteCustomer.addActionListener(new BtnDeleteCustomerActionListener());
 		customersBtnsPanel.add(btnDeleteCustomer);
 
 		JButton btnRefreshCustomers = new JButton("Refresh");
+		btnRefreshCustomers.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/refresh.png")));
 		btnRefreshCustomers.addActionListener(new BtnRefreshCustomersActionListener());
 		customersBtnsPanel.add(btnRefreshCustomers);
 

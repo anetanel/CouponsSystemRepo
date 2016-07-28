@@ -22,6 +22,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.ImageIcon;
 
 public class CustomerCtrlPanel extends JPanel {
 
@@ -43,10 +44,12 @@ public class CustomerCtrlPanel extends JPanel {
 		add(btnPanel, BorderLayout.NORTH);
 		
 		JButton btnBuyCoupons = new JButton("Buy Coupons");
+		btnBuyCoupons.setIcon(new ImageIcon(CustomerCtrlPanel.class.getResource("/images/add.png")));
 		btnBuyCoupons.addActionListener(new BtnBuyCouponsActionListener());
 		btnPanel.add(btnBuyCoupons);
 		
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setIcon(new ImageIcon(CustomerCtrlPanel.class.getResource("/images/refresh.png")));
 		btnRefresh.addActionListener(new BtnRefreshActionListener());
 		btnPanel.add(btnRefresh);
 		

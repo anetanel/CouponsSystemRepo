@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class CompanyCtrlPanel extends JPanel {
 
@@ -49,17 +50,21 @@ public class CompanyCtrlPanel extends JPanel {
 		add(btnPanel, BorderLayout.NORTH);
 
 		JButton btnNewCoupon = new JButton("New Coupon");
+		btnNewCoupon.setIcon(new ImageIcon(CompanyCtrlPanel.class.getResource("/images/add.png")));
 		btnNewCoupon.addActionListener(new BtnNewCouponActionListener());
 		btnPanel.add(btnNewCoupon);
 
 		JButton btnEditCoupon = new JButton("Edit Coupon");
+		btnEditCoupon.setIcon(new ImageIcon(CompanyCtrlPanel.class.getResource("/images/edit.png")));
 		btnPanel.add(btnEditCoupon);
 
 		JButton btnDeleteCoupon = new JButton("Delete Coupon");
+		btnDeleteCoupon.setIcon(new ImageIcon(CompanyCtrlPanel.class.getResource("/images/delete.png")));
 		btnDeleteCoupon.addActionListener(new BtnDeleteCouponActionListener());
 		btnPanel.add(btnDeleteCoupon);
 
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setIcon(new ImageIcon(CompanyCtrlPanel.class.getResource("/images/refresh.png")));
 		btnRefresh.addActionListener(new BtnRefreshActionListener());
 		btnPanel.add(btnRefresh);
 

@@ -92,6 +92,10 @@ public class CustomerFacade implements CouponClientFacade{
 		return custDao.getCoupons(custId);
 	}
 	
+	public Coupon getCoupon(long couponId) throws DAOException {
+		return couponDao.getCoupon(couponId);
+	}
+	
 	public Set<Coupon> getMyCouponsByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {

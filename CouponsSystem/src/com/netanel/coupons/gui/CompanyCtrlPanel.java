@@ -88,10 +88,10 @@ public class CompanyCtrlPanel extends JPanel {
 		couponsTable.addMouseListener(new TableMouseListener());
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
-		refreshCouponTable();
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		couponsTable.setDefaultRenderer(Number.class, centerRenderer);
+		refreshCouponTable();
 		scrollPane.setViewportView(couponsTable);
 
 	}
@@ -174,7 +174,6 @@ public class CompanyCtrlPanel extends JPanel {
 	}
 	
 	private void refreshCouponTable() throws DAOException {
-
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",
 				"Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image" });
 		couponsTable.setModel(couponTableModel);

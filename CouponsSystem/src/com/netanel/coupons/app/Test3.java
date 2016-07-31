@@ -131,27 +131,27 @@ public class Test3 {
 		try {
 			ibm.createCoupon(
 					new Coupon("5% Mainframe", LocalDate.now(), LocalDate.of(2017, 5, 15), 10, CouponType.ELECTRONICS,
-							"5% discount off any new IBM Mainframe Purchase", 199.9, "images/ibm/mf.png"));
+							"5% discount off any new IBM Mainframe Purchase", 199.9, ""));
 			ibm.createCoupon(
 					new Coupon("15% Mainframe", LocalDate.now(), LocalDate.of(2017, 6, 16), 5, CouponType.ELECTRONICS,
-							"15% discount off any new IBM Mainframe Purchase", 299.9, "images/ibm/mf.png"));
+							"15% discount off any new IBM Mainframe Purchase", 299.9, ""));
 			ibm.createCoupon(
 					new Coupon("25% Mainframe", LocalDate.now(), LocalDate.of(2017, 8, 18), 1, CouponType.ELECTRONICS,
-							"25% discount off any new IBM Mainframe Purchase", 399.9, "images/ibm/mf.png"));
+							"25% discount off any new IBM Mainframe Purchase", 399.9, ""));
 
 			emc.createCoupon(new Coupon("Free VMAX", LocalDate.now(), LocalDate.of(2017, 8, 18), 1,
-					CouponType.ELECTRONICS, "Free EMC VMAX Storage System", 5999.9, "images/emc/vmax.png"));
+					CouponType.ELECTRONICS, "Free EMC VMAX Storage System", 5999.9, null));
 			emc.createCoupon(new Coupon("Free VNX", LocalDate.now(), LocalDate.of(2017, 12, 18), 5,
-					CouponType.ELECTRONICS, "Free EMC VNX Storage System", 1899.9, "images/emc/vnx.png"));
+					CouponType.ELECTRONICS, "Free EMC VNX Storage System", 1899.9, null));
 
 			emc.createCoupon(new Coupon("EMC Coupon 1", LocalDate.now(), LocalDate.of(2017, 11, 18), 5,
-					CouponType.CARS, "EMC Coupon number 1 description", 2899.9, "images/emc/vnx.png"));
+					CouponType.CARS, "EMC Coupon number 1 description", 2899.9, null));
 			emc.createCoupon(new Coupon("EMC Coupon 2", LocalDate.now(), LocalDate.of(2017, 10, 18), 5,
-					CouponType.HEALTH, "EMC Coupon number 2 description", 3899.9, "images/emc/vnx.png"));
+					CouponType.HEALTH, "EMC Coupon number 2 description", 3899.9, null));
 			emc.createCoupon(new Coupon("EMC Coupon 3", LocalDate.now(), LocalDate.of(2017, 9, 18), 5,
-					CouponType.KIDS, "EMC Coupon number 3 description", 4899.9, "images/emc/vnx.png"));
+					CouponType.KIDS, "EMC Coupon number 3 description", 4899.9, "icons/blah.png"));
 			emc.createCoupon(new Coupon("EMC Coupon 4", LocalDate.now(), LocalDate.of(2017, 9, 18), 5,
-					CouponType.KIDS, "EMC Coupon number 4 description", 4899.9, "images/emc/vnx2.png"));
+					CouponType.KIDS, "EMC Coupon number 4 description", 4899.9, "icons/vmax.png"));
 
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block

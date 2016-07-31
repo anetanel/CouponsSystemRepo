@@ -1,5 +1,6 @@
 package com.netanel.coupons.jbeans;
 
+import java.io.File;
 import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
@@ -17,7 +18,8 @@ public class Coupon {
 	private CouponType type;
 	private String message;
 	private double price;
-	private String image = "images/default_coupon_icon.png";
+	public static final String DEFAULT_ICON = "images/default_coupon_icon.png";
+	private String image;
 	
 	//
 	// Constructor
@@ -83,6 +85,16 @@ public class Coupon {
 		return image;
 	}
 
+	public ImageIcon getIcon() {
+		ImageIcon icon = null;
+		if (image.equals(DEFAULT_ICON)) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource(image));
+		} else {
+			icon = new ImageIcon(image);
+		}
+		return icon;
+	}
+	
 	public void setId(long id) {
 		if (this.id == -1) { 
 			this.id = id;
@@ -120,14 +132,18 @@ public class Coupon {
 	}
 
 	public void setImage(String image) {
-		if (ClassLoader.getSystemResource(image) != null && !image.equals("")) {
+		if (image == null || image.equals("") || !new File(image).isFile()){
+			this.image = DEFAULT_ICON;
+		} else {
 			this.image = image;
-		}
+		}	
 	}
 
 	public Object[] getDetails(int iconSize) {
+//		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
+//				new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(image)).getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
 		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
-				new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(image)).getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
+				new ImageIcon(getIcon().getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
 		return detail;
 	}
 	

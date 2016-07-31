@@ -6,13 +6,17 @@ import java.awt.Frame;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.netanel.coupons.exception.CouponException;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.CompanyFacade;
 import com.netanel.coupons.jbeans.Coupon;
@@ -23,6 +27,12 @@ import javax.swing.JTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -33,6 +43,7 @@ import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import com.netanel.coupons.jbeans.CouponType;
 import javax.swing.SpinnerNumberModel;
@@ -48,6 +59,7 @@ public class NewCouponDialog extends JDialog {
 	private JDatePickerImpl startDatePicker, endDatePicker;
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
+	private File sourceIcon;
 
 	/**
 	 * Create the dialog.
@@ -149,6 +161,7 @@ public class NewCouponDialog extends JDialog {
 		}
 		{
 			JButton btnBrowse = new JButton("Browse...");
+			btnBrowse.addActionListener(new BtnBrowseActionListener());
 			contentPanel.add(btnBrowse);
 		}
 		
@@ -159,7 +172,7 @@ public class NewCouponDialog extends JDialog {
 		{
 			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
-			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/images/default_coupon_icon.png")));
+			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/"+Coupon.DEFAULT_ICON)));
 			contentPanel.add(lblImageIcon);
 		}
 
@@ -190,7 +203,7 @@ public class NewCouponDialog extends JDialog {
 				JOptionPane.showMessageDialog(null, "New Coupon '" + titleTxtFld.getText() + "' created.",
 						"New Coupon created", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-			} catch (DAOException e1) {
+			} catch (DAOException | CouponException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -201,16 +214,32 @@ public class NewCouponDialog extends JDialog {
 			dispose();
 		}
 	}
+	private class BtnBrowseActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			sourceIcon = selectIcon();
+		}
+	}
 
-	public void createCoupon() throws DAOException{
+	public void createCoupon() throws DAOException, CouponException{
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
 		LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		
 		Coupon coupon = new Coupon(titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
-				, (double) priceSpinner.getValue(), "");
+				, (double) priceSpinner.getValue(), null);
 		company.createCoupon(coupon);
+		if (sourceIcon != null) {
+			try {
+				Path source = sourceIcon.toPath();
+				String destIconPath = "icons/" + company.getCompName() + "_" + titleTxtFld.getText() + sourceIcon.getName().substring(sourceIcon.getName().lastIndexOf("."));
+				Path dest = FileSystems.getDefault().getPath(destIconPath);
+				Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	public class DateLabelFormatter extends AbstractFormatter {
@@ -234,5 +263,22 @@ public class NewCouponDialog extends JDialog {
 	        return "";
 	    }
 
+	}
+	private File selectIcon() {
+		JFileChooser fc = new JFileChooser();
+		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+		fc.setFileFilter(imageFilter);
+		int returnVal = fc.showOpenDialog(null);
+		if (returnVal != 0) {
+			return null;
+		}
+		File file = fc.getSelectedFile();
+		// Limit file size to 256kb
+		if (file.length() > 262144) {
+			JOptionPane.showMessageDialog(null, "File size is limited to 256 KB!",
+					"File too large", JOptionPane.INFORMATION_MESSAGE);
+			return null;
+		}
+		return file;
 	}
 }

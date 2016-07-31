@@ -9,6 +9,7 @@ import com.netanel.coupons.gui.models.CouponTableModel;
 import com.netanel.coupons.jbeans.Coupon;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -98,10 +99,10 @@ public class CompanyCtrlPanel extends JPanel {
 		couponsTable.addMouseListener(new TableMouseListener());
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
+		refreshCouponTable();
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		couponsTable.setDefaultRenderer(Number.class, centerRenderer);
-		refreshCouponTable();
 		scrollPane.setViewportView(couponsTable);
 
 	}
@@ -114,6 +115,7 @@ public class CompanyCtrlPanel extends JPanel {
 			table[cnt] = coupon.getDetails(40);
 			cnt++;
 		}
+		Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
 		return table;
 	}
 

@@ -3,6 +3,7 @@ package com.netanel.coupons.gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -114,6 +115,7 @@ public class BuyCouponDialog extends JDialog {
 			table[cnt] = coupon.getDetails(40);
 			cnt++;
 		}
+		Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
 		return table;
 	}
 

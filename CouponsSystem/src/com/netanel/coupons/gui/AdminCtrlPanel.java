@@ -99,9 +99,6 @@ public class AdminCtrlPanel extends JPanel {
 		companyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		companyTable.setAutoCreateRowSorter(true);
 		refreshCompanyTable();
-//		companyTableModel = new CouponTableModel(getAllCompaniesTable(),
-//				new String[] { "ID", "Name", "Email", "Coupons" });
-//		companyTable.setModel(companyTableModel);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		companyTable.setDefaultRenderer(Number.class, centerRenderer);

@@ -6,8 +6,11 @@ import java.awt.Frame;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -23,6 +26,12 @@ import javax.swing.JTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -33,6 +42,7 @@ import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import com.netanel.coupons.jbeans.CouponType;
 import javax.swing.SpinnerNumberModel;
@@ -48,7 +58,9 @@ public class EditCouponDialog extends JDialog {
 	private JDatePickerImpl startDatePicker, endDatePicker;
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
-	Coupon coupon = null;
+	private Coupon coupon = null;
+	private File sourceIcon; 
+	private JLabel lblImageIcon;
 
 	/**
 	 * Create the dialog.
@@ -160,6 +172,7 @@ public class EditCouponDialog extends JDialog {
 		}
 		{
 			JButton btnBrowse = new JButton("Browse...");
+			btnBrowse.addActionListener(new BtnBrowseActionListener());
 			contentPanel.add(btnBrowse);
 		}
 		
@@ -168,9 +181,9 @@ public class EditCouponDialog extends JDialog {
 			contentPanel.add(lblImage);
 		}
 		{
-			JLabel lblImageIcon = new JLabel();
+			lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
-			lblImageIcon.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(coupon.getImage())).getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
+			lblImageIcon.setIcon(new ImageIcon(coupon.getIcon().getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
 			contentPanel.add(lblImageIcon);
 		}
 
@@ -212,18 +225,54 @@ public class EditCouponDialog extends JDialog {
 			dispose();
 		}
 	}
+	private class BtnBrowseActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			sourceIcon = selectIcon();
+			if (sourceIcon != null) {
+				lblImageIcon.setIcon(new ImageIcon(new ImageIcon(sourceIcon.getAbsolutePath()).getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
+			}
+		}
+	}
 
 	public void updateCoupon() throws DAOException{
+		String destIconPath = coupon.getImage();
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
 		LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		
+		if (sourceIcon != null) {
+			try {
+				Path source = sourceIcon.toPath();
+				destIconPath = "icons/" + company.getCompName() + "_" + titleTxtFld.getText() + sourceIcon.getName().substring(sourceIcon.getName().lastIndexOf("."));
+				Path dest = FileSystems.getDefault().getPath(destIconPath);
+				Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 		coupon = new Coupon(coupon.getId(), titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
-				, (double) priceSpinner.getValue(), "");
+				, (double) priceSpinner.getValue(), destIconPath);
 		company.updateCoupon(coupon);
 	}
 	
+	public File selectIcon() {
+		JFileChooser fc = new JFileChooser();
+		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+		fc.setFileFilter(imageFilter);
+		int returnVal = fc.showOpenDialog(null);
+		if (returnVal != 0) {
+			return null;
+		}
+		File file = fc.getSelectedFile();
+		// Limit file size to 256kb
+		if (file.length() > 262144) {
+			JOptionPane.showMessageDialog(null, "File size is limited to 256 KB!",
+					"File too large", JOptionPane.INFORMATION_MESSAGE);
+			return null;
+		}
+		return file;
+	}
+
 	public class DateLabelFormatter extends AbstractFormatter {
 
 		private static final long serialVersionUID = 1L;

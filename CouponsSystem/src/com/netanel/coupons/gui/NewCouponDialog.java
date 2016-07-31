@@ -45,6 +45,8 @@ import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+
 import com.netanel.coupons.jbeans.CouponType;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
@@ -60,6 +62,7 @@ public class NewCouponDialog extends JDialog {
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
 	private File sourceIcon;
+	private JLabel lblImageIcon;
 
 	/**
 	 * Create the dialog.
@@ -170,7 +173,7 @@ public class NewCouponDialog extends JDialog {
 			contentPanel.add(lblImage);
 		}
 		{
-			JLabel lblImageIcon = new JLabel();
+			lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImageIcon.setIcon(new ImageIcon(NewCouponDialog.class.getResource("/"+Coupon.DEFAULT_ICON)));
 			contentPanel.add(lblImageIcon);
@@ -217,29 +220,31 @@ public class NewCouponDialog extends JDialog {
 	private class BtnBrowseActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			sourceIcon = selectIcon();
+			if (sourceIcon != null) {
+				lblImageIcon.setIcon(new ImageIcon(new ImageIcon(sourceIcon.getAbsolutePath()).getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
+			}
 		}
 	}
 
 	public void createCoupon() throws DAOException, CouponException{
+		String destIconPath = null;
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
 		LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		
-		Coupon coupon = new Coupon(titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
-				, (double) priceSpinner.getValue(), null);
-		company.createCoupon(coupon);
 		if (sourceIcon != null) {
 			try {
 				Path source = sourceIcon.toPath();
-				String destIconPath = "icons/" + company.getCompName() + "_" + titleTxtFld.getText() + sourceIcon.getName().substring(sourceIcon.getName().lastIndexOf("."));
+				destIconPath = "icons/" + company.getCompName() + "_" + titleTxtFld.getText() + sourceIcon.getName().substring(sourceIcon.getName().lastIndexOf("."));
 				Path dest = FileSystems.getDefault().getPath(destIconPath);
 				Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
-				
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
+		Coupon coupon = new Coupon(titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
+				, (double) priceSpinner.getValue(), destIconPath);				
+		company.createCoupon(coupon);
 	}
 	
 	public class DateLabelFormatter extends AbstractFormatter {

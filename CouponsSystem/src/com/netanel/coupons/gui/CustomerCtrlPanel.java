@@ -1,6 +1,7 @@
 package com.netanel.coupons.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -94,6 +95,7 @@ public class CustomerCtrlPanel extends JPanel {
 				table[cnt] = couponDetails;
 				cnt++;
 			}
+			Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
 			return table;
 	}
 	private class BtnBuyCouponsActionListener implements ActionListener {

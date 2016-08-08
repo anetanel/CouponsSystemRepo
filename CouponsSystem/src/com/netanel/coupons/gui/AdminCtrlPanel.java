@@ -28,6 +28,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 
+/**
+ * Admin control panel 
+ *
+ */
 public class AdminCtrlPanel extends JPanel {
 
 	//
@@ -40,24 +44,25 @@ public class AdminCtrlPanel extends JPanel {
 	private CouponTableModel companyTableModel;
 	private CouponTableModel customersTableModel;
 
-	/**
-	 * Create the panel.
-	 * 
+	/** 
+	 * @param admin an {@code AdminFacade} object.
 	 * @throws DAOException
 	 */
 	public AdminCtrlPanel(AdminFacade admin) throws DAOException {
-		setName("Admin Control Panel");
 		this.admin = admin;
-
+		
+		setName("Admin Control Panel");
 		setLayout(new BorderLayout(0, 0));
-
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		add(tabbedPane);
 
+		// Companies panel
 		JPanel companyPanel = new JPanel();
 		tabbedPane.addTab("Companies", null, companyPanel, null);
 		companyPanel.setLayout(new BorderLayout(0, 0));
-
+		
+		// Companies button panel
 		JPanel companyBtnsPanel = new JPanel();
 		companyPanel.add(companyBtnsPanel, BorderLayout.NORTH);
 
@@ -80,7 +85,8 @@ public class AdminCtrlPanel extends JPanel {
 		btnRefreshCopmanies.setIcon(new ImageIcon(AdminCtrlPanel.class.getResource("/images/refresh.png")));
 		btnRefreshCopmanies.addActionListener(new BtnRefreshCopmaniesActionListener());
 		companyBtnsPanel.add(btnRefreshCopmanies);
-
+		
+		// Companies table panel
 		JPanel companyTablePanel = new JPanel();
 		companyPanel.add(companyTablePanel, BorderLayout.CENTER);
 		companyTablePanel.setLayout(new BorderLayout(0, 0));
@@ -88,6 +94,7 @@ public class AdminCtrlPanel extends JPanel {
 		JScrollPane companyTableScrollPane = new JScrollPane();
 		companyTablePanel.add(companyTableScrollPane);
 
+		// Companies table
 		companyTable = new JTable() {
 			private static final long serialVersionUID = 1L;
 

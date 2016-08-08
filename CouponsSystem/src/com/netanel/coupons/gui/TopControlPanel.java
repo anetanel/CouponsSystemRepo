@@ -18,22 +18,29 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 
+/**
+ * Top control panel frame. Includes the menu bar and a panel for client information.
+ */
 public class TopControlPanel extends JFrame {
 
+	//
+	// Attributes
+	//
 	private static final long serialVersionUID = 1L;
 	private JPanel clientPanel;
-	private JFrame loginWindow;
 
+	
 	/**
-	 * Create the frame.
-	 * @throws DAOException 
+	 * @param client a {@code CouponClientFacade} of the logged in client.
+	 * @throws DAOException
 	 */
-	public TopControlPanel(CouponClientFacade client, JFrame loginWindow) throws DAOException {
-		this.loginWindow = loginWindow;
+	public TopControlPanel(CouponClientFacade client) throws DAOException {
+		// Window settings
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TopControlPanel.class.getResource("/images/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		
+		// Set menu bar
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -51,6 +58,7 @@ public class TopControlPanel extends JFrame {
 		mntmExit.addActionListener(new MntmExitActionListener());
 		mnActions.add(mntmExit);
 
+		// Select the appropriate control panel to show, based on the facade
 		if (client instanceof AdminFacade) {
 			clientPanel = new AdminCtrlPanel((AdminFacade)client);
 		} else if (client instanceof CompanyFacade) {
@@ -63,23 +71,27 @@ public class TopControlPanel extends JFrame {
 		pack();
 	}
 
-	public JPanel getClientPanel() {
-		return clientPanel;
-	}
+	//
+	// Listener Classes
+	//
+	
+	// Logout menu item
 	private class MntmLogoutActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			logout();
+			dispose();
 		}
 	}
+	
+	// Exit menu item
 	private class MntmExitActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			exit();
 		}
 	}
-	private void logout() {
-		dispose();
-		loginWindow.setVisible(true);
-	}
+	
+	//
+	// Functions
+	//
 	private void exit() {
 		CouponSystem sys = CouponSystem.getInstance();
 		sys.stop();

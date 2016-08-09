@@ -5,7 +5,7 @@ import java.util.Set;
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.exception.JbeansException;
 
-public class Company {
+public class Company extends Client{
 	//
 	// Attributes
 	//

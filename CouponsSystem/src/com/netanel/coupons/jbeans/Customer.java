@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
 
-public class Customer {
+public class Customer extends Client{
 	//
 	// Attributes
 	//

@@ -33,7 +33,6 @@ import javax.swing.ImageIcon;
 
 /**
  * Admin control panel 
- *
  */
 public class AdminCtrlPanel extends JPanel {
 
@@ -47,7 +46,7 @@ public class AdminCtrlPanel extends JPanel {
 	private CouponTableModel companyTableModel;
 	private CouponTableModel customersTableModel;
 
-	/** 
+	/** Create the Admin Control Panel.
 	 * @param admin an {@code AdminFacade} object.
 	 * @throws DAOException
 	 */
@@ -353,76 +352,10 @@ public class AdminCtrlPanel extends JPanel {
 		}
 
 	}
-
-	// Edit selected customer
-	private void editCustomer() {
-		// Ignore if no row is selected
-		if (customersTable.getSelectedRow() == -1) {
-			return;
-		}
-		
-		try {
-			EditCustomerDialog dialog = new EditCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
-					true, admin, admin.getCustomer(getSelectedIdFromTable(customersTable)));
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setLocationRelativeTo(dialog.getParent());
-			dialog.pack();
-			dialog.setVisible(true);
-			dialog.addWindowListener(new DialogListener(ClientType.CUSTOMER));
-		} catch (DAOException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
-		}
-	}
-
-	private void newCustomer() {
-		NewCustomerDialog dialog = new NewCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
-				admin);
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setLocationRelativeTo(dialog.getParent());
-		dialog.pack();
-		dialog.setVisible(true);
-		dialog.addWindowListener(new DialogListener(ClientType.CUSTOMER));
-	}
-
-
-	private long getSelectedIdFromTable(JTable table) {
-		int row = table.getSelectedRow();
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			if (table.getColumnName(i).equals("ID")) {
-				return (long) table.getValueAt(row, i);
-			}
-		}
-		return -1;
-	}
-
-	private void newCompany() {
-		NewCompanyDialog dialog = new NewCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
-				admin);
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setLocationRelativeTo(dialog.getParent());
-		dialog.pack();
-		dialog.setVisible(true);
-		dialog.addWindowListener(new DialogListener(ClientType.COMPANY));
-	}
-
-	private void editCompany() {
-		if (companyTable.getSelectedRow() == -1) {
-			return;
-		}
-		try {
-			EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
-					admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setLocationRelativeTo(dialog.getParent());
-			dialog.pack();
-			dialog.setVisible(true);
-			dialog.addWindowListener(new DialogListener(ClientType.COMPANY));
-		} catch (DAOException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
-		}
-	}
-
+	
+	// Delete selected company
 	private void deleteCompany() {
+		// Ignore if no row is selected
 		if (companyTable.getSelectedRow() == -1) {
 			return;
 		}
@@ -443,4 +376,74 @@ public class AdminCtrlPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	// Opens Edit Customer dialog
+	private void editCustomer() {
+		// Ignore if no row is selected
+		if (customersTable.getSelectedRow() == -1) {
+			return;
+		}
+		
+		try {
+			EditCustomerDialog dialog = new EditCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
+					true, admin, admin.getCustomer(getSelectedIdFromTable(customersTable)));
+			setDialogProperties(dialog, ClientType.CUSTOMER);
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	// Edit selected company
+	private void editCompany() {
+		// Ignore if no row is selected
+		if (companyTable.getSelectedRow() == -1) {
+			return;
+		}
+		try {
+			EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
+					admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
+			setDialogProperties(dialog, ClientType.COMPANY);
+		} catch (DAOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	// Create new customer
+	private void newCustomer() {
+		NewCustomerDialog dialog = new NewCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true, admin);
+		setDialogProperties(dialog, ClientType.CUSTOMER);
+	}
+
+	// Create new company
+	private void newCompany() {
+		NewCompanyDialog dialog = new NewCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true, admin);
+		setDialogProperties(dialog, ClientType.COMPANY);
+	}
+	
+	// Set dialog properties
+	private void setDialogProperties(JDialog dialog, ClientType clientType) {
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setLocationRelativeTo(dialog.getParent());
+		dialog.pack();
+		dialog.setVisible(true);
+		dialog.addWindowListener(new DialogListener(clientType));
+	}
+
+	// Return ID value of the client in the selected row 
+	// Returns -1 if no row is selected.
+	private long getSelectedIdFromTable(JTable table) {
+		int row = table.getSelectedRow();
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			if (table.getColumnName(i).equals("ID")) {
+				return (long) table.getValueAt(row, i);
+			}
+		}
+		return -1;
+	}
+
+	
+
+	
+
+	
 }

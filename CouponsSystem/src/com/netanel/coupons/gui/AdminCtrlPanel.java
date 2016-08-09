@@ -21,6 +21,7 @@ import com.netanel.coupons.jbeans.Customer;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -410,7 +411,7 @@ public class AdminCtrlPanel extends JPanel {
 						"Company deleted", JOptionPane.INFORMATION_MESSAGE);
 				refreshCompanyTable();
 			}
-		} catch (DAOException e1) {
+		} catch (DAOException | IOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
 		}
 	}

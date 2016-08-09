@@ -1,5 +1,6 @@
 package com.netanel.coupons.dailytask;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +46,7 @@ public class DailyCouponExpirationTask implements Runnable {
 						}
 					}
 				}
-			} catch (DAOException e) {
+			} catch (DAOException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -59,7 +60,7 @@ public class DailyCouponExpirationTask implements Runnable {
 		}
 	}
 
-	private void deleteCoupon(Company company, Coupon coupon) throws DAOException {
+	private void deleteCoupon(Company company, Coupon coupon) throws DAOException, IOException {
 		// Remove coupon from company
 		compDao.removeCoupon(company.getId(), coupon.getId());
 		// Remove coupon from all customers

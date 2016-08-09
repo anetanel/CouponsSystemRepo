@@ -1,5 +1,9 @@
 package com.netanel.coupons.dao.db;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -53,18 +57,23 @@ public class CouponDbDAO implements CouponDAO {
 	}
 
 	@Override
-	public void deleteCoupon(long couponId) throws DAOException {
+	public void deleteCoupon(long couponId) throws DAOException, IOException {
 		// Check if Coupon ID is in DB
 		if (!DB.foundInDb(Tables.Coupon, Columns.ID, String.valueOf(couponId))) {
 			throw new DAOException("Coupon ID does not exist in DB: " + couponId);
 		}
 		
+		// Get coupon image for future deletion
+		String couponImage = getCoupon(couponId).getImage();
+		
 		try (Connection con = DB.getConnection()){
+			
+			
 			String sqlCmdStr = "DELETE FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, couponId);
 			stat.executeUpdate();
-			
+			deleteImage(couponImage);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,10 +81,18 @@ public class CouponDbDAO implements CouponDAO {
 	}
 	
 	@Override
-	public void deleteCoupon(Coupon coupon) throws DAOException {
+	public void deleteCoupon(Coupon coupon) throws DAOException, IOException {
 		deleteCoupon(coupon.getId());		
 	}
 
+	public void deleteImage(String couponImage) throws IOException {
+		// Delete image if not default
+		if (!couponImage.equals(Coupon.DEFAULT_ICON)) {
+			Path path = FileSystems.getDefault().getPath(couponImage);
+			Files.deleteIfExists(path);
+		}
+	}
+	
 	@Override
 	public void updateCoupon(Coupon coupon) throws DAOException {
 		// Check if Coupon ID is in DB

@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao;
 
+import java.io.IOException;
 import java.util.Set;
 
 import com.netanel.coupons.exception.DAOException;
@@ -19,15 +20,17 @@ public interface CouponDAO {
 	 * Remove a Company from the underling database (or any other persistence storage).
 	 * @param coupon a {@code Coupon} object.
 	 * @throws DAOException
+	 * @throws IOException 
 	 */
-	void deleteCoupon(Coupon coupon) throws DAOException;
+	void deleteCoupon(Coupon coupon) throws DAOException, IOException;
 	
 	/**
 	 * Remove a Company from the underling database (or any other persistence storage).
 	 * @param couponId a {@code long} Coupon ID.
 	 * @throws DAOException
+	 * @throws IOException 
 	 */
-	void deleteCoupon(long couponId) throws DAOException;
+	void deleteCoupon(long couponId) throws DAOException, IOException;
 
 	/**
 	 * Updates a Coupon in the underling database (or any other persistence storage), from a given {@code Coupon} object.

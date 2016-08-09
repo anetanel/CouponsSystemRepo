@@ -240,7 +240,7 @@ public class CompanyCtrlPanel extends JPanel {
 						"Coupon deleted", JOptionPane.INFORMATION_MESSAGE);
 				refreshCouponTable();
 			}
-		} catch (DAOException e1) {
+		} catch (DAOException | IOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
 		}
 		

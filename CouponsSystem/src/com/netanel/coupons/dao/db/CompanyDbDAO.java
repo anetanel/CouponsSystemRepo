@@ -1,5 +1,6 @@
 package com.netanel.coupons.dao.db;
 
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -288,6 +289,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			throw new DAOException("Coupon " + couponId + " is not associated to Company " + compId);
 		}
 		DB.updateJoin(SqlCmd.DELETE, Tables.Company_Coupon, compId, couponId);
+		
 	}
 
 	@Override

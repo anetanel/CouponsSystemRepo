@@ -1,10 +1,11 @@
 package com.netanel.coupons.facades;
 
+import java.io.IOException;
 import java.util.Set;
 
 import com.netanel.coupons.app.CouponSystem;
 import com.netanel.coupons.dao.*;
-import com.netanel.coupons.email.Email;
+import com.netanel.coupons.email.EmailValidator;
 import com.netanel.coupons.exception.*;
 import com.netanel.coupons.jbeans.*;
 
@@ -44,13 +45,13 @@ public class AdminFacade implements CouponClientFacade {
 		if (company.getCompName().equals("")){
 			throw new DAOException("Company name can't be empty.");
 		}
-		if (!Email.validate(company.getEmail())){
+		if (!EmailValidator.validate(company.getEmail())){
 			throw new DAOException("Invalid Email address!");
 		}
 		compDao.createCompany(company);
 	}
 
-	public void deleteCompany(Company company) throws DAOException {
+	public void deleteCompany(Company company) throws DAOException, IOException {
 		for (Coupon coupon : company.getCoupons()) {
 			// Remove coupon from company
 			compDao.removeCoupon(company.getId(), coupon.getId());
@@ -69,7 +70,7 @@ public class AdminFacade implements CouponClientFacade {
 		if (company.getCompName().equals("")){
 			throw new DAOException("Company name can't be empty.");
 		}
-		if (!Email.validate(company.getEmail())) {
+		if (!EmailValidator.validate(company.getEmail())) {
 			throw new DAOException("Invalid Email address!");
 		}
 		compDao.updateCompany(company);

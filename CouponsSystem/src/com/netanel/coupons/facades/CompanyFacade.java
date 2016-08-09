@@ -1,5 +1,6 @@
 package com.netanel.coupons.facades;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class CompanyFacade implements CouponClientFacade{
 		compDao.addCoupon(compId, coupon);
 	}
 	
-	public void deleteCoupon(Coupon coupon) throws DAOException{
+	public void deleteCoupon(Coupon coupon) throws DAOException, IOException{
 		// Remove coupon from company
 		compDao.removeCoupon(compId, coupon.getId());
 		//Remove coupon from all customers

@@ -25,15 +25,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.ImageIcon;
 
+/**
+ * Customer control panel
+ */
 public class CustomerCtrlPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable couponsTable;
 	private CustomerFacade customerFcd;
+
 	/**
-	 * Create the panel.
-	 * @param client 
-	 * @throws DAOException 
+	 * Create the Customer Control Panel
+	 * @param client a {@code CustomerFacade} object of the logged in company.
+	 * @throws DAOException
 	 */
 	public CustomerCtrlPanel(CustomerFacade client) throws DAOException {
 		this.customerFcd = client;
@@ -41,6 +45,7 @@ public class CustomerCtrlPanel extends JPanel {
 
 		setLayout(new BorderLayout(0, 0));
 		
+		// Buttons panel
 		JPanel btnPanel = new JPanel();
 		add(btnPanel, BorderLayout.NORTH);
 		
@@ -54,6 +59,7 @@ public class CustomerCtrlPanel extends JPanel {
 		btnRefresh.addActionListener(new BtnRefreshActionListener());
 		btnPanel.add(btnRefresh);
 		
+		// Table panel
 		JPanel tablePanel = new JPanel();
 		add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));
@@ -61,6 +67,7 @@ public class CustomerCtrlPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		tablePanel.add(scrollPane);
 		
+		//Customer's Coupons Table
 		couponsTable = new JTable(){
 			private static final long serialVersionUID = 1L;
 
@@ -71,11 +78,11 @@ public class CustomerCtrlPanel extends JPanel {
 		couponsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
-		refreshCouponTable();
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		couponsTable.setDefaultRenderer(Number.class, centerRenderer);
 		scrollPane.setViewportView(couponsTable);
+		refreshCouponTable();
 	}
 
 	private Object[][] getCouponsTable() throws DAOException {

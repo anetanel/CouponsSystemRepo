@@ -57,9 +57,9 @@ public class NewCouponDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField titleTxtFld, messageTxtFld;
+	JTextField titleTxtFld, messageTxtFld;
 	private CompanyFacade company;
-	private JDatePickerImpl startDatePicker, endDatePicker;
+	JDatePickerImpl startDatePicker, endDatePicker;
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
 	private File sourceIcon;
@@ -75,8 +75,11 @@ public class NewCouponDialog extends JDialog {
 		super(owner, modal);
 		this.company = company;
 		
+		// Dialog settings
 		setTitle("New Coupon");
 		setBounds(100, 100, 450, 300);
+		
+		// Content panel
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -184,6 +187,7 @@ public class NewCouponDialog extends JDialog {
 			contentPanel.add(lblImageIcon);
 		}
 
+		// Buttons pane
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -204,6 +208,11 @@ public class NewCouponDialog extends JDialog {
 		}
 	}
 
+	//
+	// Listener Classes
+	//
+	
+	// OK button listener
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -217,11 +226,15 @@ public class NewCouponDialog extends JDialog {
 			}
 		}
 	}
+
+	// Cancel button listener
 	private class CancelButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
+	
+	// Browse button listener
 	private class BtnBrowseActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			sourceIcon = selectIcon();
@@ -231,7 +244,34 @@ public class NewCouponDialog extends JDialog {
 		}
 	}
 
-	public void createCoupon() throws DAOException, CouponException{
+	// Date Formatter class
+	// Needed for the Date Picker
+	private class DateLabelFormatter extends AbstractFormatter {
+		private static final long serialVersionUID = 1L;
+		private String datePattern = "dd.MM.yyyy";
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+		
+		@Override
+		public Object stringToValue(String text) throws ParseException {
+			return dateFormatter.parseObject(text);
+		}
+		
+		@Override
+		public String valueToString(Object value) throws ParseException {
+			if (value != null) {
+				Calendar cal = (Calendar) value;
+				return dateFormatter.format(cal.getTime());
+			}	
+			return "";
+		}	
+	}
+
+	//
+	// Functions
+	//
+	
+	// Create coupon
+	private void createCoupon() throws DAOException, CouponException{
 		String destIconPath = null;
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
@@ -252,28 +292,7 @@ public class NewCouponDialog extends JDialog {
 		company.createCoupon(coupon);
 	}
 	
-	public class DateLabelFormatter extends AbstractFormatter {
-
-		private static final long serialVersionUID = 1L;
-		private String datePattern = "dd.MM.yyyy";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-	    @Override
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
-
-	    @Override
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
-
-	        return "";
-	    }
-
-	}
+	// Opens a file chooser and returns a file to be used a icon
 	private File selectIcon() {
 		JFileChooser fc = new JFileChooser();
 		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());

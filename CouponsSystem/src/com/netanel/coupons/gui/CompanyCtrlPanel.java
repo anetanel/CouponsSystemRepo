@@ -36,7 +36,6 @@ import javax.swing.ListSelectionModel;
 
 /**
  * Company control panel
- *
  */
 public class CompanyCtrlPanel extends JPanel {
 

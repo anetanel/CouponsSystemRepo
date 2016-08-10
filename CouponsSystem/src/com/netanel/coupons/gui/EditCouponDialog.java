@@ -49,6 +49,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
+/**
+ * Edit Coupon Dialog
+ */
 public class EditCouponDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -62,15 +65,24 @@ public class EditCouponDialog extends JDialog {
 	private File sourceIcon; 
 	private JLabel lblImageIcon;
 
+
 	/**
-	 * Create the dialog.
+	 * Create the Edit coupon dialog
+	 * @param owner a {@code JFrame} that owns this dialog (for modality).
+	 * @param modal a {@code boolean} value. If {@code true} - the dialog will be modal, otherwise it will not. 
+	 * @param company a {@code CompanyFacade} object of the logged in company.
+	 * @param coupon a {@code Coupon} object to be edited.
 	 */
 	public EditCouponDialog(Frame owner, boolean modal, CompanyFacade company, Coupon coupon) {
 		super(owner, modal);
 		this.company = company;
 		this.coupon = coupon;
+		
+		// Dialog settings
 		setTitle("Edit Coupon");
 		setBounds(100, 100, 450, 300);
+		
+		// Content panel
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -187,6 +199,7 @@ public class EditCouponDialog extends JDialog {
 			contentPanel.add(lblImageIcon);
 		}
 
+		// Buttons pane
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -207,6 +220,11 @@ public class EditCouponDialog extends JDialog {
 		}
 	}
 
+	//
+	// Listener Classes
+	//
+	
+	// OK button listener
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -220,11 +238,15 @@ public class EditCouponDialog extends JDialog {
 			}
 		}
 	}
+	
+	// Cancel button listener
 	private class CancelButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
+	
+	// Browse button listener
 	private class BtnBrowseActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			sourceIcon = selectIcon();
@@ -234,7 +256,35 @@ public class EditCouponDialog extends JDialog {
 		}
 	}
 
-	public void updateCoupon() throws DAOException{
+	// Date Formatter class
+	// Needed for the Date Picker
+	public class DateLabelFormatter extends AbstractFormatter {
+	
+		private static final long serialVersionUID = 1L;
+		private String datePattern = "dd.MM.yyyy";
+	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	
+	    @Override
+	    public Object stringToValue(String text) throws ParseException {
+	        return dateFormatter.parseObject(text);
+	    }
+	
+	    @Override
+	    public String valueToString(Object value) throws ParseException {
+	        if (value != null) {
+	            Calendar cal = (Calendar) value;
+	            return dateFormatter.format(cal.getTime());
+	        }
+	        return "";
+	    }
+	}
+
+	//
+	// Functions
+	//
+	
+	// Update coupon
+	private void updateCoupon() throws DAOException{
 		String destIconPath = coupon.getImage();
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
@@ -255,7 +305,8 @@ public class EditCouponDialog extends JDialog {
 		company.updateCoupon(coupon);
 	}
 	
-	public File selectIcon() {
+	// Opens a file chooser and returns a file to be used a icon
+	private File selectIcon() {
 		JFileChooser fc = new JFileChooser();
 		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
 		fc.setFileFilter(imageFilter);
@@ -271,28 +322,5 @@ public class EditCouponDialog extends JDialog {
 			return null;
 		}
 		return file;
-	}
-
-	public class DateLabelFormatter extends AbstractFormatter {
-
-		private static final long serialVersionUID = 1L;
-		private String datePattern = "dd.MM.yyyy";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-	    @Override
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
-
-	    @Override
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
-
-	        return "";
-	    }
-
 	}
 }

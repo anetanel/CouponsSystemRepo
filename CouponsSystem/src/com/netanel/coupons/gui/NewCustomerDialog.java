@@ -24,6 +24,9 @@ import java.util.HashSet;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
+/**
+ * New Customer Dialog
+ */
 public class NewCustomerDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -31,17 +34,24 @@ public class NewCustomerDialog extends JDialog {
 	private JTextField nameTxtFld;
 	private JPasswordField passTxtFld;
 	private AdminFacade admin;
-	//private JTextField emailTxtField;
 
+	
 	/**
-	 * Create the dialog.
+	 * Create the New Customer dialog
+	 * @param owner a {@code JFrame} that owns this dialog (for modality).
+	 * @param modal a {@code boolean} value. If {@code true} - the dialog will be modal, otherwise it will not. 
+	 * @param admin a {@code AdminFacade} object.
 	 */
 	public NewCustomerDialog(Frame owner, boolean modal, AdminFacade admin) {
 		super(owner, modal);
 		this.admin = admin;
+		
+		// Dialog settings
 		setTitle("New Customer");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
+		
+		// Content panel
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 2, 0, 5));
@@ -54,15 +64,6 @@ public class NewCustomerDialog extends JDialog {
 			contentPanel.add(nameTxtFld);
 			nameTxtFld.setColumns(10);
 		}
-//		{
-//			JLabel lblEmail = new JLabel("Email");
-//			contentPanel.add(lblEmail);
-//		}
-//		{
-//			emailTxtField = new JTextField();
-//			contentPanel.add(emailTxtField);
-//			emailTxtField.setColumns(10);
-//		}
 		{
 			JLabel lblPassword = new JLabel("Password");
 			contentPanel.add(lblPassword);
@@ -72,6 +73,8 @@ public class NewCustomerDialog extends JDialog {
 			contentPanel.add(passTxtFld);
 			passTxtFld.setColumns(10);
 		}
+		
+		// Buttons pane
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -92,6 +95,11 @@ public class NewCustomerDialog extends JDialog {
 		}
 	}
 
+	//
+	// Listener Classes
+	//
+	
+	// OK button listener
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -105,13 +113,20 @@ public class NewCustomerDialog extends JDialog {
 			}
 		}
 	}
+
+	// Cancel button listener
 	private class CancelButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
-
-	public void createCustomer() throws DAOException{
+	
+	//
+	// Functions
+	//
+	
+	// Create customer
+	private void createCustomer() throws DAOException{
 		admin.createCustomer(new Customer(nameTxtFld.getText(), new Password(passTxtFld.getPassword()), new HashSet<Coupon>()));
 	}
 }

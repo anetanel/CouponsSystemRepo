@@ -1,4 +1,4 @@
-package com.netanel.coupons.gui.models;
+package com.netanel.coupons.gui.table;
 
 import javax.swing.table.DefaultTableModel;
 

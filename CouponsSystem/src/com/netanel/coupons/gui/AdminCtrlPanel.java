@@ -16,7 +16,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.AdminFacade;
 import com.netanel.coupons.facades.ClientType;
-import com.netanel.coupons.gui.models.CouponTableModel;
+import com.netanel.coupons.gui.table.CouponTableModel;
+import com.netanel.coupons.gui.table.TableHelper;
 import com.netanel.coupons.jbeans.Client;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Customer;
@@ -336,7 +337,7 @@ public class AdminCtrlPanel extends JPanel {
 		
 		Customer customer = null;
 		try {
-			customer = admin.getCustomer(getSelectedIdFromTable(customersTable));
+			customer = admin.getCustomer(TableHelper.getSelectedIdFromTable(customersTable));
 
 			int delete = JOptionPane.showConfirmDialog(null,
 					"Are you sure you want to delete customer '" + customer.getCustName() + "'?", "Delete Customer",
@@ -361,7 +362,7 @@ public class AdminCtrlPanel extends JPanel {
 		}
 		Company company = null;
 		try {
-			company = admin.getCompany(getSelectedIdFromTable(companyTable));
+			company = admin.getCompany(TableHelper.getSelectedIdFromTable(companyTable));
 
 			int delete = JOptionPane.showConfirmDialog(null,
 					"Are you sure you want to delete company '" + company.getCompName() + "'?", "Delete Company",
@@ -386,7 +387,7 @@ public class AdminCtrlPanel extends JPanel {
 		
 		try {
 			EditCustomerDialog dialog = new EditCustomerDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this),
-					true, admin, admin.getCustomer(getSelectedIdFromTable(customersTable)));
+					true, admin, admin.getCustomer(TableHelper.getSelectedIdFromTable(customersTable)));
 			setDialogProperties(dialog, ClientType.CUSTOMER);
 		} catch (DAOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
@@ -401,7 +402,7 @@ public class AdminCtrlPanel extends JPanel {
 		}
 		try {
 			EditCompanyDialog dialog = new EditCompanyDialog((JFrame) SwingUtilities.getRoot(AdminCtrlPanel.this), true,
-					admin, admin.getCompany(getSelectedIdFromTable(companyTable)));
+					admin, admin.getCompany(TableHelper.getSelectedIdFromTable(companyTable)));
 			setDialogProperties(dialog, ClientType.COMPANY);
 		} catch (DAOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!", JOptionPane.WARNING_MESSAGE);
@@ -428,22 +429,5 @@ public class AdminCtrlPanel extends JPanel {
 		dialog.setVisible(true);
 		dialog.addWindowListener(new DialogListener(clientType));
 	}
-
-	// Return ID value of the client in the selected row 
-	// Returns -1 if no row is selected.
-	private long getSelectedIdFromTable(JTable table) {
-		int row = table.getSelectedRow();
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			if (table.getColumnName(i).equals("ID")) {
-				return (long) table.getValueAt(row, i);
-			}
-		}
-		return -1;
-	}
-
-	
-
-	
-
 	
 }

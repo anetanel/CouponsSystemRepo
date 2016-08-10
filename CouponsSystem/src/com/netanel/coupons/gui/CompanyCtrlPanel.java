@@ -5,7 +5,8 @@ import javax.swing.JPanel;
 import com.netanel.coupons.exception.CouponException;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.CompanyFacade;
-import com.netanel.coupons.gui.models.CouponTableModel;
+import com.netanel.coupons.gui.table.CouponTableModel;
+import com.netanel.coupons.gui.table.TableHelper;
 import com.netanel.coupons.jbeans.Coupon;
 
 import java.awt.BorderLayout;
@@ -14,15 +15,12 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import java.awt.event.ActionListener;
@@ -30,34 +28,35 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.awt.event.ActionEvent;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 
+/**
+ * Company control panel
+ *
+ */
 public class CompanyCtrlPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable couponsTable;
 	private CompanyFacade companyFcd;
 
+
 	/**
-	 * Create the panel.
-	 * 
-	 * @param client
+	 * Create the Company Control Panel
+	 * @param client a {@code CompanyFacade} object of the logged in company.
 	 * @throws DAOException
 	 */
 	public CompanyCtrlPanel(CompanyFacade client) throws DAOException {
 		this.companyFcd = client;
+		
 		setName("Company Control Panel: " + companyFcd.getCompName());
 		setLayout(new BorderLayout(0, 0));
 
+		// Buttons panel
 		JPanel btnPanel = new JPanel();
 		add(btnPanel, BorderLayout.NORTH);
 
@@ -81,6 +80,7 @@ public class CompanyCtrlPanel extends JPanel {
 		btnRefresh.addActionListener(new BtnRefreshActionListener());
 		btnPanel.add(btnRefresh);
 
+		// Table panel
 		JPanel tablePanel = new JPanel();
 		add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));
@@ -88,6 +88,7 @@ public class CompanyCtrlPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		tablePanel.add(scrollPane);
 
+		// Company's Coupons Table
 		couponsTable = new JTable() {
 			private static final long serialVersionUID = 1L;
 
@@ -99,32 +100,63 @@ public class CompanyCtrlPanel extends JPanel {
 		couponsTable.addMouseListener(new TableMouseListener());
 		couponsTable.setRowHeight(40);
 		couponsTable.setAutoCreateRowSorter(true);
-		refreshCouponTable();
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		couponsTable.setDefaultRenderer(Number.class, centerRenderer);
 		scrollPane.setViewportView(couponsTable);
+		refreshCouponTable();
 
 	}
 
-	private Object[][] getCouponsTable() throws DAOException {
-		Set<Coupon> coupons = companyFcd.getAllCoupons();
-		Object[][] table = new Object[coupons.size()][];
-		int cnt = 0;
-		for (Coupon coupon : coupons) {
-			table[cnt] = coupon.getDetails(40);
-			cnt++;
-		}
-		Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
-		return table;
-	}
-
+	//
+	// Listener Classes
+	//
+	
+	// New Coupon button listener
 	private class BtnNewCouponActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			newCoupon();
 		}
 	}
 
+	// Delete Coupon button listener
+	private class BtnDeleteCouponActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				deleteCoupon();
+			} catch (CouponException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	// Edit Coupon button listener
+	private class BtnEditCouponActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				editCoupon();
+			} catch (DAOException | CouponException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	// Refresh button listener
+	private class BtnRefreshActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				refreshCouponTable();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	// Table mouse listener
+	// Listens to double click on table row
 	private class TableMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -138,59 +170,9 @@ public class CompanyCtrlPanel extends JPanel {
 			}
 		}
 	}
-
-	private class BtnRefreshActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			try {
-				refreshCouponTable();
-			} catch (DAOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-
-	private void newCoupon() {
-		NewCouponDialog dialog = new NewCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
-				companyFcd);
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setLocationRelativeTo(dialog.getParent());
-		dialog.pack();
-		dialog.setVisible(true);
-		dialog.addWindowListener(new DialogListener());
-
-	}
-
-	private void editCoupon() throws DAOException, CouponException {
-		if (couponsTable.getSelectedRow() == -1) {
-			return;
-		}
-		EditCouponDialog dialog = new EditCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
-				companyFcd, companyFcd.getCoupon(getSelectedIdFromTable(couponsTable)));
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setLocationRelativeTo(dialog.getParent());
-		dialog.pack();
-		dialog.setVisible(true);
-		dialog.addWindowListener(new DialogListener());
-		
-	}
-
-	private long getSelectedIdFromTable(JTable table) {
-		int row = table.getSelectedRow();
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			if (table.getColumnName(i).equals("ID")) {
-				return (long) table.getValueAt(row, i);
-			}
-		}
-		return -1;
-	}
 	
-	private void refreshCouponTable() throws DAOException {
-		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",
-				"Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image" });
-		couponsTable.setModel(couponTableModel);
-	}
-
+	// Dialog listener
+	// Listens to frame dispose
 	private class DialogListener extends WindowAdapter {
 		@Override
 		public void windowClosed(WindowEvent e) {
@@ -202,34 +184,66 @@ public class CompanyCtrlPanel extends JPanel {
 			}
 		}
 	}
-	private class BtnDeleteCouponActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			try {
-				deleteCoupon();
-			} catch (CouponException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+
+	//
+	// Functions
+	//
+	
+	// Returns an ID-sorted two-dimensional array of company's coupons
+	// Used by table model.
+	private Object[][] getCouponsTable() throws DAOException {
+		Set<Coupon> coupons = companyFcd.getAllCoupons();
+		Object[][] table = new Object[coupons.size()][];
+		int cnt = 0;
+		for (Coupon coupon : coupons) {
+			table[cnt] = coupon.getDetails(40);
+			cnt++;
 		}
-	}
-	private class BtnEditCouponActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			try {
-				editCoupon();
-			} catch (DAOException | CouponException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+		Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
+		return table;
 	}
 
+	// New coupon
+	private void newCoupon() {
+		NewCouponDialog dialog = new NewCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
+				companyFcd);
+		setDialogProperties(dialog);
+	}
+
+	// Edit coupon
+	private void editCoupon() throws DAOException, CouponException {
+		// Ignore if no row is selected
+		if (couponsTable.getSelectedRow() == -1) {
+			return;
+		}
+		EditCouponDialog dialog = new EditCouponDialog((JFrame) SwingUtilities.getRoot(CompanyCtrlPanel.this), true,
+				companyFcd, companyFcd.getCoupon(TableHelper.getSelectedIdFromTable(couponsTable)));
+		setDialogProperties(dialog);
+	}
+
+	// Set dialog properties
+	private void setDialogProperties(JDialog dialog) {
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setLocationRelativeTo(dialog.getParent());
+			dialog.pack();
+			dialog.setVisible(true);
+			dialog.addWindowListener(new DialogListener());
+	}
+	
+	private void refreshCouponTable() throws DAOException {
+		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",
+				"Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image" });
+		couponsTable.setModel(couponTableModel);
+	}
+
+	// Delete coupon
 	private void deleteCoupon() throws CouponException {
 		if (couponsTable.getSelectedRow() == -1) {
 			return;
 		}
 		Coupon coupon = null;
 		try {
-			coupon = companyFcd.getCoupon(getSelectedIdFromTable(couponsTable));
+			coupon = companyFcd.getCoupon(TableHelper.getSelectedIdFromTable(couponsTable));
 
 			int delete = JOptionPane.showConfirmDialog(null,
 					"Are you sure you want to delete coupon '" + coupon.getTitle() + "'?", "Delete Coupon",

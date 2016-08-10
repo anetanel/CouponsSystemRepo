@@ -23,6 +23,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JPasswordField;
 
+/**
+ * Edit Company Dialog
+ */
 public class EditCompanyDialog extends JDialog {
 
 
@@ -35,17 +38,25 @@ public class EditCompanyDialog extends JDialog {
 	private JTextField emailTxtField;
 	private Company company;
 
+	
 	/**
-	 * Create the dialog.
+	 * Create the Edit Company dialog.
+	 * @param owner a {@code JFrame} that owns this dialog (for modality).
+	 * @param modal a {@code boolean} value. If {@code true} - the dialog will be modal, otherwise it will not. 
+	 * @param admin a {@code AdminFacade} object.
+	 * @param company the {@code Company} object to be edited.
 	 */
 	public EditCompanyDialog(Frame owner, boolean modal, AdminFacade admin, Company company) {
 		super(owner, modal);
 		this.admin = admin;
 		this.company = company;
 		
+		// Dialog setting
 		setTitle("Edit Company");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
+		
+		// Content panel
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 2, 0, 5));
@@ -78,11 +89,14 @@ public class EditCompanyDialog extends JDialog {
 			contentPanel.add(passTxtFld);
 			passTxtFld.setColumns(10);
 		}
+		// Checkbox to enable password change
 		{
 			JCheckBox chckbxChagePassword = new JCheckBox("Chage Password");
 			chckbxChagePassword.addChangeListener(new ChckbxChagePasswordChangeListener());
 			contentPanel.add(chckbxChagePassword);
 		}
+		
+		// Buttons pane
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -103,6 +117,11 @@ public class EditCompanyDialog extends JDialog {
 		}
 	}
 	
+	//
+	// Listener Classes
+	//
+	
+	// OK button listener
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -117,11 +136,14 @@ public class EditCompanyDialog extends JDialog {
 		}
 	}
 	
+	// Cancel button listener
 	private class CancelButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
+	
+	// Password Checkbox listener 
 	private class ChckbxChagePasswordChangeListener implements ChangeListener {
 		public void stateChanged(ChangeEvent e) {
 			JCheckBox chkBx = (JCheckBox) e.getSource();
@@ -129,13 +151,19 @@ public class EditCompanyDialog extends JDialog {
 				passTxtFld.setEnabled(true);
 				lblPassword.setEnabled(true);
 			} else {
+				passTxtFld.setText(null);
 				passTxtFld.setEnabled(false);
 				lblPassword.setEnabled(false);
 			}
 		}
 	}
 	
-	public void updateCompany() throws DAOException {
+	//
+	// Functions
+	//
+	
+	// Update company
+	private void updateCompany() throws DAOException {
 		company.setCompName(nameTxtFld.getText());
 		company.setEmail(emailTxtField.getText());
 		if (lblPassword.isEnabled()) {

@@ -45,13 +45,14 @@ import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
-
 import com.netanel.coupons.jbeans.CouponType;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
+/**
+ * New Coupon Dialog
+ */
 public class NewCouponDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -65,11 +66,15 @@ public class NewCouponDialog extends JDialog {
 	private JLabel lblImageIcon;
 
 	/**
-	 * Create the dialog.
+	 * Create the New Coupon dialog
+	 * @param owner a {@code JFrame} that owns this dialog (for modality).
+	 * @param modal a {@code boolean} value. If {@code true} - the dialog will be modal, otherwise it will not. 
+	 * @param company a {@code CompanyFacade} object of the logged in company.
 	 */
 	public NewCouponDialog(Frame owner, boolean modal, CompanyFacade company) {
 		super(owner, modal);
 		this.company = company;
+		
 		setTitle("New Coupon");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

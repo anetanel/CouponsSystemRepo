@@ -149,8 +149,12 @@ public class EditCustomerDialog extends JDialog {
 		}
 	}
 	
+	//
+	// Functions
+	//
+	
 	// Update customer
-	public void updateCustomer() throws DAOException {
+	private void updateCustomer() throws DAOException {
 		customer.setCustName(nameTxtFld.getText());
 		if (lblPassword.isEnabled()) {
 			customer.setPassword(passTxtFld.getPassword());

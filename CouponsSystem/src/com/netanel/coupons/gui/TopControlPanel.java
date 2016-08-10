@@ -31,6 +31,7 @@ public class TopControlPanel extends JFrame {
 
 	
 	/**
+	 * Create the top control panel frame.
 	 * @param client a {@code CouponClientFacade} of the logged in client.
 	 * @throws DAOException
 	 */

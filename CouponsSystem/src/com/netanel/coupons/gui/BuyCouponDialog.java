@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import com.netanel.coupons.exception.CouponException;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.CustomerFacade;
-import com.netanel.coupons.gui.models.CouponTableModel;
+import com.netanel.coupons.gui.table.CouponTableModel;
 import com.netanel.coupons.jbeans.Coupon;
 
 import javax.swing.JScrollPane;

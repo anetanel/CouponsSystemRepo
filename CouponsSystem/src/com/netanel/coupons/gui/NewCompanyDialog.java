@@ -24,6 +24,9 @@ import java.util.HashSet;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
+/**
+ * New Company Dialog
+ */
 public class NewCompanyDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -33,15 +36,23 @@ public class NewCompanyDialog extends JDialog {
 	private AdminFacade admin;
 	private JTextField emailTxtField;
 
+
 	/**
-	 * Create the dialog.
+	 * Create the New Company dialog
+	 * @param owner a {@code JFrame} that owns this dialog (for modality).
+	 * @param modal a {@code boolean} value. If {@code true} - the dialog will be modal, otherwise it will not. 
+	 * @param admin a {@code AdminFacade} object.
 	 */
 	public NewCompanyDialog(Frame owner, boolean modal, AdminFacade admin) {
 		super(owner, modal);
 		this.admin = admin;
+		
+		// Dialog settings
 		setTitle("New Company");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
+		
+		// Content panel
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 2, 0, 5));
@@ -72,6 +83,8 @@ public class NewCompanyDialog extends JDialog {
 			contentPanel.add(passTxtFld);
 			passTxtFld.setColumns(10);
 		}
+		
+		// Buttons pane
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -92,6 +105,11 @@ public class NewCompanyDialog extends JDialog {
 		}
 	}
 
+	//
+	// Listener Classes
+	//
+	
+	// OK button listener
 	private class OkButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -105,13 +123,20 @@ public class NewCompanyDialog extends JDialog {
 			}
 		}
 	}
+	
+	// Cancel button listener
 	private class CancelButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
 
-	public void createCompany() throws DAOException{
+	//
+	// Functions
+	//
+	
+	// Create company
+	private void createCompany() throws DAOException{
 		admin.createCompany(new Company(nameTxtFld.getText(), new Password(passTxtFld.getPassword()), emailTxtField.getText(), new HashSet<Coupon>()));
 	}
 }

@@ -3,6 +3,10 @@ package com.netanel.coupons.crypt;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Secure password object.
+ *
+ */
 public class Password {
 	//
 	// Attributes
@@ -24,10 +28,18 @@ public class Password {
 	//
 	// Functions
 	//
+	/**
+	 * Get password hash and salt.
+	 * @return A {@code map <String, String>} with keys "salt" and "hash", and values of the salt and password hash in hex.
+	 */
 	public Map<String, String> getHashAndSalt() {
 		return hashAndSalt;
 	}
 	
+	/**
+	 * Sets a new secure password.
+	 * @param password a {@code char[]} with the new password.
+	 */
 	public void setNewPassword(char[] password) {
 		hashAndSalt = PasswordHash.hashPassword(password);
 	}

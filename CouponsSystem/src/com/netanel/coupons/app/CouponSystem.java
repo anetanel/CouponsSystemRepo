@@ -8,6 +8,10 @@ import com.netanel.coupons.dao.db.CompanyDbDAO;
 import com.netanel.coupons.dao.db.CouponDbDAO;
 import com.netanel.coupons.dao.db.CustomerDbDAO;
 
+/**
+ * Coupon System Singleton.
+ * This Signleton instantiates all DOA objects, and starts a task to purge expired coupons.  
+ */
 public class CouponSystem {
 	public static CouponSystem instance = null;
 	private CompanyDAO compDao = null;
@@ -16,6 +20,9 @@ public class CouponSystem {
 	private DailyCouponExpirationTask dailyTask = null;
 	private Thread dailyTaskThread = null;
 	
+	//
+	// Constructor
+	//
 	private CouponSystem() {
 		compDao = new CompanyDbDAO();
 		custDao = new CustomerDbDAO();
@@ -25,6 +32,11 @@ public class CouponSystem {
 		dailyTaskThread.start();		
 	}
 	
+	//
+	// Functions
+	//
+	
+	// Instantiate singleton
 	public static CouponSystem getInstance() {
 		if (instance == null) {
 			instance = new CouponSystem();
@@ -36,6 +48,7 @@ public class CouponSystem {
 		dailyTask.stop();
 		dailyTaskThread.interrupt();
 	}
+	
 	public CompanyDAO getCompDao() {
 		return compDao;
 	}

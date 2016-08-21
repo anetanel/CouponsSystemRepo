@@ -8,10 +8,13 @@ import com.netanel.coupons.dao.CompanyDAO;
 import com.netanel.coupons.dao.CouponDAO;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 
+/**
+ * A threaded task that runs in the background and deletes expired coupons.
+ *
+ */
 public class DailyCouponExpirationTask implements Runnable {
 	//
 	// Attributes
@@ -20,6 +23,7 @@ public class DailyCouponExpirationTask implements Runnable {
 	private CustomerDAO custDao = null;
 	private CouponDAO couponDao = null;
 	private boolean running = true;
+	
 
 	//
 	// Constructors
@@ -72,6 +76,9 @@ public class DailyCouponExpirationTask implements Runnable {
 		couponDao.deleteCoupon(coupon);
 	}
 
+	/**
+	 * 
+	 */
 	public void stop() {
 		running = false;
 	}

@@ -46,6 +46,14 @@ public interface CompanyDAO {
 	Company getCompany(long compId) throws DAOException;
 	
 	/**
+	 * Returns a {@code Company} object from the underling database (or any other persistence storage).
+	 * @param compName a {@String long} Company name.
+	 * @return a {@code Company} object.
+	 * @throws DAOException
+	 */
+	Company getCompany(String compName) throws DAOException;
+	
+	/**
 	 * Returns a {@code Set<Company>} of all Companies from the underling database (or any other persistence storage).
 	 * @return a {@code Set<Company>}.
 	 * @throws DAOException
@@ -78,6 +86,14 @@ public interface CompanyDAO {
 	void addCoupon(Company company, Coupon coupon) throws DAOException;
 	
 	/**
+	 * Adds a correlation between a Coupon and a Company in the underling database (or any other persistence storage).
+	 * @param compId a {@code long} company ID.
+	 * @param coupon a {@code Coupon} object.
+	 * @throws DAOException
+	 */
+	void addCoupon(long compId, Coupon coupon) throws DAOException;
+	
+	/**
 	 * Removes a correlation between a Coupon and a Company in the underling database (or any other persistence storage).
 	 * @param compId a {@code long} Company ID.
 	 * @param couponId a {@code long} Coupon ID.
@@ -92,8 +108,6 @@ public interface CompanyDAO {
 	 */
 	void removeCoupon(Company company, Coupon coupon) throws DAOException;
 
-	Company getCompany(String compName) throws DAOException;
 
-	void addCoupon(long compId, Coupon coupon) throws DAOException;
 	
 }

@@ -85,10 +85,60 @@ public class CustomerCtrlPanel extends JPanel {
 		refreshCouponTable();
 	}
 
+	//
+	// Listener Classes
+	//
+	
+	// Buy coupon button listener
+	private class BtnBuyCouponsActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				buyCoupon();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	// Refresh button listener
+	private class BtnRefreshActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				refreshCouponTable();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	// Dialog listener
+	// Listens to frame dispose
+	private class DialogListener extends WindowAdapter {
+		@Override
+		public void windowClosed(WindowEvent e) {
+			try {
+				refreshCouponTable();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	//
+	// Functions
+	//
+	
+	// Returns an ID-sorted two-dimensional array of customer's coupons
+	// Used by table model.
 	private Object[][] getCouponsTable() throws DAOException {
 			Set<Coupon> coupons = customerFcd.getMyCoupons();
 			Object[][] table = new Object[coupons.size()][];
 			int cnt = 0;
+			// Populate array with coupons details.
+			// Skip the 5th element (Amount).
 			for (Coupon coupon : coupons) {
 				Object[] couponDetails = new Object[coupon.getDetails(40).length -1];
 				int j = 0;
@@ -105,17 +155,9 @@ public class CustomerCtrlPanel extends JPanel {
 			Arrays.sort(table, java.util.Comparator.comparingLong(a -> (Long) a[0]));
 			return table;
 	}
-	private class BtnBuyCouponsActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			try {
-				buyCoupon();
-			} catch (DAOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-	public void buyCoupon() throws DAOException {
+	
+	// Buy coupon
+	private void buyCoupon() throws DAOException {
 		BuyCouponDialog dialog = new BuyCouponDialog((JFrame) SwingUtilities.getRoot(CustomerCtrlPanel.this), true,
 				customerFcd);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -125,28 +167,8 @@ public class CustomerCtrlPanel extends JPanel {
 		dialog.addWindowListener(new DialogListener());
 		
 	}
-	private class DialogListener extends WindowAdapter {
-		@Override
-		public void windowClosed(WindowEvent e) {
-			try {
-				refreshCouponTable();
-			} catch (DAOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-	private class BtnRefreshActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			try {
-				refreshCouponTable();
-			} catch (DAOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
 	
+	// (Re)Loads coupons table 
 	private void refreshCouponTable() throws DAOException {
 
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",

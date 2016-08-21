@@ -1,6 +1,5 @@
 package com.netanel.coupons.dao.db;
 
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CompanyDAO;
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 

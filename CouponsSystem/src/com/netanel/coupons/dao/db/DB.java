@@ -10,13 +10,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DB {
 	//TODO: Change function access modifier to package  
-//	public static Connection connectDB() throws ClassNotFoundException, SQLException {
-//		String dbDriver = "org.sqlite.JDBC";
-//		String url = "jdbc:sqlite:db/CouponsDB.db";
-//		Class.forName(dbDriver);
-//		Connection con = DriverManager.getConnection(url);
-//		return con;
-//	}
 	
 	private static ComboPooledDataSource cpds = null;
 	

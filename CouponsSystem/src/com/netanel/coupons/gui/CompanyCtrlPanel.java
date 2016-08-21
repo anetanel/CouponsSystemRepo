@@ -229,6 +229,7 @@ public class CompanyCtrlPanel extends JPanel {
 			dialog.addWindowListener(new DialogListener());
 	}
 	
+	// (Re)Loads coupons table 
 	private void refreshCouponTable() throws DAOException {
 		CouponTableModel couponTableModel = new CouponTableModel(getCouponsTable(), new String[] { "ID", "Title",
 				"Start Date", "End Date", "Amount", "Type", "Message", "Price", "Image" });

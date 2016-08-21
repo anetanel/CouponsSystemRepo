@@ -140,8 +140,6 @@ public class Coupon {
 	}
 
 	public Object[] getDetails(int iconSize) {
-//		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
-//				new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource(image)).getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
 		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
 				new ImageIcon(getIcon().getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};
 		return detail;

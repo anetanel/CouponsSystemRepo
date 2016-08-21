@@ -44,7 +44,6 @@ public class CompanyFacade implements CouponClientFacade{
 		}
 		
 		if (loginSuccessful && clientType.equals(ClientType.COMPANY)) {
-			//company = compDao.getCompany(compName);
 			this.compId = compDao.getCompany(compName).getId();
 			this.compName = compName;
 			return this;

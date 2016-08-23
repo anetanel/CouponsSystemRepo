@@ -86,6 +86,14 @@ public interface CustomerDAO {
 	void addCoupon(Customer customer, Coupon coupon) throws DAOException;
 	
 	/**
+	 * Adds a correlation between a Coupon and a Customer in the underling database (or any other persistence storage).
+	 * @param custId a {@code long} Customer ID.
+	 * @param coupon a {@code Coupon} object.
+	 * @throws DAOException
+	 */
+	void addCoupon(long custId, Coupon coupon) throws DAOException;
+	
+	/**
 	 * Removes a correlation between a Coupon and a Customer in the underling database (or any other persistence storage).
 	 * @param custId a {@code long} Customer ID.
 	 * @param couponId a {@code long} Coupon ID.
@@ -101,6 +109,6 @@ public interface CustomerDAO {
 	 */
 	void removeCoupon(Customer customer, Coupon coupon) throws DAOException;
 
-	void addCoupon(long custId, Coupon coupon) throws DAOException;
+	
 
 }

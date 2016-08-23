@@ -26,17 +26,17 @@ public class Test {
 		System.setProperty("com.mchange.v2.log.MLog", "fallback");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		// Initialize DB
-		try {
-			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company");
-			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer");
-			DB.getConnection().createStatement().executeUpdate("DELETE FROM Coupon");
-			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company_Coupon");
-			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
-			DB.getConnection().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company");
+//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer");
+//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Coupon");
+//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company_Coupon");
+//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
+//			DB.getConnection().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		/////////////////////////////////////////////
 

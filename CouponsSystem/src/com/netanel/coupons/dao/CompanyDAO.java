@@ -100,6 +100,7 @@ public interface CompanyDAO {
 	 * @throws DAOException
 	 */
 	void removeCoupon(long compId, long couponId) throws DAOException;
+	
 	/**
 	 * Removes a correlation between a Coupon and a Company in the underling database (or any other persistence storage).
 	 * @param company a {@code Company} object.

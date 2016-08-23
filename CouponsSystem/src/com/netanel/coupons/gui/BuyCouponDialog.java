@@ -148,7 +148,7 @@ public class BuyCouponDialog extends JDialog {
 	}
 
 	// Buy selected coupons
-	public void buyCoupons() {
+	private void buyCoupons() {
 		String boughtCouponsStr = "";
 		Set<Coupon> boughtCoupons = new HashSet<>();
 		long[] couponsIds = TableHelper.getAllSelectedIdsFromTable(couponsTable);

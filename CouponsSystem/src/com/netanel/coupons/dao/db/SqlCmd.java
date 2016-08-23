@@ -1,6 +1,6 @@
 package com.netanel.coupons.dao.db;
 
-public enum SqlCmd {
+enum SqlCmd {
 	INSERT,
 	DELETE,
 }

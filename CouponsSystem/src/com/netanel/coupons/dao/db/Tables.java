@@ -1,6 +1,6 @@
 package com.netanel.coupons.dao.db;
 
-public enum Tables {
+enum Tables {
 	Company,
 	Customer,
 	Coupon,

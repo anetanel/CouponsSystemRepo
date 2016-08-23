@@ -6,6 +6,9 @@ import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
+/**
+ * Customer DAO Interface
+ */
 public interface CustomerDAO {
 	
 	/**

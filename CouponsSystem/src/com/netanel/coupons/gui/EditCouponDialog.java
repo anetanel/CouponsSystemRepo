@@ -258,7 +258,7 @@ public class EditCouponDialog extends JDialog {
 
 	// Date Formatter class
 	// Needed for the Date Picker
-	public class DateLabelFormatter extends AbstractFormatter {
+	private class DateLabelFormatter extends AbstractFormatter {
 	
 		private static final long serialVersionUID = 1L;
 		private String datePattern = "dd.MM.yyyy";

@@ -3,9 +3,11 @@ package com.netanel.coupons.dao;
 import java.util.*;
 
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.JbeansException;
 import com.netanel.coupons.jbeans.*;
 
+/**
+ * Company DAO Interface
+ */
 public interface CompanyDAO {
 	
 	/**
@@ -73,7 +75,7 @@ public interface CompanyDAO {
 	 * @param compName a {@code String} Company name. 
 	 * @param password a {@code char[]} password.
 	 * @return {@code true} if the credentials match, otherwise {@code false}.
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	boolean login(String compName, char[] password) throws DAOException;
 	

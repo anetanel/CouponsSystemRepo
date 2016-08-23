@@ -15,9 +15,13 @@ import java.util.Set;
 
 import com.netanel.coupons.dao.CouponDAO;
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.DaoSQLException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 
+/**
+ * Coupon SQL Database DAO Class
+ */
 public class CouponDbDAO implements CouponDAO {
 
 	@Override
@@ -50,8 +54,7 @@ public class CouponDbDAO implements CouponDAO {
 			id = rs.getLong(1);
 			coupon.setId(id);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return id;
 	}
@@ -67,16 +70,13 @@ public class CouponDbDAO implements CouponDAO {
 		String couponImage = getCoupon(couponId).getImage();
 		
 		try (Connection con = DB.getConnection()){
-			
-			
 			String sqlCmdStr = "DELETE FROM Coupon WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement (sqlCmdStr);
 			stat.setLong(1, couponId);
 			stat.executeUpdate();
 			deleteImage(couponImage);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}		
 	}
 	
@@ -84,9 +84,10 @@ public class CouponDbDAO implements CouponDAO {
 	public void deleteCoupon(Coupon coupon) throws DAOException, IOException {
 		deleteCoupon(coupon.getId());		
 	}
-
+	
+	@Override
 	public void deleteImage(String couponImage) throws IOException {
-		// Delete image if not default
+		// Delete image if not default icon
 		if (!couponImage.equals(Coupon.DEFAULT_ICON)) {
 			Path path = FileSystems.getDefault().getPath(couponImage);
 			Files.deleteIfExists(path);
@@ -116,8 +117,7 @@ public class CouponDbDAO implements CouponDAO {
 			stat.executeUpdate();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 	}
 
@@ -153,8 +153,7 @@ public class CouponDbDAO implements CouponDAO {
 			coupon = new Coupon(couponId, title, startDate.toLocalDate(),
 					endDate.toLocalDate(), amount, type, message, price, image);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return coupon;
 	}
@@ -170,8 +169,7 @@ public class CouponDbDAO implements CouponDAO {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return coupons;
 	}
@@ -188,15 +186,14 @@ public class CouponDbDAO implements CouponDAO {
 				coupons.add(getCoupon(rs.getLong(1)));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return coupons;
 	}
 
 	
 	@Override
-	public Set<Long> getCustomersId(Coupon coupon) {
+	public Set<Long> getCustomersId(Coupon coupon) throws DAOException{
 		Set<Long> customers = new HashSet<>();
 		try (Connection con = DB.getConnection()){
 			String sqlCmdStr = "SELECT CUST_ID FROM Customer_Coupon WHERE COUPON_ID=?";
@@ -207,8 +204,7 @@ public class CouponDbDAO implements CouponDAO {
 				customers.add(rs.getLong(1));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return customers;
 	}

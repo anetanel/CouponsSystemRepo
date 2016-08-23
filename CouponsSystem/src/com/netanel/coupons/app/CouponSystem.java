@@ -14,7 +14,7 @@ import com.netanel.coupons.dao.db.CustomerDbDAO;
  */
 
 public class CouponSystem {
-	public static CouponSystem instance = null;
+	private static CouponSystem instance = null;
 	private CompanyDAO compDao = null;
 	private CustomerDAO custDao = null;
 	private CouponDAO couponDao = null;

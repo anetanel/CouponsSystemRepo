@@ -13,9 +13,13 @@ import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CompanyDAO;
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.DaoSQLException;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 
+/**
+ * Company SQL Database DAO Class
+ */
 public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
@@ -52,8 +56,7 @@ public class CompanyDbDAO implements CompanyDAO {
 				addCoupon(company, coupon);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return id;
 	}
@@ -71,8 +74,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 	}
 
@@ -107,15 +109,8 @@ public class CompanyDbDAO implements CompanyDAO {
 			stat.setString(4, hashAndSalt.get("salt"));
 			stat.setLong(5, company.getId());
 			stat.executeUpdate();
-			// // Insert all coupons to the Company_Coupon join table
-			// // TODO: what about removing coupons?
-			// for (Coupon coupon : company.getCoupons()) {
-			// addCoupon(company, coupon);
-			// }
-
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 	}
 
@@ -144,8 +139,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			coupons = getCoupons(compId);
 			company = new Company(compId, compName, password, email, coupons);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return company;
 	}
@@ -176,8 +170,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			coupons = getCoupons(compId);
 			company = new Company(compId, compName, password, email, coupons);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return company;
 	}
@@ -194,8 +187,7 @@ public class CompanyDbDAO implements CompanyDAO {
 				companies.add(getCompany(rs.getLong(1)));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return companies;
 	}
@@ -221,8 +213,7 @@ public class CompanyDbDAO implements CompanyDAO {
 				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return coupons;
 	}
@@ -249,8 +240,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return passwordMatch;
 	}
@@ -262,7 +252,6 @@ public class CompanyDbDAO implements CompanyDAO {
 
 	@Override
 	public void addCoupon(long compId, Coupon coupon) throws DAOException {
-		// TODO: can be more efficient? maybe one query..
 		// Check if Company ID, Coupon ID, and join information exist in DB
 		if (!DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(compId))) {
 			throw new DAOException("Company ID does not exist in DB: " + compId);

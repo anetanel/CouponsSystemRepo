@@ -25,7 +25,7 @@ final public class PasswordHash {
 	 * @param password	- A char array 
 	 * @return	A map <String, String> with keys "salt" and "hash", and values of the salt and password hash in hex. 		
 	 */
-	public static Map<String, String> hashPassword(char[] password) {
+	static Map<String, String> hashPassword(char[] password) {
 		byte[] salt = generateSalt();
 		return hashPassword(password, salt);
 	}

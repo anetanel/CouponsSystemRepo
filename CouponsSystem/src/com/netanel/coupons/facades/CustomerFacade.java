@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.netanel.coupons.app.CouponSystem;
 import com.netanel.coupons.dao.*;
-import com.netanel.coupons.dao.db.*;
 import com.netanel.coupons.exception.*;
 import com.netanel.coupons.jbeans.*;
 

@@ -13,7 +13,7 @@ import com.netanel.coupons.exception.DaoSQLException;
  * A collection of static functions for DB handling.
  * Includes Connection Pool creation. 
  */
-public class DB {
+class DB {
 	//
 	// Arguments
 	//
@@ -126,7 +126,7 @@ public class DB {
 	 * @return {@code true} if value is found in the database, otherwise returns {@code false}.
 	 * @throws DaoSQLException
 	 */
-	public static boolean foundInDb(Tables table, Columns columnName, String queryValue) throws DaoSQLException {
+	static boolean foundInDb(Tables table, Columns columnName, String queryValue) throws DaoSQLException {
 		// Actually, overloading with the same arguments twice, in order to use the same foundInDb function.
 		return foundInDb(table, columnName, columnName, queryValue, queryValue);	
 	}

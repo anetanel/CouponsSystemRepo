@@ -7,6 +7,9 @@ import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 
+/**
+ * Coupon DAO Interface
+ */
 public interface CouponDAO {
 	/**
 	 * Create a new Coupon in the underling database (or any other persistence storage), from a given {@code Coupon} object.
@@ -67,8 +70,16 @@ public interface CouponDAO {
 	 * Returns a {@code Set<Long>} of the IDs of the Customers that correlate to the Coupon in the underling database (or any other persistence storage).
 	 * @param coupon a {@code Coupon} object.
 	 * @return a {@code Set<Long>}.
+	 * @throws DAOException 
 	 */
-	Set<Long> getCustomersId(Coupon coupon);
+	Set<Long> getCustomersId(Coupon coupon) throws DAOException;
+
+	/**
+	 * Delete coupon icon image file
+	 * @param couponImage a {@code String} of the path to the image file
+	 * @throws IOException
+	 */
+	void deleteImage(String couponImage) throws IOException;
 
 
 }

@@ -3,7 +3,6 @@ package com.netanel.coupons.jbeans;
 import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
-import com.netanel.coupons.exception.JbeansException;
 
 public class Company extends Client{
 	//

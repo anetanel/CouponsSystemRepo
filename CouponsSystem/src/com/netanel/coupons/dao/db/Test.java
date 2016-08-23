@@ -1,4 +1,4 @@
-package com.netanel.coupons.app;
+package com.netanel.coupons.dao.db;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
-import com.netanel.coupons.dao.db.DB;
 import com.netanel.coupons.exception.CouponException;
 import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.exception.LoginException;
@@ -20,6 +19,7 @@ import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
 import com.netanel.coupons.jbeans.Customer;
 
+@SuppressWarnings("unused")
 public class Test {
 	public static void main(String[] args) {
 

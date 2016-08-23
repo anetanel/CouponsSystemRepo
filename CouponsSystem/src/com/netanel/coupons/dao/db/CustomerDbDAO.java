@@ -13,9 +13,13 @@ import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.crypt.PasswordHash;
 import com.netanel.coupons.dao.CustomerDAO;
 import com.netanel.coupons.exception.DAOException;
+import com.netanel.coupons.exception.DaoSQLException;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.Customer;
 
+/**
+ * Customer SQL Database DAO Class
+ */
 public class CustomerDbDAO implements CustomerDAO {
 
 	@Override
@@ -50,8 +54,7 @@ public class CustomerDbDAO implements CustomerDAO {
 				addCoupon(customer, coupon);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return id;
 	}
@@ -69,8 +72,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 	}
 
@@ -104,14 +106,9 @@ public class CustomerDbDAO implements CustomerDAO {
 			stat.setString(3, hashAndSalt.get("salt"));
 			stat.setLong(4, customer.getId());
 			stat.executeUpdate();
-			// // Insert all coupons to the Customer_Coupon join table
-			// for (Coupon coupon : customer.getCoupons()) {
-			// addCoupon(customer, coupon);
-			// }
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 	}
 
@@ -139,8 +136,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			coupons = getCoupons(custId);
 			customer = new Customer(custId, custName, password, coupons);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return customer;
 	}
@@ -169,8 +165,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			coupons = getCoupons(custId);
 			customer = new Customer(custId, custName, password, coupons);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return customer;
 	}
@@ -186,8 +181,7 @@ public class CustomerDbDAO implements CustomerDAO {
 				customers.add(getCustomer(rs.getLong(1)));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return customers;
 	}
@@ -213,8 +207,7 @@ public class CustomerDbDAO implements CustomerDAO {
 				coupons.add(couponDB.getCoupon(rs.getLong("COUPON_ID")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return coupons;
 	}
@@ -239,8 +232,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			passwordMatch = PasswordHash.passwordMatches(saltHexStr, hashHexStr, password);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DaoSQLException(e.getMessage());
 		}
 		return passwordMatch;
 	}

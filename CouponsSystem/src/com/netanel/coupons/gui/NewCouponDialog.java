@@ -57,9 +57,9 @@ public class NewCouponDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	JTextField titleTxtFld, messageTxtFld;
+	private JTextField titleTxtFld, messageTxtFld;
 	private CompanyFacade company;
-	JDatePickerImpl startDatePicker, endDatePicker;
+	private JDatePickerImpl startDatePicker, endDatePicker;
 	private JSpinner amountSpinner, priceSpinner;
 	private JComboBox<CouponType> couponTypeComboBox;
 	private File sourceIcon;

@@ -65,7 +65,7 @@ public class EditCompanyDialog extends JDialog {
 			contentPanel.add(lblCompanyName);
 		}
 		{
-			nameTxtFld = new JTextField(company.getCompName());
+			nameTxtFld = new JTextField(company.getName());
 			contentPanel.add(nameTxtFld);
 			nameTxtFld.setColumns(10);
 		}
@@ -164,7 +164,7 @@ public class EditCompanyDialog extends JDialog {
 	
 	// Update company
 	private void updateCompany() throws DAOException {
-		company.setCompName(nameTxtFld.getText());
+		company.setName(nameTxtFld.getText());
 		company.setEmail(emailTxtField.getText());
 		if (lblPassword.isEnabled()) {
 			company.setPassword(passTxtFld.getPassword());

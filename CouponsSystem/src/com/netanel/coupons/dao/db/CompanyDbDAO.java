@@ -28,8 +28,8 @@ public class CompanyDbDAO implements CompanyDAO {
 		if (DB.foundInDb(Tables.Company, Columns.ID, String.valueOf(company.getId()))) {
 			throw new DAOException("Company ID already exist in DB: " + company.getId());
 		}
-		if (DB.foundInDb(Tables.Company, Columns.COMP_NAME, String.valueOf(company.getCompName()))) {
-			throw new DAOException("Company Name already exist in DB: " + company.getCompName());
+		if (DB.foundInDb(Tables.Company, Columns.COMP_NAME, String.valueOf(company.getName()))) {
+			throw new DAOException("Company Name already exist in DB: " + company.getName());
 		}
 
 		// Initialize id to -1
@@ -40,7 +40,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			// SQL command:
 			String sqlCmdStr = "INSERT INTO Company (COMP_NAME, PASSWORD, EMAIL, SALT) VALUES(?,?,?,?)";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
-			stat.setString(1, company.getCompName());
+			stat.setString(1, company.getName());
 			stat.setString(2, hashAndSalt.get("hash"));
 			stat.setString(3, company.getEmail());
 			stat.setString(4, hashAndSalt.get("salt"));
@@ -90,11 +90,11 @@ public class CompanyDbDAO implements CompanyDAO {
 			throw new DAOException("Company ID does not exist in DB: " + company.getId());
 		}
 
-		boolean nameFound = DB.foundInDb(Tables.Company, Columns.COMP_NAME, company.getCompName());
+		boolean nameFound = DB.foundInDb(Tables.Company, Columns.COMP_NAME, company.getName());
 		boolean idAndNameFound = DB.foundInDb(Tables.Company, Columns.ID, Columns.COMP_NAME,
-				String.valueOf(company.getId()), company.getCompName());
+				String.valueOf(company.getId()), company.getName());
 		if (nameFound && !idAndNameFound) {
-			throw new DAOException("Company Name already exist: " + company.getCompName());
+			throw new DAOException("Company Name already exist: " + company.getName());
 		}
 
 		try (Connection con = DB.getConnection()) {
@@ -103,7 +103,7 @@ public class CompanyDbDAO implements CompanyDAO {
 			// SQL command:
 			String sqlCmdStr = "UPDATE Company SET COMP_NAME=?, EMAIL=?, PASSWORD=?, SALT=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
-			stat.setString(1, company.getCompName());
+			stat.setString(1, company.getName());
 			stat.setString(2, company.getEmail());
 			stat.setString(3, hashAndSalt.get("hash"));
 			stat.setString(4, hashAndSalt.get("salt"));

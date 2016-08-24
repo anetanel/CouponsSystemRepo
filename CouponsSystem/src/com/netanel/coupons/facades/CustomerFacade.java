@@ -9,6 +9,9 @@ import com.netanel.coupons.dao.*;
 import com.netanel.coupons.exception.*;
 import com.netanel.coupons.jbeans.*;
 
+/**
+ * Coupon System Customer Facade
+ */
 public class CustomerFacade implements CouponClientFacade{
 	//
 	// Attributes
@@ -34,13 +37,12 @@ public class CustomerFacade implements CouponClientFacade{
 	public CustomerFacade login(String custName, char[] password, ClientType clientType) throws LoginException, DAOException {
 		boolean loginSuccessful = false;
 		try {
-			loginSuccessful = custDao.login(custName, password);
+			loginSuccessful = custDao.login(custName, password) && clientType.equals(ClientType.CUSTOMER);
 		} catch (Exception e) {
 			throw new LoginException("Customer Login Failed.");
 		}
 		
-		if (loginSuccessful && clientType.equals(ClientType.CUSTOMER)) {
-		//	customer = custDao.getCustomer(custName);
+		if (loginSuccessful) {
 			this.custId = custDao.getCustomer(custName).getId();
 			this.custName = custName;
 			return this;
@@ -49,6 +51,12 @@ public class CustomerFacade implements CouponClientFacade{
 		}
 	}
 
+	/**
+	 * Buy a coupon.
+	 * @param coupon a {@code Coupon} object.
+	 * @throws DAOException
+	 * @throws CouponException
+	 */
 	public void buyCoupon(Coupon coupon) throws DAOException, CouponException{
 		// Check amount
 		if (coupon.getAmount() < 1) {
@@ -65,6 +73,12 @@ public class CustomerFacade implements CouponClientFacade{
 	}
 	
 	
+	/**
+	 * Buy a coupon by ID
+	 * @param couponId a {@code long} value of the coupon's ID
+	 * @throws DAOException
+	 * @throws CouponException
+	 */
 	public void buyCoupon(long couponId) throws DAOException, CouponException{		
 		for (Coupon coupon : getAllCoupons()) {
 			if (coupon.getId() == couponId) {
@@ -74,6 +88,12 @@ public class CustomerFacade implements CouponClientFacade{
 		}
 	}
 	
+	/**
+	 * Buy a coupon by title.
+	 * @param couponTitle a {@code String} value of the coupon's title.
+	 * @throws DAOException
+	 * @throws CouponException
+	 */
 	public void buyCoupon(String couponTitle) throws DAOException, CouponException{		
 		for (Coupon coupon : getAllCoupons()) {
 			if (coupon.getTitle().equals(couponTitle)) {
@@ -83,18 +103,40 @@ public class CustomerFacade implements CouponClientFacade{
 		}
 	}
 	
+	/**
+	 * Get all the coupons in the system.
+	 * @return a {@code Set<Coupon>} of all coupons in the system (include expired, out of stock and bought coupons).
+	 * @throws DAOException
+	 */
 	public Set<Coupon> getAllCoupons() throws DAOException {
 		return couponDao.getAllCoupons();
 	}
 	
+	/**
+	 * Get costumer's coupons.
+	 * @return a {@code Set<Coupon>} of the coupons of the current customer.
+	 * @throws DAOException
+	 */
 	public Set<Coupon> getMyCoupons() throws DAOException{
 		return custDao.getCoupons(custId);
 	}
 	
+	/**
+	 * Get coupon by ID.
+	 * @param couponId a {@code long} value of the coupon's ID.
+	 * @return a {@code Coupon} object.
+	 * @throws DAOException
+	 */
 	public Coupon getCoupon(long couponId) throws DAOException {
 		return couponDao.getCoupon(couponId);
 	}
 	
+	/**
+	 * Get coupins by Type.
+	 * @param couponType a {@code CouponType} Enum.
+	 * @return  a {@code Set<Coupon>} of all of the customer's coupons of a specific type.
+	 * @throws DAOException
+	 */
 	public Set<Coupon> getMyCouponsByType(CouponType couponType) throws DAOException {
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {
@@ -105,6 +147,12 @@ public class CustomerFacade implements CouponClientFacade{
 		return coupons;
 	}
 	
+	/**
+	 * Get coupons by Price.
+	 * @param price a {@code double} value of the maximum coupon price.
+	 * @return a {@code Set<Coupon>} of all of the customer's coupons whose price is equal or lower than the specified price.
+	 * @throws DAOException
+	 */
 	public Set<Coupon> getMyCouponsByPrice(double price) throws DAOException{
 		Set<Coupon> coupons = new HashSet<>();
 		for (Coupon coupon : custDao.getCoupons(custId)) {
@@ -115,10 +163,18 @@ public class CustomerFacade implements CouponClientFacade{
 		return coupons;
 	}
 
+	/**
+	 * Get this facade's customer ID.
+	 * @return a {@code long} value if the customer ID.
+	 */
 	public long getCustId() {
 		return custId;
 	}
 
+	/**
+	 * Get this facade's customer name.
+	 * @return a {@code String} value of the customer name.
+	 */
 	public String getCustName() {
 		return custName;
 	}

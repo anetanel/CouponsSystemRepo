@@ -1,10 +1,12 @@
 package com.netanel.coupons.dao.db;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import com.netanel.coupons.crypt.Password;
 import com.netanel.coupons.exception.CouponException;
@@ -21,36 +23,29 @@ import com.netanel.coupons.jbeans.Customer;
 
 @SuppressWarnings("unused")
 public class Test {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
-		System.setProperty("com.mchange.v2.log.MLog", "fallback");
-		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
+//		System.setProperty("com.mchange.v2.log.MLog", "fallback");
+//		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		// Initialize DB
-//		try {
-//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company");
-//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer");
-//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Coupon");
-//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Company_Coupon");
-//			DB.getConnection().createStatement().executeUpdate("DELETE FROM Customer_Coupon");
-//			DB.getConnection().createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try (Connection con = DB.getConnection()) {
+			con.createStatement().executeUpdate("DELETE FROM Company");
+			con.createStatement().executeUpdate("DELETE FROM Customer");
+			con.createStatement().executeUpdate("DELETE FROM Coupon");
+			con.createStatement().executeUpdate("DELETE FROM Company_Coupon");
+			con.createStatement().executeUpdate("DELETE FROM Customer_Coupon");
+			con.createStatement().executeUpdate("UPDATE sqlite_sequence set seq=0");
+		} 
+
 
 		/////////////////////////////////////////////
 
 		// Get Admin Facade
 		AdminFacade admin = null;
-		try {
-			admin = new AdminFacade().login("admin", "1234".toCharArray(), ClientType.ADMIN);
-		} catch (LoginException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		admin = new AdminFacade().login("admin", "1234".toCharArray(), ClientType.ADMIN);
+ 
 
 		// Create some companies
-		try {
 			admin.createCompany(
 					new Company("IBM", new Password("12345".toCharArray()), "info@ibm.com", new HashSet<Coupon>()));
 			admin.createCompany(
@@ -99,36 +94,25 @@ public class Test {
 					new Company("Erroca", new Password("1234".toCharArray()), "info@erroca.co.il", new HashSet<Coupon>()));
 			admin.createCompany(
 					new Company("Sony", new Password("1234".toCharArray()), "info@sony.com", new HashSet<Coupon>()));
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+ 
 
 		// Create some customers
-		try {
+
 			admin.createCustomer(new Customer("moshe", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("david", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("sarah", new Password("1234".toCharArray()), new HashSet<Coupon>()));
 			admin.createCustomer(new Customer("dana", new Password("1234".toCharArray()), new HashSet<Coupon>()));
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		// Get Companies facades
 		CompanyFacade ibm = null;
 		CompanyFacade emc = null;
-		try {
+
 			ibm = new CompanyFacade().login("IBM", "12345".toCharArray(), ClientType.COMPANY);
 			emc = new CompanyFacade().login("EMC", "1q2w3e".toCharArray(), ClientType.COMPANY);
 
-		} catch (LoginException | DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		// Create some coupons
-		try {
+
 			ibm.createCoupon(
 					new Coupon("5% Mainframe", LocalDate.now(), LocalDate.of(2017, 5, 15), 10, CouponType.ELECTRONICS,
 							"5% discount off any new IBM Mainframe Purchase", 199.9, ""));
@@ -153,25 +137,18 @@ public class Test {
 			emc.createCoupon(new Coupon("EMC Coupon 4", LocalDate.now(), LocalDate.of(2017, 9, 18), 5,
 					CouponType.KIDS, "EMC Coupon number 4 description", 4899.9, "icons/vmax.png"));
 
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		// Get customers facades
 		CustomerFacade moshe = null;
 		CustomerFacade dana = null;
 
-		try {
+
 			moshe = new CustomerFacade().login("moshe", "1234".toCharArray(), ClientType.CUSTOMER);
 			dana = new CustomerFacade().login("dana", "1234".toCharArray(), ClientType.CUSTOMER);
-		} catch (LoginException | DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		// Buy some coupons
-		try {
+
 			moshe.buyCoupon("Free VMAX");
 			// moshe.buyCoupon("Free VMAX");
 			moshe.buyCoupon("Free VNX");
@@ -181,10 +158,7 @@ public class Test {
 			dana.buyCoupon("EMC Coupon 1");
 			dana.buyCoupon("EMC Coupon 2");
 			dana.buyCoupon("EMC Coupon 3");
-		} catch (DAOException | CouponException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		// Show customers coupons
 //		try {
@@ -222,34 +196,27 @@ public class Test {
 //		}
 		
 		// Update company
-		try {
+
 			Company lenovo = admin.getCompany("IBM");
 
 			lenovo.setEmail("support@lenovo.com");
-			lenovo.setCompName("Lenovo");
+			lenovo.setName("Lenovo");
 			admin.updateCompanyDetails(lenovo);
 			
 //			System.out.println(admin.getAllCompanies());
 //			System.out.println(admin.getCompany("Dell"));
-		} catch (DAOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+
 		
 		
 		
 		// Update customer
 		
-		try {
+
 			Customer misha = admin.getCustomer("moshe");
-			misha.setCustName("misha");
+			misha.setName("misha");
 			admin.updateCustomerDetails(misha);
 //			System.out.println(admin.getAllCustomers());
-		} catch (DAOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 		
 		
 		// Show customers coupons

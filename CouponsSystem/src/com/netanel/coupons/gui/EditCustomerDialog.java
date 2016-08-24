@@ -65,7 +65,7 @@ public class EditCustomerDialog extends JDialog {
 			contentPanel.add(lblCustomerName);
 		}
 		{
-			nameTxtFld = new JTextField(customer.getCustName());
+			nameTxtFld = new JTextField(customer.getName());
 			contentPanel.add(nameTxtFld);
 			nameTxtFld.setColumns(10);
 		}
@@ -155,7 +155,7 @@ public class EditCustomerDialog extends JDialog {
 	
 	// Update customer
 	private void updateCustomer() throws DAOException {
-		customer.setCustName(nameTxtFld.getText());
+		customer.setName(nameTxtFld.getText());
 		if (lblPassword.isEnabled()) {
 			customer.setPassword(passTxtFld.getPassword());
 		}

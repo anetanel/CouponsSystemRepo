@@ -340,11 +340,11 @@ public class AdminCtrlPanel extends JPanel {
 			customer = admin.getCustomer(TableHelper.getSelectedIdFromTable(customersTable));
 
 			int delete = JOptionPane.showConfirmDialog(null,
-					"Are you sure you want to delete customer '" + customer.getCustName() + "'?", "Delete Customer",
+					"Are you sure you want to delete customer '" + customer.getName() + "'?", "Delete Customer",
 					JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE);
 			if (delete == 0) {
 				admin.deleteCustomer(customer);
-				JOptionPane.showMessageDialog(null, "Customer '" + customer.getCustName() + "' deleted!",
+				JOptionPane.showMessageDialog(null, "Customer '" + customer.getName() + "' deleted!",
 						"Customer deleted", JOptionPane.INFORMATION_MESSAGE);
 				refreshCustomerTable();
 			}
@@ -365,11 +365,11 @@ public class AdminCtrlPanel extends JPanel {
 			company = admin.getCompany(TableHelper.getSelectedIdFromTable(companyTable));
 
 			int delete = JOptionPane.showConfirmDialog(null,
-					"Are you sure you want to delete company '" + company.getCompName() + "'?", "Delete Company",
+					"Are you sure you want to delete company '" + company.getName() + "'?", "Delete Company",
 					JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE);
 			if (delete == 0) {
 				admin.deleteCompany(company);
-				JOptionPane.showMessageDialog(null, "Company '" + company.getCompName() + "' deleted!",
+				JOptionPane.showMessageDialog(null, "Company '" + company.getName() + "' deleted!",
 						"Company deleted", JOptionPane.INFORMATION_MESSAGE);
 				refreshCompanyTable();
 			}

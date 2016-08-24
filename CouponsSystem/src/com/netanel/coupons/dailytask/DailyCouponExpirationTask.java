@@ -24,8 +24,8 @@ public class DailyCouponExpirationTask implements Runnable {
 	private CustomerDAO custDao = null;
 	private CouponDAO couponDao = null;
 	private boolean running = true;
-	private final static TimeUnit TIMEUNIT = TimeUnit.HOURS;
-	private final static int SLEEPTIME = 24;
+	private final static TimeUnit TIMEUNIT = TimeUnit.SECONDS;
+	private final static int SLEEPTIME = 15;
 	
 
 	//
@@ -44,6 +44,12 @@ public class DailyCouponExpirationTask implements Runnable {
 	public void run() {
 		while (running) {
 			try {
+				TIMEUNIT.sleep(SLEEPTIME);
+			} catch (InterruptedException e) {
+				System.out.println("bye bye");
+				System.exit(0);
+			}
+			try {
 				System.out.println(LocalDateTime.now() + " - Daily Task Running...");
 				// Loop through every company's coupons and delete expired ones
 				for (Company company : compDao.getAllCompanies()) {
@@ -57,12 +63,7 @@ public class DailyCouponExpirationTask implements Runnable {
 				System.out.println(LocalDateTime.now() + " - ERROR: Failed to auto delete coupon:");
 				System.out.println(e.getMessage());
 			}
-			try {
-				TIMEUNIT.sleep(SLEEPTIME);
-			} catch (InterruptedException e) {
-				System.out.println("bye bye");
-				System.exit(0);
-			}
+			
 		}
 	}
 

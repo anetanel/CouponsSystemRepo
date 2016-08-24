@@ -36,7 +36,6 @@ public class Coupon {
 		this.type = type;
 		this.message = message;
 		this.price = price;
-		//this.image = image;
 		setImage(image);
 	}
 	

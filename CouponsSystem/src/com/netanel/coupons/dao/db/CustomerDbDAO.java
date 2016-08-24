@@ -28,8 +28,8 @@ public class CustomerDbDAO implements CustomerDAO {
 		if (DB.foundInDb(Tables.Customer, Columns.ID, String.valueOf(customer.getId()))) {
 			throw new DAOException("Customer ID already exist in DB: " + customer.getId());
 		}
-		if (DB.foundInDb(Tables.Customer, Columns.CUST_NAME, String.valueOf(customer.getCustName()))) {
-			throw new DAOException("Customer Name already exist in DB: " + customer.getCustName());
+		if (DB.foundInDb(Tables.Customer, Columns.CUST_NAME, String.valueOf(customer.getName()))) {
+			throw new DAOException("Customer Name already exist in DB: " + customer.getName());
 		}
 		// Initialize id to -1
 		long id = -1;
@@ -39,7 +39,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			// SQL command:
 			String sqlCmdStr = "INSERT INTO Customer (CUST_NAME, PASSWORD, SALT) VALUES(?,?,?)";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
-			stat.setString(1, customer.getCustName());
+			stat.setString(1, customer.getName());
 			stat.setString(2, hashAndSalt.get("hash"));
 			stat.setString(3, hashAndSalt.get("salt"));
 			stat.executeUpdate();
@@ -88,11 +88,11 @@ public class CustomerDbDAO implements CustomerDAO {
 			throw new DAOException("Customer ID does not exist in DB: " + String.valueOf(customer.getId()));
 		}
 		
-		boolean nameFound = DB.foundInDb(Tables.Customer, Columns.CUST_NAME, customer.getCustName());
+		boolean nameFound = DB.foundInDb(Tables.Customer, Columns.CUST_NAME, customer.getName());
 		boolean idAndNameFound = DB.foundInDb(Tables.Customer, Columns.ID, Columns.CUST_NAME,
-				String.valueOf(customer.getId()), customer.getCustName());
+				String.valueOf(customer.getId()), customer.getName());
 		if (nameFound && !idAndNameFound) {
-			throw new DAOException("Customer Name already exist: " + customer.getCustName());
+			throw new DAOException("Customer Name already exist: " + customer.getName());
 		}
 		
 		try (Connection con = DB.getConnection()) {
@@ -101,7 +101,7 @@ public class CustomerDbDAO implements CustomerDAO {
 			// SQL command:
 			String sqlCmdStr = "UPDATE Customer SET CUST_NAME=?, PASSWORD=?, SALT=? WHERE ID=?";
 			PreparedStatement stat = con.prepareStatement(sqlCmdStr);
-			stat.setString(1, customer.getCustName());
+			stat.setString(1, customer.getName());
 			stat.setString(2, hashAndSalt.get("hash"));
 			stat.setString(3, hashAndSalt.get("salt"));
 			stat.setLong(4, customer.getId());

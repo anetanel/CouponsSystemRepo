@@ -181,7 +181,7 @@ public class AdminFacade implements CouponClientFacade {
 
 	// Validate company name and email
 	private void validateCompanyNameAndEmail(Company company) throws DAOException {
-		if (company.getCompName().equals("")) {
+		if (company.getName().equals("")) {
 			throw new DAOException("Company name can't be empty.");
 		}
 		if (!EmailValidator.validate(company.getEmail())) {
@@ -191,7 +191,7 @@ public class AdminFacade implements CouponClientFacade {
 
 	// Validate customer name
 	private void validateCustomerName(Customer customer) throws DAOException {
-		if (customer.getCustName().equals("")) {
+		if (customer.getName().equals("")) {
 			throw new DAOException("Customer name can't be empty.");
 		}
 	}

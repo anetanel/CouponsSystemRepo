@@ -232,7 +232,7 @@ public class EditCouponDialog extends JDialog {
 				JOptionPane.showMessageDialog(null, "Coupon '" + titleTxtFld.getText() + "' was updated.",
 						"Coupon Updated", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-			} catch (DAOException e1) {
+			} catch (DAOException | IOException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error!",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -284,21 +284,19 @@ public class EditCouponDialog extends JDialog {
 	//
 	
 	// Update coupon
-	private void updateCoupon() throws DAOException{
+	private void updateCoupon() throws DAOException, IOException{
 		String destIconPath = coupon.getImage();
 		Date startDate = (Date) startDatePicker.getModel().getValue();
 		Date endDate = (Date) endDatePicker.getModel().getValue();
 		LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if (sourceIcon != null) {
-			try {
+
 				Path source = sourceIcon.toPath();
 				destIconPath = "icons/" + company.getCompName() + "_" + titleTxtFld.getText() + sourceIcon.getName().substring(sourceIcon.getName().lastIndexOf("."));
 				Path dest = FileSystems.getDefault().getPath(destIconPath);
 				Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 		coupon = new Coupon(coupon.getId(), titleTxtFld.getText(), localStartDate, localEndDate, (int) amountSpinner.getValue(), (CouponType) couponTypeComboBox.getSelectedItem(), messageTxtFld.getText()
 				, (double) priceSpinner.getValue(), destIconPath);

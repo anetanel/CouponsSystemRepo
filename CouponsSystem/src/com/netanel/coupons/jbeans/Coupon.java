@@ -5,6 +5,13 @@ import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 
+/**
+ *Coupon System Coupon JBean Class.
+ */
+/**
+ * @author jbt
+ *
+ */
 public class Coupon {
 
 	//
@@ -28,7 +35,6 @@ public class Coupon {
 	
 	public Coupon(String title, LocalDate startDate, LocalDate endDate, int amount, CouponType type, String message,
 			double price, String image) {
-		// TODO: check for validity of dates?
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -80,10 +86,16 @@ public class Coupon {
 		return price;
 	}
 
+	/**
+	 * @return a {@code String} with coupon's icon path.
+	 */
 	public String getImage() {
 		return image;
 	}
 
+	/**
+	 * @return an {@code Icon} object of the coupon's icon. If no icon was set, returns the default icon.
+	 */
 	public ImageIcon getIcon() {
 		ImageIcon icon = null;
 		if (image.equals(DEFAULT_ICON)) {
@@ -138,6 +150,10 @@ public class Coupon {
 		}	
 	}
 
+	/**
+	 * Get Coupon details. Used by table model. 
+	 * @return an {@code Object[]} array of {@code [long id, String title, LocalDate startDate, LocalDate endDate, int amount, String message, double price, Icon icon]}.
+	 */
 	public Object[] getDetails(int iconSize) {
 		Object[] detail = {getId(), getTitle(), getStartDate(), getEndDate(), getAmount(), getType(), getMessage(), getPrice(),
 				new ImageIcon(getIcon().getImage().getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))};

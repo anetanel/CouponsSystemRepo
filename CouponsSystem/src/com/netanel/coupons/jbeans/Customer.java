@@ -4,6 +4,9 @@ import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
 
+/**
+ * Coupon System Customer JBean Class. Extends {@link Client}.
+ */
 public class Customer extends Client{
 	
 	//

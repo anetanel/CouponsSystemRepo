@@ -4,15 +4,17 @@ import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
 
+/**
+ * Coupon System Client JBean Superclass. 
+ *
+ */
 public class Client {
-	//
-	// Constructors
-	//
 	
 	//
 	// Constructors
 	//
-	public Client() {	}
+	public Client() {
+	}
 	
 	public Client(String name, Password password, Set<Coupon> coupons) {
 		this.name = name;
@@ -77,6 +79,10 @@ public class Client {
 	}
 
 	
+	/**
+	 * Get Client details. Used by table model. 
+	 * @return an {@code Object[]} array of {@code [long id, String name, int number_of_coupons]}.
+	 */
 	public Object[] getDetails() {
 		Object[] detail = {getId(), getName(), getCoupons().size()};
 		return detail;

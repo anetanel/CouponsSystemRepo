@@ -4,6 +4,9 @@ import java.util.Set;
 
 import com.netanel.coupons.crypt.Password;
 
+/**
+ * Coupon System Company JBean Class. Extends {@link Client}.
+ */
 public class Company extends Client{
 	//
 	// Attributes
@@ -39,6 +42,10 @@ public class Company extends Client{
 		this.email = email;
 	}
 
+	/**
+	 * Get Company details. Used by table model. 
+	 * @return an {@code Object[]} array of {@code [long id, String name, String email, int number_of_coupons]}.
+	 */
 	@Override
 	public Object[] getDetails() {
 		Object[] detail = {getId(), getName(), getEmail(), getCoupons().size()};

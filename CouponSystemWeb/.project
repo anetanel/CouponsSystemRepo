@@ -3,6 +3,7 @@
 	<name>CouponSystemWeb</name>
 	<comment></comment>
 	<projects>
+		<project>CouponsSystem</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

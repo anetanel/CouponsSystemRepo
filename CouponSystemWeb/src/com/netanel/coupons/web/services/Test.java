@@ -14,7 +14,7 @@ public class Test {
 	}
 	
 	@GET
-	@Produces(MediaType.TEXT_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public TestBean getTest() {
 		TestBean tb = new TestBean();
 		tb.setElement1("this is element 1");

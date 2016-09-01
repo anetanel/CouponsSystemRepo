@@ -4,14 +4,12 @@ import java.io.File;
 import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *Coupon System Coupon JBean Class.
  */
-/**
- * @author jbt
- *
- */
+@XmlRootElement
 public class Coupon {
 
 	//

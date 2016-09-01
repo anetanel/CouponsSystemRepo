@@ -2,13 +2,26 @@ package com.netanel.coupons.jbeans;
 
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import com.netanel.coupons.crypt.Password;
 
 /**
  * Coupon System Client JBean Superclass. 
  *
  */
+@XmlRootElement
+@XmlSeeAlso({Customer.class,Company.class})
 public class Client {
+	//
+	// Attributes
+	//
+	
+	protected long id = -1;
+	protected Password password;
+	protected Set<Coupon> coupons;
+	protected String name;
 	
 	//
 	// Constructors
@@ -27,14 +40,6 @@ public class Client {
 		this.id = id;
 	}
 	
-	//
-	// Attributes
-	//
-	
-	protected long id = -1;
-	protected Password password;
-	protected Set<Coupon> coupons;
-	protected String name;
 	
 	//
 	// Functions

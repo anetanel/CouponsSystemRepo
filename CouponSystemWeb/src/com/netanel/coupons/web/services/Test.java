@@ -1,14 +1,18 @@
 package com.netanel.coupons.web.services;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.netanel.coupons.crypt.Password;
+import com.netanel.coupons.facades.ClientType;
 import com.netanel.coupons.jbeans.Company;
 import com.netanel.coupons.jbeans.Coupon;
 import com.netanel.coupons.jbeans.CouponType;
@@ -22,20 +26,33 @@ public class Test {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public TestBean getTest() {
-		TestBean tb = new TestBean();
-		tb.setElement1("this is element 1");
-		tb.setElement2("this is element 2");
-		tb.setElement3("this is element 3");
-		return tb;
+	@Path("/login")
+	public TestBean login(
+					@QueryParam("username") String username,
+					@QueryParam("password") String password,
+					@QueryParam("clientType") String clientType) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("username", username);
+		map.put("password", password);
+		map.put("clientType", clientType);
+		TestBean bean = new TestBean();
+		bean.setMap(map);
+		return bean;
+	}
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTest() {
+		
+		return "This is just a test...";
 	}
 	
 	
 	@GET
-	@Path("/coupon")
+	@Path("/coupon/{couponTitle}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Coupon getCoupon() {
-		Coupon coupon = new Coupon("My Coupon", LocalDate.now(), LocalDate.of(2018, 5, 15), 5, CouponType.CARS, "A car", 1999.89, "");
+	public Coupon getCoupon(@PathParam("couponTitle") String couponTitle) {
+		
+		Coupon coupon = new Coupon(couponTitle, LocalDate.now(), LocalDate.of(2018, 5, 15), 5, CouponType.CARS, "A car", 1999.89, "");
 		
 		return coupon;
 	}

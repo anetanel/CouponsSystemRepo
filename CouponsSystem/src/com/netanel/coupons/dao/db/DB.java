@@ -28,7 +28,7 @@ class DB {
 		cpds = new ComboPooledDataSource();
 		try {
 			cpds.setDriverClass( "org.sqlite.JDBC" );
-			cpds.setJdbcUrl( "jdbc:sqlite:db/CouponsDB.db" );
+			cpds.setJdbcUrl( "jdbc:sqlite:c:\\coupondb\\CouponsDB.db" );
 			cpds.setMaxStatements( 180 ); 
 		} catch (PropertyVetoException e) {
 			System.out.println("ERROR: Connection Pool error:");

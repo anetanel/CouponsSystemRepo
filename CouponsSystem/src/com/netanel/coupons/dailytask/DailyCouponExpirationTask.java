@@ -24,8 +24,8 @@ public class DailyCouponExpirationTask implements Runnable {
 	private CustomerDAO custDao = null;
 	private CouponDAO couponDao = null;
 	private boolean running = true;
-	private final static TimeUnit TIMEUNIT = TimeUnit.SECONDS;
-	private final static int SLEEPTIME = 15;
+	private final static TimeUnit TIMEUNIT = TimeUnit.HOURS;
+	private final static int SLEEPTIME = 24;
 	
 
 	//

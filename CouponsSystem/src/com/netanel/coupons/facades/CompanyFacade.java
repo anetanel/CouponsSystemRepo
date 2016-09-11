@@ -212,5 +212,12 @@ public class CompanyFacade implements CouponClientFacade{
 			throw new DAOException("Coupon name can't be empty.");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "CompanyFacade [compId=" + compId + ", compName=" + compName + "]";
+	}
+
+
 	
 }

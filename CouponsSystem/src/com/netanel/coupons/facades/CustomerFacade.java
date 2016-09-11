@@ -178,6 +178,13 @@ public class CustomerFacade implements CouponClientFacade{
 	public String getCustName() {
 		return custName;
 	}
+
+	@Override
+	public String toString() {
+		return "CustomerFacade [custId=" + custId + ", custName=" + custName + "]";
+	}
+
+
 	
 	
 }

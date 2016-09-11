@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -35,18 +36,25 @@ public class LoginFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
-
 		System.out.println("Filtered!");
-		HttpSession session = ((HttpServletRequest) request).getSession(false);
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		String url = req.getContextPath() + "/loginpage.html";
+		HttpSession session = req.getSession(false);
+		
 		if (session == null) {
 			System.out.println("no session!");
+			res.sendRedirect(url);
+			return;
 		} else if (session.getAttribute("FACADE") == null){
 			System.out.println("no facade in session!");
+			res.sendRedirect(url);
+			return;
 		} else {
 			System.out.println("facade found in session!");
 		}
+		
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
 	}

@@ -45,10 +45,12 @@ public class LoginFilter implements Filter {
 		
 		if (session == null) {
 			System.out.println("no session!");
+			System.out.println("redirect to " + url);
 			res.sendRedirect(url);
 			return;
 		} else if (session.getAttribute("FACADE") == null){
 			System.out.println("no facade in session!");
+			System.out.println("redirect to " + url);
 			res.sendRedirect(url);
 			return;
 		} else {

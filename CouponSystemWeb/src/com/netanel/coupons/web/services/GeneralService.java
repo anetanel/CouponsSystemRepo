@@ -20,10 +20,11 @@ public class GeneralService {
 	
 	@GET
 	@Path("/clienttype")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String getClientType() {
 		ClientType clientType = (ClientType) request.getSession(false).getAttribute("CLIENT_TYPE");
-		return "{\"clientType\": \""+ clientType.toString() + "\"}";
+		return clientType.toString().toLowerCase();
+		//return "{\"clientType\": \""+ clientType.toString() + "\"}";
 	}
 
 	

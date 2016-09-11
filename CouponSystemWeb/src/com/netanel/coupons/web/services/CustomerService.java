@@ -6,13 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.netanel.coupons.exception.DAOException;
-import com.netanel.coupons.exception.LoginException;
-import com.netanel.coupons.facades.ClientType;
 import com.netanel.coupons.facades.CustomerFacade;
 import com.netanel.coupons.jbeans.Coupon;
 
@@ -22,7 +19,6 @@ public class CustomerService {
 	private HttpServletRequest request;
 	
 	private static final String FACADE = "FACADE"; 
-	private CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
 	
 	public CustomerService() {
 		
@@ -52,6 +48,7 @@ public class CustomerService {
 	@Path("/getallcoupons")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Coupon> getAllCoupons() {
+		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
 		try {
 			return facade.getAllCoupons();
 		} catch (DAOException e) {
@@ -65,6 +62,7 @@ public class CustomerService {
 	@Path("/whoami")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String whoAmI() {
+		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
 		return facade.toString();
 	}
 

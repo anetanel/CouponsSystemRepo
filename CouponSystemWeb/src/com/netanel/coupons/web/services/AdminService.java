@@ -28,6 +28,7 @@ public class AdminService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Company> getAllCompanies() throws DAOException {
 		AdminFacade facade = (AdminFacade) request.getSession().getAttribute(FACADE);
+		if (true) throw new DAOException("tesst123");
 		return facade.getAllCompanies();
 	}
 	

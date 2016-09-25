@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.netanel.coupons.facades.ClientType;
 
-@Path("/general")
+@Path("general")
 public class GeneralService {
 	@Context
 	private HttpServletRequest request;
@@ -19,7 +19,7 @@ public class GeneralService {
 	}
 	
 	@GET
-	@Path("/clienttype")
+	@Path("clienttype")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getClientType() {
 		ClientType clientType = (ClientType) request.getSession(false).getAttribute("CLIENT_TYPE");

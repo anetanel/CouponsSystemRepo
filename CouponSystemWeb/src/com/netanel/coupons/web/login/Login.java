@@ -22,19 +22,20 @@ import com.netanel.coupons.facades.CustomerFacade;
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public Login() {
-        super();
-    }
+	public Login() {
+		super();
+	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		String username = request.getParameter("username");
 		char[] password = request.getParameter("password").toCharArray();
 		ClientType clientType = ClientType.valueOf(request.getParameter("clienttype"));
-		
+
 		CouponClientFacade facade = login(username, password, clientType);
-		
+
 		if (facade == null) {
 			out.print("{\"login\": \"false\"}");
 		} else {
@@ -43,12 +44,11 @@ public class Login extends HttpServlet {
 			session.setAttribute("CLIENT_TYPE", clientType);
 			out.print("{\"login\": \"true\"}");
 		}
-		
-		
 
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
@@ -71,7 +71,7 @@ public class Login extends HttpServlet {
 			return null;
 		}
 		return facade;
-		
+
 	}
-	
+
 }

@@ -13,7 +13,7 @@ import com.netanel.coupons.exception.DAOException;
 import com.netanel.coupons.facades.CustomerFacade;
 import com.netanel.coupons.jbeans.Coupon;
 
-@Path("/customer")
+@Path("customer")
 public class CustomerService {
 	@Context
 	private HttpServletRequest request;
@@ -45,7 +45,7 @@ public class CustomerService {
 //	}
 
 	@GET
-	@Path("/getallcoupons")
+	@Path("getallcoupons")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Coupon> getAllCoupons() {
 		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
@@ -59,7 +59,7 @@ public class CustomerService {
 	}
 	
 	@GET
-	@Path("/whoami")
+	@Path("whoami")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String whoAmI() {
 		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);

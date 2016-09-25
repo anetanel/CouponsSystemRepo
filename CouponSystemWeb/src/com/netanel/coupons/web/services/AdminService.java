@@ -18,23 +18,24 @@ public class AdminService {
 
 	@Context HttpServletRequest request;
 	
-	private AdminFacade facade = (AdminFacade) request.getAttribute("FACADE");
+	private static final String FACADE = "FACADE";
 	
 	public AdminService() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	@GET
 	@Path("getallcompanies")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Company> getAllCompanies() throws DAOException {
+		AdminFacade facade = (AdminFacade) request.getSession().getAttribute(FACADE);
 		return facade.getAllCompanies();
 	}
 	
 	@GET
-	@Path("/whoami")
+	@Path("whoami")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String whoAmI() {
+		AdminFacade facade = (AdminFacade) request.getSession().getAttribute(FACADE);
 		return facade.toString();
 	}
 	

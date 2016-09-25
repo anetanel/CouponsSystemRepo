@@ -28,13 +28,13 @@ public class AdminService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Company> getAllCompanies() throws DAOException {
 		AdminFacade facade = (AdminFacade) request.getSession().getAttribute(FACADE);
-		if (true) throw new DAOException("tesst123");
+		//if (true) throw new DAOException("tesst123");
 		return facade.getAllCompanies();
 	}
 	
 	@GET
 	@Path("whoami")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String whoAmI() {
 		AdminFacade facade = (AdminFacade) request.getSession().getAttribute(FACADE);
 		return facade.toString();

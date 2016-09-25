@@ -1,7 +1,8 @@
 package com.netanel.coupons.web.exception;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -10,15 +11,20 @@ import com.netanel.coupons.exception.DAOException;
 @Provider
 public class DaoExceptionMapper implements ExceptionMapper<DAOException> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
-	public Response toResponse(DAOException exception) {
-		System.out.println("in mapper");
-		return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
+	public Response toResponse(DAOException ex) {
+		Response.StatusType type = getStatusType(ex);
+
+		ErrorBean error = new ErrorBean(type.getStatusCode(), type.getReasonPhrase(), ex.getLocalizedMessage());
+
+		return Response.status(error.getStatusCode()).entity(error).type(MediaType.APPLICATION_JSON).build();
 	}
 
+	private Response.StatusType getStatusType(Throwable ex) {
+		if (ex instanceof WebApplicationException) {
+			return ((WebApplicationException) ex).getResponse().getStatusInfo();
+		} else {
+			return Response.Status.INTERNAL_SERVER_ERROR;
+		}
+	}
 }

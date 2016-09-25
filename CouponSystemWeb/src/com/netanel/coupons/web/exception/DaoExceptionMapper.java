@@ -1,13 +1,14 @@
 package com.netanel.coupons.web.exception;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import com.netanel.coupons.exception.DAOException;
 
 @Provider
-public class DaoExceptionMapper extends DAOException implements ExceptionMapper<DAOException>{
+public class DaoExceptionMapper implements ExceptionMapper<DAOException> {
 
 	/**
 	 * 
@@ -15,9 +16,9 @@ public class DaoExceptionMapper extends DAOException implements ExceptionMapper<
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Response toResponse(DAOException ex) {
+	public Response toResponse(DAOException exception) {
 		System.out.println("in mapper");
-		return Response.status(Response.Status.NOT_FOUND).build();
+		return Response.status(Status.BAD_REQUEST).entity(exception.getMessage()).build();
 	}
 
 }

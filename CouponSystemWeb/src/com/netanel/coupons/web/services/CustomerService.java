@@ -24,47 +24,28 @@ public class CustomerService {
 		
 	}
 	
-//	@GET
-//	@Path("/login")
-//	@Produces(MediaType.TEXT_PLAIN)
-//	public String login(@QueryParam("username") String custName,
-//				@QueryParam("password") String password){
-//		CustomerFacade facade = null;
-//		try {
-//			facade = new CustomerFacade().login(custName, password.toCharArray(), ClientType.CUSTOMER);
-//		} catch (LoginException | DAOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		if (facade == null) {
-//			return "login failed";
-//		}
-//			
-//		request.getSession().setAttribute(FACADE, facade);
-//		return "login successful";
-//	}
-
 	@GET
 	@Path("getallcoupons")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<Coupon> getAllCoupons() {
-		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
-		try {
-			return facade.getAllCoupons();
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	public Set<Coupon> getAllCoupons() throws DAOException {
+		CustomerFacade facade = getFacade();
+		return facade.getAllCoupons();
 	}
 	
 	@GET
 	@Path("whoami")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String whoAmI() {
-		CustomerFacade facade = (CustomerFacade) request.getSession().getAttribute(FACADE);
+	public String whoAmI() throws DAOException {
+		CustomerFacade facade = getFacade();
 		return facade.toString();
 	}
 
+	private CustomerFacade getFacade() throws DAOException {
+		if (request.getSession().getAttribute(FACADE) instanceof CustomerFacade) {
+			return (CustomerFacade) request.getSession().getAttribute(FACADE);
+		} else {
+			throw new DAOException("Could not find an Admin login session");
+		}
+	}
 	
 }

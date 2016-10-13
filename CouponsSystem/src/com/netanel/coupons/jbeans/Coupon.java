@@ -5,11 +5,17 @@ import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.netanel.coupons.web.adapters.LocalDateAdapter;
+
+
 
 /**
  *Coupon System Coupon JBean Class.
  */
 @XmlRootElement
+
 public class Coupon {
 
 	//
@@ -17,7 +23,9 @@ public class Coupon {
 	//
 	private long id = -1;
 	private String title;
+	@XmlJavaTypeAdapter(LocalDateAdapter.class)
 	private LocalDate startDate;
+	@XmlJavaTypeAdapter(LocalDateAdapter.class) 
 	private LocalDate endDate;
 	private int amount;
 	private CouponType type;

@@ -34,15 +34,32 @@ public class CompanyService {
 	//
 	// Functions
 	//
+//	@GET
+//    @Path("now")
+//	@Produces(MediaType.APPLICATION_JSON)
+//    //@JsonDeserialize(using = LocalDateDeserializer.class)
+//    public TestBean get() {
+//		TestBean now = new TestBean("mytitle");
+//		now.setLocalDate(LocalDate.of(2019, 11, 29));
+//		System.out.println(now.getTitle());
+//        return now;
+//    }
+//	
+//	@POST
+//	@Path("postNow")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public TestBean set(TestBean myDate) {
+//		System.out.println(myDate.getLocalDate());
+//		return myDate;
+//	}
+	
 	@POST
 	@Path("createCoupon")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void createCoupon(Coupon coupon) throws DAOException {
-		System.out.println(coupon.getTitle());
-		System.out.println(coupon.getStartDate());
-		System.out.println(coupon.getStartDate().getClass().getName());
-		//getFacade().createCoupon(coupon);
+		getFacade().createCoupon(coupon);
 	}
 	
 	@GET

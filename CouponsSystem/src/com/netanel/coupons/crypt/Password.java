@@ -3,15 +3,18 @@ package com.netanel.coupons.crypt;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Secure password object.
  *
  */
+@XmlRootElement
 public class Password {
 	//
 	// Attributes
 	//
-	private Map<String, String> hashAndSalt = new HashMap<>(); 
+	private Map<String, String> hashAndSalt = new HashMap<>();
 	
 	//
 	// Constructors

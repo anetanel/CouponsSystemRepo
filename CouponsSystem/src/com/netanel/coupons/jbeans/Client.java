@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.netanel.coupons.crypt.Password;
 
@@ -17,7 +18,6 @@ public class Client {
 	//
 	// Attributes
 	//
-	
 	protected long id = -1;
 	protected Password password;
 	protected Set<Coupon> coupons;
@@ -44,7 +44,6 @@ public class Client {
 	//
 	// Functions
 	//
-	
 	public long getId() {
 		return id;
 	}
@@ -56,7 +55,6 @@ public class Client {
 	public Password getPassword() {
 		return password;
 	}
-
 
 	public Set<Coupon> getCoupons() {
 		return coupons;
@@ -88,6 +86,7 @@ public class Client {
 	 * Get Client details. Used by table model. 
 	 * @return an {@code Object[]} array of {@code [long id, String name, int number_of_coupons]}.
 	 */
+	@XmlTransient
 	public Object[] getDetails() {
 		Object[] detail = {getId(), getName(), getCoupons().size()};
 		return detail;

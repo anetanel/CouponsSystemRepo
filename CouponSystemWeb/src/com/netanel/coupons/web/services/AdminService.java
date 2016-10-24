@@ -44,6 +44,21 @@ public class AdminService {
 	// Functions
 	//
 	@POST
+	@Path("testCompany")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void testCompany(Company company) {
+		System.out.println("in testCompany");
+		System.out.println(company);
+	}
+	
+	@GET
+	@Path("getPass")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Password getPass() {
+		return new Password("1234".toCharArray());
+	}
+	
+	@POST
 	@Path("createcompany")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createCompany(Map<String, String> companyMap) throws DAOException {
@@ -77,6 +92,7 @@ public class AdminService {
 	@Path("getcompanybyid")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Company getCompany(@QueryParam("compId") long compId) throws DAOException {
+		System.out.println(getFacade().getCompany(compId));
 		return getFacade().getCompany(compId);
 	}
 	

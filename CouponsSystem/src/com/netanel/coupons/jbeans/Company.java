@@ -2,6 +2,8 @@ package com.netanel.coupons.jbeans;
 
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.netanel.coupons.crypt.Password;
 
 /**
@@ -47,6 +49,7 @@ public class Company extends Client{
 	 * @return an {@code Object[]} array of {@code [long id, String name, String email, int number_of_coupons]}.
 	 */
 	@Override
+	@XmlTransient
 	public Object[] getDetails() {
 		Object[] detail = {getId(), getName(), getEmail(), getCoupons().size()};
 		return detail;
@@ -75,6 +78,12 @@ public class Company extends Client{
 		} else if (!email.equals(other.email))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Company [email=" + email + ", id=" + id + ", password=" + password + ", coupons=" + coupons + ", name="
+				+ name + "]";
 	}
 	
 
